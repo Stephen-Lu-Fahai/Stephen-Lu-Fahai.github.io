@@ -88,7 +88,62 @@
             </div>
             <div class="post-content">
                 
-                    
+                    <h1 id="一、网卡驱动类型"><a href="#一、网卡驱动类型" class="headerlink" title="一、网卡驱动类型"></a>一、网卡驱动类型</h1><h2 id="1、通用型"><a href="#1、通用型" class="headerlink" title="1、通用型"></a>1、通用型</h2><pre><code>优点: generic通用型的网卡驱动对物理网卡没有太多要求，只需要Linux系统支持其驱动，就能在IGH的配置中将其选作网卡驱动。
+
+缺点: 实时性较差，尤其是进行dc同步控制时表现更为明显。
+</code></pre>
+<h2 id="2、本地型"><a href="#2、本地型" class="headerlink" title="2、本地型"></a>2、本地型</h2><pre><code>优点: native本地型网卡驱动是官方专门适配的几款Intel网卡，实时性方面有良好的保证
+
+缺点: 只支持几款网卡，并且还需专门的内核版本支持。
+</code></pre>
+<h1 id="一、安装通用型网卡驱动"><a href="#一、安装通用型网卡驱动" class="headerlink" title="一、安装通用型网卡驱动"></a>一、安装通用型网卡驱动</h1><h2 id="1、下载源码包"><a href="#1、下载源码包" class="headerlink" title="1、下载源码包"></a>1、下载源码包</h2><pre><code>https://sourceforge.net/p/etherlabmaster/code/ci/stable-1.5/tree/
+</code></pre>
+<h2 id="2、配置"><a href="#2、配置" class="headerlink" title="2、配置"></a>2、配置</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/ethercatMaster</span><br><span class="line">./bootstrap</span><br><span class="line"><span class="built_in">mkdir</span> etherlab</span><br><span class="line">./configure --prefix=/home/lufahai/xenohegongda/etherlabmaster/etherlab --with-linux-dir=/home/lufahai/xenohegongda/linux-4.9.51 --enable-cycles --enable-hrtimer --enable-8139too=no --enable-generic=<span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+configure中的路径需要根据本地实际路径修改
+</code></pre>
+<h2 id="3、编译及安装"><a href="#3、编译及安装" class="headerlink" title="3、编译及安装"></a>3、编译及安装</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">make -j16</span><br><span class="line">make modules -j16</span><br><span class="line">sudo make install</span><br><span class="line">sudo make modules_install</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="4、创建软连接"><a href="#4、创建软连接" class="headerlink" title="4、创建软连接"></a>4、创建软连接</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/ethercat/etherlab/modules</span><br><span class="line"><span class="built_in">cp</span> devices/ec_generic.ko etherlab/modules/</span><br><span class="line"><span class="built_in">cp</span> master/ec_master.ko etherlab/modules/</span><br><span class="line">sudo <span class="built_in">cp</span> -r etherlab/ /opt </span><br><span class="line">sudo <span class="built_in">ln</span> -fs /opt/etherlab/etc/init.d/ethercat /etc/init.d/</span><br><span class="line">sudo <span class="built_in">ln</span> -fs /opt/etherlab/bin/ethercat /usr/local/bin/</span><br><span class="line">sudo <span class="built_in">mkdir</span> /etc/sysconfig</span><br><span class="line">sudo <span class="built_in">ln</span> -fs /opt/etherlab/etc/sysconfig/ethercat /etc/sysconfig/</span><br><span class="line">sudo su</span><br><span class="line"><span class="built_in">echo</span> KERNEL==\&quot;EtherCAT[0-9]*\&quot;, MODE=\&quot;0664\&quot; &gt; /etc/udev/rules.d/99-EtherCAT.rules</span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line">sudo <span class="built_in">cp</span> /opt/etherlab/modules/ec_master.ko /lib/modules/4.9.51-xenomai3.1+</span><br><span class="line">sudo depmod</span><br></pre></td></tr></table></figure>
+此步骤中的路径需要根据本地实际路径修改
+</code></pre>
+<h2 id="5、配置网卡"><a href="#5、配置网卡" class="headerlink" title="5、配置网卡"></a>5、配置网卡</h2><pre><code>ifconfig 找出网卡的MAC地址
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/sysconfig/ethercat</span><br><span class="line">MASTER0_DEVICE=”b8:27:eb:7d:26:a2” //填写实际MAC</span><br><span class="line">DEVICE_MODULES=”generic”</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="6、增加系统路径"><a href="#6、增加系统路径" class="headerlink" title="6、增加系统路径"></a>6、增加系统路径</h2><pre><code>在~/.bashrc 末尾增加下面内容并source
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PATH=<span class="variable">$PATH</span>:/opt/etherlab/bin</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="7、添加库文件供程序链接"><a href="#7、添加库文件供程序链接" class="headerlink" title="7、添加库文件供程序链接"></a>7、添加库文件供程序链接</h2><pre><code>如果没有将xenomai的库添加到系统路径中，程序在链接的时候就会出现
+error: while loading shared libraries...
+解决：
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/ld.so.conf</span><br><span class="line">/usr/xenomai/lib  //文件中增加这一行</span><br><span class="line">sudo ldconfig -v  //使其生效</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h1 id="一、安装native型网卡驱动"><a href="#一、安装native型网卡驱动" class="headerlink" title="一、安装native型网卡驱动"></a>一、安装native型网卡驱动</h1><h2 id="1、内核及igh源码版本的下载地址"><a href="#1、内核及igh源码版本的下载地址" class="headerlink" title="1、内核及igh源码版本的下载地址"></a>1、内核及igh源码版本的下载地址</h2><pre><code>安装native型网卡驱动需要内核支持此网卡驱动，
+最好的内核无疑是igh官方经过优化后的，下载地址如下
+内核：https://source.denx.de/Xenomai/linux-dovetail 
+branch选择 v5.10.y-dovetail
+
+igh源码： https://gitlab.com/etherlab.org/ethercat/-/tree/e1000e-5.10
+branch选择 e1000e-5.10
+
+xenomai选择3.2.1版本
+</code></pre>
+<h2 id="2、Linux内核配置"><a href="#2、Linux内核配置" class="headerlink" title="2、Linux内核配置"></a>2、Linux内核配置</h2><pre><code>由于使用官方提供的内核，所以打补丁与另一篇搭建实时系统博客中的方法略有不同
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/kernel</span><br><span class="line">../xenomai-v3.2.1/scripts/prepare-kernel.sh --<span class="built_in">arch</span>=x86_64</span><br></pre></td></tr></table></figure>
+剩下安装内核与xenomai的步骤与另一篇博客一致
+</code></pre>
+<h2 id="3、native型网卡配置"><a href="#3、native型网卡配置" class="headerlink" title="3、native型网卡配置"></a>3、native型网卡配置</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/ighsourceTree</span><br><span class="line">./scrip/bootstrap</span><br><span class="line"><span class="built_in">mkdir</span> etherlab</span><br><span class="line"></span><br><span class="line">./configure --prefix=/home/huger/rtlinux/ethercat-e1000e-5.10/etherlab -enable-8139too=no -enable-e1000e=<span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="4、编译及安装"><a href="#4、编译及安装" class="headerlink" title="4、编译及安装"></a>4、编译及安装</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">make all modules -j16</span><br><span class="line">sudo make modules_install install -j16</span><br><span class="line">sudo depmod</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="5、创建软链接"><a href="#5、创建软链接" class="headerlink" title="5、创建软链接"></a>5、创建软链接</h2><pre><code>与通用型相同
+</code></pre>
+<h2 id="6、配置网卡"><a href="#6、配置网卡" class="headerlink" title="6、配置网卡"></a>6、配置网卡</h2><pre><code>sudo vi /etc/sysconfig/ethercat
+MASTER0_DEVICE=”b8:27:eb:7d:26:a2” //填写实际MAC
+DEVICE_MODULES=”e1000e”
+</code></pre>
+
                 
             </div>
         </article>
@@ -150,6 +205,11 @@ xenomai3.1及补丁: https://xenomai.org/downloads/
 <h2 id="4、修改-lat-best为负的方法"><a href="#4、修改-lat-best为负的方法" class="headerlink" title="4、修改 lat best为负的方法"></a>4、修改 lat best为负的方法</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/xenomai/latency</span><br><span class="line">xeno latency</span><br></pre></td></tr></table></figure>
 运行一小段时间待其稳定后查看此时lat best 的数值, 将此数值乘1000 后重新echo
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> value*1000 &gt; /proc/xenomai/latency</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h1 id="五、添加库文件供程序链接"><a href="#五、添加库文件供程序链接" class="headerlink" title="五、添加库文件供程序链接"></a>五、添加库文件供程序链接</h1><pre><code>如果没有将xenomai的库添加到系统路径中，程序在链接的时候就会出现
+error: while loading shared libraries...
+解决：
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/ld.so.conf</span><br><span class="line">/usr/xenomai/lib  //文件中增加这一行</span><br><span class="line">sudo ldconfig -v  //使其生效</span><br></pre></td></tr></table></figure>
 </code></pre>
 
                 
