@@ -112,8 +112,7 @@
 
 2) 初始化列表初始化优先于构造函数内的代码执行顺序。
 
-3) 一般只对无动态内存的成员、const成员、引用初始化, 
-    其中const成员、引用成员必须在初始化列表初始化。
+3) 一般只对无动态内存的成员、const成员、引用初始化, 其中const成员、引用成员必须在初始化列表初始化。
 
 4) 成员初始化列表初始化效率更高。
 
@@ -125,7 +124,7 @@
 
 但是如果使用下面的成员初始化列表初始化，那么就省去了创建临时对象再拷贝的过程
 
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> class Word&#123;</span><br><span class="line"> public:</span><br><span class="line">     Word() :_name(0),_cnt(0)&#123;&#125; //直接初始化_name，不创建临时对象</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> private:</span><br><span class="line">     string _name;</span><br><span class="line">     int _cnt;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> class Word&#123;</span><br><span class="line"> public:</span><br><span class="line">     Word() :_name(0),_cnt(0)&#123;&#125; //直接初始化_name，不创建临时对象</span><br><span class="line">     </span><br><span class="line"> private:</span><br><span class="line">     string _name;</span><br><span class="line">     int _cnt;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 </code></pre>
 <h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><pre><code>1) 成员初始化列表初始化成员才是真正意义上的初始化，其他两种方式都是为赋值。
 
