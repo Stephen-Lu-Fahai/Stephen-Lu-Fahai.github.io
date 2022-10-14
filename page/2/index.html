@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>StephenLu`s Blog</title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+
+        </div>
+        <nav class="header-nav">
+            
+            <a href="/" class="header-nav-link" >
+                首页
+            </a>
+            
+
+            
+            <a href="/archives" class="header-nav-link">
+                归档
+            </a>
+            
+
+            
+            <a href="/tags" class="header-nav-link">
+                标签
+            </a>
+            
+
+            
+        </nav>
+    </div>
+</header>
+<header class="mobile-header">
+    <div class="mobile-nav">
+        <div class="mobile-nav-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-nav-title">
+            <a href="/" class="mobile-nav-title-link">Stephen Lu's Blog</a>
+        </div>
+
+    </div>
+    <nav class="mobile-menu">
+        <ul class="mobile-menu-list">
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-home"></i>
+                <a href="/" class="mobile-nav-link">首页</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-archive"></i>
+                <a href="/archives" class="mobile-nav-link">归档</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-tag"></i>
+                <a href="/tags" class="mobile-nav-link">标签</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-about"></i>
+                <a href="/about/" class="mobile-nav-link">关于</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="main">
+    <div class="content-inner">
+        <div class="posts">
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/09/27/ubuntu%E5%AE%89%E8%A3%85hexo%E8%B8%A9%E5%9D%91/">ubuntu安装hexo踩坑</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-09-27</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    <h2 id="软件问题导致无法安装HEXO"><a href="#软件问题导致无法安装HEXO" class="headerlink" title="软件问题导致无法安装HEXO"></a>软件问题导致无法安装HEXO</h2><h3 id="现象及原因"><a href="#现象及原因" class="headerlink" title="现象及原因"></a>现象及原因</h3><pre><code>如果默认使用 
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install nodejs npm</span><br></pre></td></tr></table></figure>
+系统会默认安装低版本的软件，然而在执行
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo </span><br></pre></td></tr></table></figure>
+会提示版本太低
+</code></pre>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install curl</span><br><span class="line">curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -</span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure>
+这就安装了高版本的软件，可以直接安装hexo.
+</code></pre>
+<!-- ![][dog] 
+
+[dog]:data:image/png;base64,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 -->
+                
+            </div>
+        </article>
+    
+</div>
+<div class="paginator">
+    
+        
+        <a class="prev" href="/">
+            <i class="iconfont icon-prev"></i>
+            上一页
+        </a>
+        
+        
+    
+</div>
+
+    </div>
+</div>
+<footer class="footer-social">
+    
+    <a class="social-link" target="_blank" href="https://github.com/Stephen-Lu-Fahai">
+        <i class="iconfont icon-github"></i>
+    </a>
+    
+
+    
+
+    
+
+    <div class="footer-copyright">
+        <p class="time-line">
+            &copy;
+            
+            
+                2018 -
+            
+            2022
+            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
+            <a target="_blank" href="https://github.com/Stephen-Lu-Fahai">Stephen Lu</a>
+        </p>
+        <p class="theme-info">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
+            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    
+    var gitment = new Gitment({
+        id: '',
+        owner: 'Stephen-Lu-Fahai',
+        repo: 'git@github.com:Stephen-Lu-Fahai/blogComments.git',
+        oauth: {
+            client_id: '475f26b9760e99ec10cb',
+            client_secret: 'af10c83d7ec565e05d774d57dcd0947ca40c1018'
+        }
+    });
+    gitment.render('comment-container');
+    
+
+</script>
+</html>
