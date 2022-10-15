@@ -80,96 +80,150 @@
     
         <article class="post-abstract">
             <div class="post-title">
-                <h2><a class="post-title-link" href="/2022/09/27/x86%E5%B7%A5%E6%8E%A7%E6%9C%BA%E6%90%AD%E5%BB%BAubuntu18-xenomai%E5%AE%9E%E6%97%B6%E7%B3%BB%E7%BB%9F/">x86工控机搭建ubuntu18+xenomai实时系统</a></h2>
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-13-%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/">设计模式:13--责任链模式</a></h2>
             </div>
             <div class="post-meta">
-                <span class="post-time">2022-09-27</span>
+                <span class="post-time">2022-10-15</span>
                 
             </div>
             <div class="post-content">
                 
-                    <h1 id="一、安装系统及软件依赖"><a href="#一、安装系统及软件依赖" class="headerlink" title="一、安装系统及软件依赖"></a>一、安装系统及软件依赖</h1><h2 id="1、系统选择"><a href="#1、系统选择" class="headerlink" title="1、系统选择"></a>1、系统选择</h2><pre><code>选择安装 ubuntu18.04.6 LTS
-</code></pre>
-<h2 id="2、软件依赖"><a href="#2、软件依赖" class="headerlink" title="2、软件依赖"></a>2、软件依赖</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libc6-dev libncurses5-dev libssl-dev build-essential bison flex lib32stdc++6 lib32z1 autoconf automake libtool pkg-config libelf-dev</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="3、软件版本及下载"><a href="#3、软件版本及下载" class="headerlink" title="3、软件版本及下载"></a>3、软件版本及下载</h2><pre><code>kernel: 4.9.38: https://mirrors.edge.kernel.org/pub/linux/kernel/
-
-xenomai3.1及补丁: https://xenomai.org/downloads/
-</code></pre>
-<h1 id="二、配置内核"><a href="#二、配置内核" class="headerlink" title="二、配置内核"></a>二、配置内核</h1><h2 id="1、打补丁"><a href="#1、打补丁" class="headerlink" title="1、打补丁"></a>1、打补丁</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> linux-4.9.38</span><br><span class="line"></span><br><span class="line">../xenomai-3.1/scripts/prepare-kernel.sh --<span class="built_in">arch</span>=x86_64 --ipipe=ipipe-core-4.9.38-x86-3.patch</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="2、安装内核管理包"><a href="#2、安装内核管理包" class="headerlink" title="2、安装内核管理包"></a>2、安装内核管理包</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install kernel-package</span><br></pre></td></tr></table></figure>
-在弹出的界面中选择 “keep the local version…….”
-</code></pre>
-<h2 id="3、配置kernel"><a href="#3、配置kernel" class="headerlink" title="3、配置kernel"></a>3、配置kernel</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
-安装附录中的选项配置内核，去除xenomai相关的警告
-</code></pre>
-<h2 id="4、去除编译错误"><a href="#4、去除编译错误" class="headerlink" title="4、去除编译错误"></a>4、去除编译错误</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi .config</span><br></pre></td></tr></table></figure>
-找到SYSTEM_TRUSTED_KEYS将其赋值为空，使用#注释掉CONFIG_DEBUG_INFO_BTF
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM_TRUSTED_KEYS=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="comment">#CONFIG_DEBUG_INFO_BTF</span></span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="5、编译内核"><a href="#5、编译内核" class="headerlink" title="5、编译内核"></a>5、编译内核</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CONCURRENCY_LEVEL=$(<span class="built_in">nproc</span>) make-kpkg --rootcmd fakeroot --initrd kernel_image kernel_headers</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="6、参考文档"><a href="#6、参考文档" class="headerlink" title="6、参考文档"></a>6、参考文档</h2><pre><code>https://blog.csdn.net/qq_28882933/article/details/123626659?spm=1001.2014.3001.5502
-</code></pre>
-<h1 id="三、安装新内核并修改grub"><a href="#三、安装新内核并修改grub" class="headerlink" title="三、安装新内核并修改grub"></a>三、安装新内核并修改grub</h1><h2 id="1、安装"><a href="#1、安装" class="headerlink" title="1、安装"></a>1、安装</h2><pre><code>内核编译完成后会在上一层目录生成对应的deb安装包
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line">sudo dpkg -i *.deb</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="2、增加非root用户"><a href="#2、增加非root用户" class="headerlink" title="2、增加非root用户"></a>2、增加非root用户</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo addgroup xenomai --gid 1234</span><br><span class="line">sudo addgroup root xenomai</span><br><span class="line">sudo usermod -a -G xenomai <span class="variable">$USER</span></span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="3、查看当前系统下的所有可用内核"><a href="#3、查看当前系统下的所有可用内核" class="headerlink" title="3、查看当前系统下的所有可用内核"></a>3、查看当前系统下的所有可用内核</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /boot/grub/grub.cfg | grep menuentry</span><br></pre></td></tr></table></figure>
-记住刚才安装的实时内核下标号
-</code></pre>
-<h2 id="4、修改grub启动项"><a href="#4、修改grub启动项" class="headerlink" title="4、修改grub启动项"></a>4、修改grub启动项</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/default/grub</span><br></pre></td></tr></table></figure>
-倒数第二个选项，要在后面加命令行“xenomai.allowed_group=1234”即上步骤新增的组，具体修改如下:
-</code></pre>
-<h2 id="5、更新grub"><a href="#5、更新grub" class="headerlink" title="5、更新grub"></a>5、更新grub</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo update-grub</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h1 id="四、安装xenomai"><a href="#四、安装xenomai" class="headerlink" title="四、安装xenomai"></a>四、安装xenomai</h1><h2 id="1、编译源文件"><a href="#1、编译源文件" class="headerlink" title="1、编译源文件"></a>1、编译源文件</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> xenomai-3.1</span><br><span class="line"></span><br><span class="line">./configure --with-pic --with-core=cobalt --enable-smp --disable-tls --enable-dlopen-libs --disable-clock-monotonic-raw</span><br><span class="line"></span><br><span class="line">make -j`<span class="built_in">nproc</span>`</span><br><span class="line"></span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="2、配置系统路径"><a href="#2、配置系统路径" class="headerlink" title="2、配置系统路径"></a>2、配置系统路径</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;</span></span><br><span class="line"><span class="string">### Xenomai</span></span><br><span class="line"><span class="string">export XENOMAI_ROOT_DIR=/usr/xenomai</span></span><br><span class="line"><span class="string">export XENOMAI_PATH=/usr/xenomai</span></span><br><span class="line"><span class="string">export PATH=$PATH:$XENOMAI_PATH/bin:$XENOMAI_PATH/sbin</span></span><br><span class="line"><span class="string">export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$XENOMAI_PATH/lib/pkgconfig</span></span><br><span class="line"><span class="string">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$XENOMAI_PATH/lib</span></span><br><span class="line"><span class="string">export OROCOS_TARGET=xenomai</span></span><br><span class="line"><span class="string">&#x27;</span> &gt;&gt; ~/.xenomai_rc</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;source ~/.xenomai_rc&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="3、实时性测试"><a href="#3、实时性测试" class="headerlink" title="3、实时性测试"></a>3、实时性测试</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chmod</span> -R 777 /dev/rtdm/memdev-private</span><br><span class="line">sudo <span class="built_in">chmod</span> -R 777 /dev/rtdm/memdev-shared</span><br><span class="line">xeno latency</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h2 id="4、修改-lat-best为负的方法"><a href="#4、修改-lat-best为负的方法" class="headerlink" title="4、修改 lat best为负的方法"></a>4、修改 lat best为负的方法</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/xenomai/latency</span><br><span class="line">xeno latency</span><br></pre></td></tr></table></figure>
-运行一小段时间待其稳定后查看此时lat best 的数值, 将此数值乘1000 后重新echo
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> value*1000 &gt; /proc/xenomai/latency</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h1 id="五、添加库文件供程序链接"><a href="#五、添加库文件供程序链接" class="headerlink" title="五、添加库文件供程序链接"></a>五、添加库文件供程序链接</h1><pre><code>如果没有将xenomai的库添加到系统路径中，程序在链接的时候就会出现
-error: while loading shared libraries...
-解决：
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/ld.so.conf</span><br><span class="line">/usr/xenomai/lib  //文件中增加这一行</span><br><span class="line">sudo ldconfig -v  //使其生效</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h1 id="六、内核配置附录"><a href="#六、内核配置附录" class="headerlink" title="六、内核配置附录"></a>六、内核配置附录</h1><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">#进入menuconfig界面，会看影响xenomai实时性的警告信息：</span></span><br><span class="line"><span class="comment">#*** WARNING! Page migration (CONFIG_MIGRATION) may increase ***</span></span><br><span class="line"><span class="comment">#*** latency. ***</span></span><br><span class="line"><span class="comment">#*** WARNING! At least one of APM, CPU frequency scaling, ACPI ‘processor‘ ***</span></span><br><span class="line"><span class="comment">#*** or CPU idle features is enabled. Any of these options may ***</span></span><br><span class="line"><span class="comment">#*** cause troubles with Xenomai. You should disable them. ***</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#具体配置如下所示：   </span></span><br><span class="line"></span><br><span class="line">    * General setup</span><br><span class="line"></span><br><span class="line">      --&gt; Local version - append to kernel release: -xenomai-3.1</span><br><span class="line"></span><br><span class="line">      --&gt; Timers subsystem</span><br><span class="line"></span><br><span class="line">          --&gt; High Resolution Timer Support (Enable)</span><br><span class="line"></span><br><span class="line">    * Xenomai/cobalt</span><br><span class="line"></span><br><span class="line">      --&gt; Sizes and static limits</span><br><span class="line"></span><br><span class="line">        --&gt; Number of registry slots (512 --&gt; 4096)</span><br><span class="line"></span><br><span class="line">        --&gt; Size of system heap (Kb) (512 --&gt; 4096)</span><br><span class="line"></span><br><span class="line">        --&gt; Size of private heap (Kb) (64 --&gt; 256)</span><br><span class="line"></span><br><span class="line">        --&gt; Size of shared heap (Kb) (64 --&gt; 256)</span><br><span class="line"></span><br><span class="line">        --&gt; Maximum number of POSIX timers per process (128 --&gt; 512)</span><br><span class="line"></span><br><span class="line">      --&gt; Drivers</span><br><span class="line"></span><br><span class="line">        --&gt; RTnet</span><br><span class="line"></span><br><span class="line">            --&gt; RTnet, TCP/IP socket interface (Enable)</span><br><span class="line"></span><br><span class="line">                --&gt; Drivers</span><br><span class="line"></span><br><span class="line">                    --&gt; New intel(R) PRO/1000 PCIe (Enable)</span><br><span class="line"></span><br><span class="line">                    --&gt; Realtek 8169 (Enable)</span><br><span class="line"></span><br><span class="line">                    --&gt; Loopback (Enable)</span><br><span class="line"></span><br><span class="line">            --&gt; Add-Ons</span><br><span class="line"></span><br><span class="line">                --&gt; Real-Time Capturing Support (Enable)</span><br><span class="line"></span><br><span class="line">    * Power management and ACPI options</span><br><span class="line"></span><br><span class="line">      --&gt; CPU Frequency scaling</span><br><span class="line"></span><br><span class="line">          --&gt; CPU Frequency scaling (Disable)</span><br><span class="line"></span><br><span class="line">      --&gt; ACPI (Advanced Configuration and Power Interface) Support</span><br><span class="line"></span><br><span class="line">          --&gt; Processor (Disable)</span><br><span class="line"></span><br><span class="line">      --&gt; CPU Idle</span><br><span class="line"></span><br><span class="line">          --&gt; CPU idle PM support (Disable)</span><br><span class="line"></span><br><span class="line">    * Pocessor <span class="built_in">type</span> and features</span><br><span class="line"></span><br><span class="line">      --&gt; Enable maximum number of SMP processors and NUMA nodes (Disable)</span><br><span class="line"></span><br><span class="line">      // Ref : http://xenomai.org/pipermail/xenomai/2017-September/037718.html</span><br><span class="line"></span><br><span class="line">      --&gt; Processor family</span><br><span class="line"></span><br><span class="line">          --&gt; Core 2/newer Xeon (<span class="keyword">if</span> <span class="string">&quot;cat /proc/cpuinfo | grep family&quot;</span> returns 6, <span class="built_in">set</span> as Generic otherwise)</span><br><span class="line"></span><br><span class="line">      // Xenomai will issue a warning about CONFIG_MIGRATION, <span class="built_in">disable</span> those <span class="keyword">in</span> this orde</span><br><span class="line"></span><br><span class="line">      --&gt; Transparent Hugepage Support (Disable)</span><br><span class="line"></span><br><span class="line">      --&gt; Allow <span class="keyword">for</span> memory compaction (Disable)</span><br><span class="line"></span><br><span class="line">      --&gt; Contiguous Memory Allocation (Disable)</span><br><span class="line"></span><br><span class="line">      --&gt; Allow <span class="keyword">for</span> memory compaction</span><br><span class="line"></span><br><span class="line">          --&gt; Page Migration (Disable)</span><br><span class="line"></span><br><span class="line">    * Device Drivers</span><br><span class="line"></span><br><span class="line">      --&gt; Staging drivers</span><br><span class="line"></span><br><span class="line">          --&gt; Unisys SPAR driver support</span><br><span class="line"></span><br><span class="line">             --&gt; Unisys visorbus driver (Disable)</span><br></pre></td></tr></table></figure>
-</code></pre>
-
+                    
                 
             </div>
         </article>
     
         <article class="post-abstract">
             <div class="post-title">
-                <h2><a class="post-title-link" href="/2022/09/27/ubuntu%E5%AE%89%E8%A3%85hexo%E8%B8%A9%E5%9D%91/">ubuntu安装hexo踩坑</a></h2>
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-12-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">设计模式:12--代理模式</a></h2>
             </div>
             <div class="post-meta">
-                <span class="post-time">2022-09-27</span>
+                <span class="post-time">2022-10-15</span>
                 
             </div>
             <div class="post-content">
                 
-                    <h2 id="软件问题导致无法安装HEXO"><a href="#软件问题导致无法安装HEXO" class="headerlink" title="软件问题导致无法安装HEXO"></a>软件问题导致无法安装HEXO</h2><h3 id="现象及原因"><a href="#现象及原因" class="headerlink" title="现象及原因"></a>现象及原因</h3><pre><code>如果默认使用 
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install nodejs npm</span><br></pre></td></tr></table></figure>
-系统会默认安装低版本的软件，然而在执行
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo </span><br></pre></td></tr></table></figure>
-会提示版本太低
-</code></pre>
-<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install curl</span><br><span class="line">curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -</span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure>
-这就安装了高版本的软件，可以直接安装hexo.
-</code></pre>
-<!-- ![][dog] 
-
-[dog]:data:image/png;base64,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 -->
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-11-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/">设计模式:11--享元模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-10-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/">设计模式:10--外观模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-09-%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/">设计模式:09--装饰模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-08-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">设计模式:08--组合模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-07-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">设计模式:07--桥接模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-06-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/">设计模式:06--适配器模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-05-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">设计模式:05--单例模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
+                
+            </div>
+        </article>
+    
+        <article class="post-abstract">
+            <div class="post-title">
+                <h2><a class="post-title-link" href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-04-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/">设计模式:04--原型模式</a></h2>
+            </div>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+            </div>
+            <div class="post-content">
+                
+                    
                 
             </div>
         </article>
@@ -183,6 +237,11 @@ error: while loading shared libraries...
             上一页
         </a>
         
+        
+        <a class="next" href="/page/3/">
+            下一页
+            <i class="iconfont icon-next"></i>
+        </a>
         
     
 </div>
