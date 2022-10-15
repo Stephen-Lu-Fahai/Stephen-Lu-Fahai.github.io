@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>StephenLu`s Blog</title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+
+        </div>
+        <nav class="header-nav">
+            
+            <a href="/" class="header-nav-link" >
+                首页
+            </a>
+            
+
+            
+            <a href="/archives" class="header-nav-link">
+                归档
+            </a>
+            
+
+            
+            <a href="/tags" class="header-nav-link">
+                标签
+            </a>
+            
+
+            
+        </nav>
+    </div>
+</header>
+<header class="mobile-header">
+    <div class="mobile-nav">
+        <div class="mobile-nav-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="mobile-nav-title">
+            <a href="/" class="mobile-nav-title-link">Stephen Lu's Blog</a>
+        </div>
+
+    </div>
+    <nav class="mobile-menu">
+        <ul class="mobile-menu-list">
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-home"></i>
+                <a href="/" class="mobile-nav-link">首页</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-archive"></i>
+                <a href="/archives" class="mobile-nav-link">归档</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-tag"></i>
+                <a href="/tags" class="mobile-nav-link">标签</a>
+            </li>
+            <li class="mobile-menu-item">
+                <i class="iconfont icon-about"></i>
+                <a href="/about/" class="mobile-nav-link">关于</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div class="main">
+    <div class="content-inner">
+        <div class="posts">
+    <article class="post-whole">
+        <div class="post-title">
+            <h2 class="title">C++:06--function与bind及Lamda实现回调函数</h2>
+            <div class="post-meta">
+                <span class="post-time">2022-10-15</span>
+                
+                <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
+            </div>
+        </div>
+        <div class="post-toc" id="post-toc">
+    <strong class="post-toc-title">目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BD%BF%E7%94%A8std-function%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%85%A5%E5%8F%82"><span class="toc-text">一、使用std::function作为函数入参</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%9F%BA%E4%BA%8E%E4%BC%A0%E5%80%BC%E7%9A%84%E6%96%B9%E5%BC%8F%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="toc-text">1、基于传值的方式传递参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%9F%BA%E4%BA%8E%E5%BC%95%E7%94%A8%E7%9A%84%E6%96%B9%E5%BC%8F%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="toc-text">2、基于引用的方式传递参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E4%BC%A0%E5%80%BC%E6%96%B9%E5%BC%8F%E4%B8%8B%E7%9A%84std-function%E5%AF%B9%E8%B1%A1%E4%BF%9D%E5%AD%98"><span class="toc-text">3、传值方式下的std::function对象保存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%85%A5%E5%8F%82"><span class="toc-text">二、类的成员函数作为函数入参</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BD%BF%E7%94%A8bind%E5%92%8Cfunction%E6%9D%A5%E5%AE%9E%E7%8E%B0"><span class="toc-text">1、使用bind和function来实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E4%BD%BF%E7%94%A8lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AE%9E%E7%8E%B0"><span class="toc-text">2、使用lambda表达式实现</span></a></li></ol></li></ol>
+    <div class="back-to-top" id="back-to-top">
+        <a href="javascript:void(0);">回到顶部</a>
+    </div>
+</div>
+        <div class="post-content">
+            <h1 id="一、使用std-function作为函数入参"><a href="#一、使用std-function作为函数入参" class="headerlink" title="一、使用std::function作为函数入参"></a>一、使用std::function作为函数入参</h1><h2 id="1、基于传值的方式传递参数"><a href="#1、基于传值的方式传递参数" class="headerlink" title="1、基于传值的方式传递参数"></a>1、基于传值的方式传递参数</h2><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">registerCallBack</span><span class="params">(<span class="built_in">std</span>::function&lt;<span class="type">void</span>()&gt;)</span>;</span><br></pre></td></tr></table></figure>
+上面的代码实现了一个注册回调函数的机制，入参std::function&lt;void()&gt;是一个模板类对象，
+它可以用一个函数签名为void()的可调用对象来进行初始化。
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法（A）</span></span><br><span class="line">registerCallBack([=]&#123;</span><br><span class="line">    ....  <span class="comment">// 回调函数的实现部分</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+这里使用了lambda表达式作为函数的入参，lambda表达式会生成一个匿名的闭包，
+基于这个闭包构造了一个std::function&lt;void()&gt;的对象，
+然后通过传值调用的方式把这个对象传递registerCallBack函数中使用。
+</code></pre>
+<h2 id="2、基于引用的方式传递参数"><a href="#2、基于引用的方式传递参数" class="headerlink" title="2、基于引用的方式传递参数"></a>2、基于引用的方式传递参数</h2><pre><code>当然还可以如下实现这个注册函数，入参通过const引用的方式传递，这里的引用必须是const的，
+这是因为调用registerCallBack函数的地方生成了一个临时的std::function()对象，
+是一个右值，否则编译会报错。
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方法(B)</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">registerCallBack</span><span class="params">(<span class="built_in">std</span>::function&lt;<span class="type">void</span>()&gt; <span class="type">const</span>&amp;)</span>;</span><br></pre></td></tr></table></figure>
+
+这传值和引用区别就在于，在registerCallBack函数内部怎么使用这个入参，
+1) 如果只是简单的调用一下std::func()类，那么两种都没有问题，可能使用引用的效率更高；
+
+2) 如果register函数内部需要保存这个std::func()，并用于以后使用，那么方法A直接保存没有问题，
+    方法B就必须做一次拷贝，否则方法B中，当临时的对象销毁时，有可能出现引用悬空的问题。
+</code></pre>
+<h2 id="3、传值方式下的std-function对象保存"><a href="#3、传值方式下的std-function对象保存" class="headerlink" title="3、传值方式下的std::function对象保存"></a>3、传值方式下的std::function对象保存</h2><pre><code>如果要在registerCallBack函数内部保存传入的function对象，可以使用std::move，效率更高。
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CallBackHolder</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line"><span class="type">void</span> <span class="title function_">registerCallBack</span><span class="params">(<span class="built_in">std</span>::function&lt;<span class="type">void</span>()&gt; func)</span> &#123;</span><br><span class="line">    callback = <span class="built_in">std</span>::move(func);</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    <span class="built_in">std</span>::function&lt;<span class="type">void</span>()&gt; callback; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h1 id="二、类的成员函数作为函数入参"><a href="#二、类的成员函数作为函数入参" class="headerlink" title="二、类的成员函数作为函数入参"></a>二、类的成员函数作为函数入参</h1><pre><code>类的成员函数都会默认有个隐藏的this指针，所以不像普通的函数直接作为入参就可以了。
+</code></pre>
+<h2 id="1、使用bind和function来实现"><a href="#1、使用bind和function来实现" class="headerlink" title="1、使用bind和function来实现"></a>1、使用bind和function来实现</h2><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">classA</span> &#123;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="type">void</span>(<span class="type">int</span> i)&gt; <span class="type">callback_t</span>;</span><br><span class="line">...</span><br><span class="line">    <span class="type">void</span> <span class="title function_">registCb</span><span class="params">(<span class="type">callback_t</span> func)</span> &#123;</span><br><span class="line">        cbHandle = <span class="built_in">std</span>::move(func);</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    <span class="type">callback_t</span> cbHandle;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">classB</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    classB(classA&amp; cA) &#123;       </span><br><span class="line">        cA.registCb(bind(&amp;classB::handle, this, placeholders::_1));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="2、使用lambda表达式实现"><a href="#2、使用lambda表达式实现" class="headerlink" title="2、使用lambda表达式实现"></a>2、使用lambda表达式实现</h2><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">classA</span> &#123;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="type">void</span>(<span class="type">int</span> i)&gt; <span class="type">callback_t</span>;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line">    classA() &#123;&#125;</span><br><span class="line">    ~classA() &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">void</span> <span class="title function_">handle</span><span class="params">(<span class="type">int</span> i)</span> &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;classA::handle&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        cbHandle(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">registCb</span><span class="params">(<span class="type">callback_t</span> func)</span></span><br><span class="line">    &#123;cbHandle = <span class="built_in">std</span>::move(func);&#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    <span class="type">callback_t</span> cbHandle;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">classB</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    classB(classA&amp; cA) &#123;       </span><br><span class="line">        cA.registCb([this](<span class="type">int</span> i)&#123;classB::handle(i);&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    ~classB() &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">void</span> <span class="title function_">handle</span><span class="params">(<span class="type">int</span> i)</span>&#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;classB, handle message&quot;</span> &lt;&lt; i &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    classA testa;</span><br><span class="line">    classB <span class="title function_">testb</span><span class="params">(testa)</span>;</span><br><span class="line"></span><br><span class="line">    testa.handle(<span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+
+        </div>
+        
+        <div class="post-tag">
+            
+            <a class="tag" href="/tags/C/" title="C++">C++</a>
+            
+        </div>
+        
+    </article>
+</div>
+<div class="paginator">
+    
+        
+        
+            <a class="next" href="/2022/10/14/C-05-Lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/">
+                <span class="nav-default">C++:05--Lamda表达式使用场景</span>
+                <span class="nav-mobile">下一篇</span>
+                <i class="iconfont icon-next"></i>
+            </a>
+        
+    
+</div>
+<div id="comment-container"></div>
+    </div>
+</div>
+<footer class="footer-social">
+    
+    <a class="social-link" target="_blank" href="https://github.com/Stephen-Lu-Fahai">
+        <i class="iconfont icon-github"></i>
+    </a>
+    
+
+    
+
+    
+
+    <div class="footer-copyright">
+        <p class="time-line">
+            &copy;
+            
+            
+                2018 -
+            
+            2022
+            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
+            <a target="_blank" href="https://github.com/Stephen-Lu-Fahai">Stephen Lu</a>
+        </p>
+        <p class="theme-info">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
+            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    
+    var gitment = new Gitment({
+        id: 'C++:06--function与bind及Lamda实现回调函数',
+        owner: 'Stephen-Lu-Fahai',
+        repo: 'git@github.com:Stephen-Lu-Fahai/blogComments.git',
+        oauth: {
+            client_id: '475f26b9760e99ec10cb',
+            client_secret: 'af10c83d7ec565e05d774d57dcd0947ca40c1018'
+        }
+    });
+    gitment.render('comment-container');
+    
+
+</script>
+</html>
