@@ -1,100 +1,339 @@
 <!DOCTYPE html>
-<html>
+<html lang=zh>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <title>StephenLu`s Blog</title>
-    
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>C++:05--Lamda表达式使用场景 | Hexo</title>
+  <meta name="description" content="一、lamda表达式变量截取方式1、定义 1) 变量截取方式  2) Lambda表达式的参数列表  3) Mutable 标识  4) 异常标识  5) 返回值  6) “函数”体，也就是lambda表达式需要进行的实际操作  2、变量截取方式[] 不截取任何变量 [&amp;] 截取外部作用域中所有变量，并作为引用在函数体中使用 [&#x3D;] 截取外部作用域中所有变量，并拷贝一份在函数体中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++:05--Lamda表达式使用场景">
+<meta property="og:url" content="http://example.com/2022/10/14/C-05-Lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="一、lamda表达式变量截取方式1、定义 1) 变量截取方式  2) Lambda表达式的参数列表  3) Mutable 标识  4) 异常标识  5) 返回值  6) “函数”体，也就是lambda表达式需要进行的实际操作  2、变量截取方式[] 不截取任何变量 [&amp;] 截取外部作用域中所有变量，并作为引用在函数体中使用 [&#x3D;] 截取外部作用域中所有变量，并拷贝一份在函数体中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-14T06:54:13.000Z">
+<meta property="article:modified_time" content="2022-10-16T01:41:40.274Z">
+<meta property="article:author" content="Stephen Lu">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/10/14/C-05-Lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
 <link rel="stylesheet" href="/css/style.css">
 
-    
-<link rel="stylesheet" href="/css/gitment.css">
-
-    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_859455_eaq7v6w8ktj.css">
+  
+  
+  
+  
 <meta name="generator" content="Hexo 6.3.0"></head>
-<body>
-<header class="header">
-    <div class="header-inner">
-        <div class="header-title">
 
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Stephen-Lu-Fahai" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">StephenLu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Embedded Software Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
         </div>
-        <nav class="header-nav">
-            
-            <a href="/" class="header-nav-link" >
-                首页
-            </a>
-            
-
-            
-            <a href="/archives" class="header-nav-link">
-                归档
-            </a>
-            
-
-            
-            <a href="/tags" class="header-nav-link">
-                标签
-            </a>
-            
-
-            
-        </nav>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
     </div>
-</header>
-<header class="mobile-header">
-    <div class="mobile-nav">
-        <div class="mobile-nav-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <div class="mobile-nav-title">
-            <a href="/" class="mobile-nav-title-link">Stephen Lu's Blog</a>
-        </div>
-
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
     </div>
-    <nav class="mobile-menu">
-        <ul class="mobile-menu-list">
-            <li class="mobile-menu-item">
-                <i class="iconfont icon-home"></i>
-                <a href="/" class="mobile-nav-link">首页</a>
-            </li>
-            <li class="mobile-menu-item">
-                <i class="iconfont icon-archive"></i>
-                <a href="/archives" class="mobile-nav-link">归档</a>
-            </li>
-            <li class="mobile-menu-item">
-                <i class="iconfont icon-tag"></i>
-                <a href="/tags" class="mobile-nav-link">标签</a>
-            </li>
-            <li class="mobile-menu-item">
-                <i class="iconfont icon-about"></i>
-                <a href="/about/" class="mobile-nav-link">关于</a>
-            </li>
-        </ul>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
     </nav>
+  </div>
 </header>
-<div class="main">
-    <div class="content-inner">
-        <div class="posts">
-    <article class="post-whole">
-        <div class="post-title">
-            <h2 class="title">C++:05--Lamda表达式使用场景</h2>
-            <div class="post-meta">
-                <span class="post-time">2022-10-14</span>
-                
-                <span class="post-visit"> 阅读次数：<span id="busuanzi_value_page_pv"></span></span>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Stephen`s Blog!</p>
             </div>
         </div>
-        <div class="post-toc" id="post-toc">
-    <strong class="post-toc-title">目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8F%98%E9%87%8F%E6%88%AA%E5%8F%96%E6%96%B9%E5%BC%8F"><span class="toc-text">一、lamda表达式变量截取方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-text">1、定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%8F%98%E9%87%8F%E6%88%AA%E5%8F%96%E6%96%B9%E5%BC%8F"><span class="toc-text">2、变量截取方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">二、lamda表达式使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%9C%BA%E6%99%AF1"><span class="toc-text">1、场景1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%9C%BA%E6%99%AF2"><span class="toc-text">2、场景2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%9C%BA%E6%99%AF3"><span class="toc-text">3、场景3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%9B%B4%E5%A4%9A%E5%8F%82%E8%80%83%E4%BE%8B%E5%AD%90"><span class="toc-text">4、更多参考例子</span></a></li></ol></li></ol>
-    <div class="back-to-top" id="back-to-top">
-        <a href="javascript:void(0);">回到顶部</a>
     </div>
 </div>
-        <div class="post-content">
-            <h1 id="一、lamda表达式变量截取方式"><a href="#一、lamda表达式变量截取方式" class="headerlink" title="一、lamda表达式变量截取方式"></a>一、lamda表达式变量截取方式</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><p><img src="data:image/png;base64,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"></p>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="tag">模式设计</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/C/" style="font-size: 13.5px;">C++</a> <a href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">ubuntu系统</a> <a href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" style="font-size: 13px;">伺服控制</a> <a href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 14px;">模式设计</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-23-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" class="title">设计模式:23--访问者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:21:29.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-22-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" class="title">设计模式:22--模板方法模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:21:07.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-21-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="title">设计模式:21--策略模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:44.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-20-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" class="title">设计模式:20--状态模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:27.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-19-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" class="title">设计模式:19--观察者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:06.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-C-05-Lamda表达式使用场景" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      C++:05--Lamda表达式使用场景
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/14/C-05-Lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="article-date">
+	  <time datetime="2022-10-14T06:54:13.000Z" itemprop="datePublished">2022-10-14</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/C/">C++</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/C/" rel="tag">C++</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/14/C-05-Lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、lamda表达式变量截取方式"><a href="#一、lamda表达式变量截取方式" class="headerlink" title="一、lamda表达式变量截取方式"></a>一、lamda表达式变量截取方式</h1><h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><p><img src="data:image/png;base64,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"></p>
 <pre><code>1) 变量截取方式
 
 2) Lambda表达式的参数列表
@@ -134,85 +373,214 @@ lambda表达式可以以引用方式捕获上下文中的变量，达到回调�
 <h2 id="4、更多参考例子"><a href="#4、更多参考例子" class="headerlink" title="4、更多参考例子"></a>4、更多参考例子</h2><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt; <span class="type">int</span>&gt; vec;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 1. simple lambda */</span>   </span><br><span class="line"><span class="keyword">auto</span> it = <span class="built_in">std</span>::find_if(vec.begin(), vec.end(), </span><br><span class="line">    [](<span class="type">int</span> i) &#123; <span class="keyword">return</span> i &gt; <span class="number">50</span>; &#125;);  </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span>  </span><br><span class="line">public:  </span><br><span class="line">    <span class="type">bool</span> <span class="title function_">operator</span><span class="params">(<span class="type">int</span> i)</span> <span class="type">const</span> &#123; <span class="keyword">return</span> i &gt; <span class="number">50</span>; &#125;  </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> it = <span class="built_in">std</span>::find_if(vec.begin(), vec.end(), A());  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 2. lambda return syntax */</span>   </span><br><span class="line">function&lt;<span class="type">int</span>(<span class="type">int</span>)&gt; square = [](<span class="type">int</span> i) -&gt; <span class="type">int</span> &#123;<span class="keyword">return</span> i * i;&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 3. lambda expr: capture of local variable */</span>  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="type">int</span> min_val = <span class="number">10</span>;  </span><br><span class="line">    <span class="type">int</span> max_val = <span class="number">1000</span>;  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> it = find_if(vec.begin(), vec.end(), </span><br><span class="line">        [=](<span class="type">int</span> i) &#123;<span class="keyword">return</span> i &gt; min_val &amp;&amp; i &lt; max_val;&#125;);  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> it = find_if(vec.begin(), vec.end(), </span><br><span class="line">        [&amp;](<span class="type">int</span> i) &#123;<span class="keyword">return</span> i &gt; min_val &amp;&amp; i &lt; max_val;&#125;);  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> it = find_if(vec.begin(), vec.end(), </span><br><span class="line">        [=, &amp;max_value](<span class="type">int</span> i) &#123;<span class="keyword">return</span> i &gt; min_val &amp;&amp; i &lt; max_val;&#125;);  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 4. lambda expr: capture of class member */</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span>  </span><br><span class="line">public:  </span><br><span class="line">    <span class="type">void</span> <span class="title function_">DoSomething</span><span class="params">()</span>;  </span><br><span class="line"></span><br><span class="line">private:  </span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;  m_vec;  </span><br><span class="line">    <span class="type">int</span> m_min_val;  </span><br><span class="line">    <span class="type">int</span> m_max_va;  </span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 4.1 capture member by this */</span>   </span><br><span class="line"><span class="type">void</span> <span class="title function_">A::DoSomething</span><span class="params">()</span>  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="keyword">auto</span> it = find_if(m_vec.begin(), m_vec.end(), [this](<span class="type">int</span> i)&#123;</span><br><span class="line">        <span class="keyword">return</span> i &gt; m_min_val &amp;&amp; i &lt; m_max_val;&#125;);  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 4.2 capture member by default pass-by-value */</span>   </span><br><span class="line"><span class="type">void</span> <span class="title function_">A::DoSomething</span><span class="params">()</span>  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="keyword">auto</span> it = find_if(m_vec.begin(), m_vec.end(), [=](<span class="type">int</span> i)&#123;  </span><br><span class="line">        <span class="keyword">return</span> i &gt; m_min_val &amp;&amp; i &lt; m_max_val; &#125;);  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 4.3 capture member by default pass-by-reference */</span>  </span><br><span class="line"><span class="type">void</span> <span class="title function_">A::DoSomething</span><span class="params">()</span>  </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="keyword">auto</span> it = find_if(m_vec.begin(), m_vec.end(), [&amp;](<span class="type">int</span> i)&#123;  </span><br><span class="line">        <span class="keyword">return</span> i &gt; m_min_val &amp;&amp; i &lt; m_max_val;&#125;);  </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 </code></pre>
 
-        </div>
-        
-        <div class="post-tag">
-            
-            <a class="tag" href="/tags/C/" title="C++">C++</a>
-            
-        </div>
-        
-    </article>
-</div>
-<div class="paginator">
-    
-        
-            <a class="prev" href="/2022/10/15/C-06-function%E4%B8%8Ebind%E5%8F%8ALamda%E5%AE%9E%E7%8E%B0%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/">
-                <i class="iconfont icon-prev"></i>
-                <span class="nav-default">C++:06--function与bind及Lamda实现回调函数</span>
-                <span class="nav-mobile">上一篇</span>
-            </a>
-        
-        
-            <a class="next" href="/2022/10/14/C-04-std-function%E5%92%8Cstd-bind%E7%9A%84%E7%94%A8%E6%B3%95/">
-                <span class="nav-default">C++:04--std::function和std::bind的用法</span>
-                <span class="nav-mobile">下一篇</span>
-                <i class="iconfont icon-next"></i>
-            </a>
-        
-    
-</div>
-<div id="comment-container"></div>
+      
     </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/10/14/C-05-Lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" title="C++:05--Lamda表达式使用场景" target="_blank" rel="external">http://example.com/2022/10/14/C-05-Lamda表达式使用场景/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
 </div>
-<footer class="footer-social">
-    
-    <a class="social-link" target="_blank" href="https://github.com/Stephen-Lu-Fahai">
-        <i class="iconfont icon-github"></i>
-    </a>
-    
 
-    
 
+    </div>
+  </article>
+  
     
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
 
-    <div class="footer-copyright">
-        <p class="time-line">
-            &copy;
-            
-            
-                2018 -
-            
-            2022
-            &nbsp;<i class="iconfont icon-heart"></i>&nbsp;
-            <a target="_blank" href="https://github.com/Stephen-Lu-Fahai">Stephen Lu</a>
-        </p>
-        <p class="theme-info">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme -
-            <a target="_blank" href="https://github.com/iJinxin/hexo-theme-sky">Sky</a>
-        </p>
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/10/15/C-06-function%E4%B8%8Ebind%E5%8F%8ALamda%E5%AE%9E%E7%8E%B0%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/" title="C++:06--function与bind及Lamda实现回调函数"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/10/14/C-04-std-function%E5%92%8Cstd-bind%E7%9A%84%E7%94%A8%E6%B3%95/" title="C++:04--std::function和std::bind的用法"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
     </div>
 </footer>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script src="/js/index.js"></script>
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
-    
-    var gitment = new Gitment({
-        id: 'C++:05--Lamda表达式使用场景',
-        owner: 'Stephen-Lu-Fahai',
-        repo: 'git@github.com:Stephen-Lu-Fahai/blogComments.git',
-        oauth: {
-            client_id: '475f26b9760e99ec10cb',
-            client_secret: 'af10c83d7ec565e05d774d57dcd0947ca40c1018'
-        }
-    });
-    gitment.render('comment-container');
-    
-
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 </script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
 </html>
