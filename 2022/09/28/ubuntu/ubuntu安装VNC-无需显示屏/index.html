@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>ubuntu安装VNC-无需显示屏 | Stephen`s Blog</title>
+  <meta name="description" content="一、安装1、安装VNC1234sudo apt-get install x11vnc –y&#x2F;* generate password *&#x2F;sudo x11vnc -storepasswd &#x2F;etc&#x2F;x11vnc.pass  2、启动VNC1sudo x11vnc -display :0 -auth &#x2F;var&#x2F;run&#x2F;lightdm&#x2F;root&#x2F;:0 -forever -bg -o &#x2F;var&#x2F;log&#x2F;x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu安装VNC-无需显示屏">
+<meta property="og:url" content="http://example.com/2022/09/28/ubuntu/ubuntu%E5%AE%89%E8%A3%85VNC-%E6%97%A0%E9%9C%80%E6%98%BE%E7%A4%BA%E5%B1%8F/index.html">
+<meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="一、安装1、安装VNC1234sudo apt-get install x11vnc –y&#x2F;* generate password *&#x2F;sudo x11vnc -storepasswd &#x2F;etc&#x2F;x11vnc.pass  2、启动VNC1sudo x11vnc -display :0 -auth &#x2F;var&#x2F;run&#x2F;lightdm&#x2F;root&#x2F;:0 -forever -bg -o &#x2F;var&#x2F;log&#x2F;x">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-28T06:35:13.000Z">
+<meta property="article:modified_time" content="2022-10-16T03:33:52.097Z">
+<meta property="article:author" content="Stephen Lu">
+<meta property="article:tag" content="ubuntu系统">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/09/28/ubuntu/ubuntu%E5%AE%89%E8%A3%85VNC-%E6%97%A0%E9%9C%80%E6%98%BE%E7%A4%BA%E5%B1%8F/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Stephen-Lu-Fahai" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">StephenLu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Embedded Software Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Stephen`s Blog!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/">伺服控制</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a><span class="category-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="tag">模式设计</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/C/" style="font-size: 13.5px;">C++</a> <a href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">ubuntu系统</a> <a href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" style="font-size: 13px;">伺服控制</a> <a href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 14px;">模式设计</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-23-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" class="title">设计模式:23--访问者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:21:29.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-22-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" class="title">设计模式:22--模板方法模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:21:07.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-21-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="title">设计模式:21--策略模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:44.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-20-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" class="title">设计模式:20--状态模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:27.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-19-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" class="title">设计模式:19--观察者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:06.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-ubuntu/ubuntu安装VNC-无需显示屏" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ubuntu安装VNC-无需显示屏
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/09/28/ubuntu/ubuntu%E5%AE%89%E8%A3%85VNC-%E6%97%A0%E9%9C%80%E6%98%BE%E7%A4%BA%E5%B1%8F/" class="article-date">
+	  <time datetime="2022-09-28T06:35:13.000Z" itemprop="datePublished">2022-09-28</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/28/ubuntu/ubuntu%E5%AE%89%E8%A3%85VNC-%E6%97%A0%E9%9C%80%E6%98%BE%E7%A4%BA%E5%B1%8F/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><h2 id="1、安装VNC"><a href="#1、安装VNC" class="headerlink" title="1、安装VNC"></a>1、安装VNC</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install x11vnc –y</span><br><span class="line"></span><br><span class="line">/* generate password */</span><br><span class="line">sudo x11vnc -storepasswd /etc/x11vnc.pass</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="2、启动VNC"><a href="#2、启动VNC" class="headerlink" title="2、启动VNC"></a>2、启动VNC</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo x11vnc -display :0 -auth /var/run/lightdm/root/:0 -forever -<span class="built_in">bg</span> -o /var/log/x11vnc.<span class="built_in">log</span> -rfbauth /etc/x11vnc.pass -rfbport 5901</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h1 id="一、配置无显示器访问"><a href="#一、配置无显示器访问" class="headerlink" title="一、配置无显示器访问"></a>一、配置无显示器访问</h1><h2 id="1、生成配置文件"><a href="#1、生成配置文件" class="headerlink" title="1、生成配置文件"></a>1、生成配置文件</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo Xorg :1 –configure</span><br><span class="line">/* 此时会在root路径下生成xorg.conf.new文件 */</span><br><span class="line"></span><br><span class="line"><span class="built_in">cp</span> /root/xorg.conf.new /usr/share/X11/xorg.conf.d/xorg.conf</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="2、安装虚拟显卡驱动"><a href="#2、安装虚拟显卡驱动" class="headerlink" title="2、安装虚拟显卡驱动"></a>2、安装虚拟显卡驱动</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install xserver-xorg-video-dummy</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="3、添加虚拟显卡配置"><a href="#3、添加虚拟显卡配置" class="headerlink" title="3、添加虚拟显卡配置"></a>3、添加虚拟显卡配置</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /usr/share/X11/xorg.conf.d/xorg.conf</span><br><span class="line"></span><br><span class="line">/* 在文件最后添加以下内容 */</span><br><span class="line">Section <span class="string">&quot;Monitor&quot;</span></span><br><span class="line">    Identifier <span class="string">&quot;Monitor1&quot;</span></span><br><span class="line">    HorizSync   1.0 - 2000.0</span><br><span class="line">    VertRefresh 1.0 - 200.0</span><br><span class="line">    <span class="comment"># Add 16:9 modes, others are automatically detected.</span></span><br><span class="line">    Modeline <span class="string">&quot;1280x720&quot;</span> 74.48 1280 1336 1472 1664 720 721 724 746</span><br><span class="line">    Modeline <span class="string">&quot;1920x1080&quot;</span> 172.80 1920 2040 2248 2576 1080 1081 1084 1118</span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;Device&quot;</span></span><br><span class="line">    Identifier <span class="string">&quot;Card1&quot;</span></span><br><span class="line">    Driver <span class="string">&quot;dummy&quot;</span></span><br><span class="line">    VideoRam 256000</span><br><span class="line">EndSection</span><br><span class="line">    </span><br><span class="line">Section <span class="string">&quot;Screen&quot;</span></span><br><span class="line">    DefaultDepth 24</span><br><span class="line">    Identifier <span class="string">&quot;Screen1&quot;</span></span><br><span class="line">    Device <span class="string">&quot;Card1&quot;</span></span><br><span class="line">    Monitor <span class="string">&quot;Monitor1&quot;</span></span><br><span class="line">    SubSection <span class="string">&quot;Display&quot;</span></span><br><span class="line">        Depth 24</span><br><span class="line">        Modes <span class="string">&quot;1920x1080&quot;</span></span><br><span class="line">    EndSubSection</span><br><span class="line">EndSection</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="4、虚拟与真实显示器同时工作配置"><a href="#4、虚拟与真实显示器同时工作配置" class="headerlink" title="4、虚拟与真实显示器同时工作配置"></a>4、虚拟与真实显示器同时工作配置</h2><pre><code>修改步骤3中的配置文件最上面的ServerLayout:
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Section <span class="string">&quot;ServerLayout&quot;</span></span><br><span class="line">    Identifier     <span class="string">&quot;X.org Configured&quot;</span></span><br><span class="line">    Screen      0  <span class="string">&quot;Screen0&quot;</span> 0 0</span><br><span class="line"> Screen      1  <span class="string">&quot;Screen1&quot;</span> 0 0</span><br><span class="line">EndSection</span><br></pre></td></tr></table></figure>
+</code></pre>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/09/28/ubuntu/ubuntu%E5%AE%89%E8%A3%85VNC-%E6%97%A0%E9%9C%80%E6%98%BE%E7%A4%BA%E5%B1%8F/" title="ubuntu安装VNC-无需显示屏" target="_blank" rel="external">http://example.com/2022/09/28/ubuntu/ubuntu安装VNC-无需显示屏/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/09/29/ubuntu/ubuntu%E6%90%AD%E5%BB%BAQt4Android%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" title="ubuntu搭建Qt4Android的开发环境"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/09/28/servoCtrl/%E6%A0%91%E8%8E%93%E6%B4%BE3B-xenomai-igh/" title="树莓派3B+xenomai+igh"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

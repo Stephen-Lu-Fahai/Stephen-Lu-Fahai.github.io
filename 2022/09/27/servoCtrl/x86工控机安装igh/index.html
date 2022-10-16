@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>x86工控机安装igh | Stephen`s Blog</title>
+  <meta name="description" content="一、网卡驱动类型1、通用型优点: generic通用型的网卡驱动对物理网卡没有太多要求，只需要Linux系统支持其驱动， 就能在IGH的配置中将其选作网卡驱动。  缺点: 实时性较差，尤其是进行dc同步控制时表现更为明显。  2、本地型优点: native本地型网卡驱动是官方专门适配的几款Intel网卡，实时性方面有良好的保证  缺点: 只支持几款网卡，并且还需专门的内核版本支持。  二、安装通用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="x86工控机安装igh">
+<meta property="og:url" content="http://example.com/2022/09/27/servoCtrl/x86%E5%B7%A5%E6%8E%A7%E6%9C%BA%E5%AE%89%E8%A3%85igh/index.html">
+<meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="一、网卡驱动类型1、通用型优点: generic通用型的网卡驱动对物理网卡没有太多要求，只需要Linux系统支持其驱动， 就能在IGH的配置中将其选作网卡驱动。  缺点: 实时性较差，尤其是进行dc同步控制时表现更为明显。  2、本地型优点: native本地型网卡驱动是官方专门适配的几款Intel网卡，实时性方面有良好的保证  缺点: 只支持几款网卡，并且还需专门的内核版本支持。  二、安装通用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-27T13:51:31.000Z">
+<meta property="article:modified_time" content="2022-10-16T03:34:08.809Z">
+<meta property="article:author" content="Stephen Lu">
+<meta property="article:tag" content="伺服控制">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/09/27/servoCtrl/x86%E5%B7%A5%E6%8E%A7%E6%9C%BA%E5%AE%89%E8%A3%85igh/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Stephen-Lu-Fahai" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">StephenLu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Embedded Software Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Stephen`s Blog!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/">伺服控制</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a><span class="category-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="tag">模式设计</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/C/" style="font-size: 13.5px;">C++</a> <a href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" style="font-size: 13px;">ubuntu系统</a> <a href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" style="font-size: 13px;">伺服控制</a> <a href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 14px;">模式设计</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-23-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" class="title">设计模式:23--访问者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:21:29.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-22-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" class="title">设计模式:22--模板方法模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:21:07.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-21-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="title">设计模式:21--策略模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:44.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-20-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" class="title">设计模式:20--状态模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:27.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-19-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" class="title">设计模式:19--观察者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-15T14:20:06.000Z" itemprop="datePublished">2022-10-15</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-servoCtrl/x86工控机安装igh" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      x86工控机安装igh
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/09/27/servoCtrl/x86%E5%B7%A5%E6%8E%A7%E6%9C%BA%E5%AE%89%E8%A3%85igh/" class="article-date">
+	  <time datetime="2022-09-27T13:51:31.000Z" itemprop="datePublished">2022-09-27</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/">伺服控制</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/27/servoCtrl/x86%E5%B7%A5%E6%8E%A7%E6%9C%BA%E5%AE%89%E8%A3%85igh/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、网卡驱动类型"><a href="#一、网卡驱动类型" class="headerlink" title="一、网卡驱动类型"></a>一、网卡驱动类型</h1><h2 id="1、通用型"><a href="#1、通用型" class="headerlink" title="1、通用型"></a>1、通用型</h2><pre><code>优点: generic通用型的网卡驱动对物理网卡没有太多要求，只需要Linux系统支持其驱动，
+就能在IGH的配置中将其选作网卡驱动。
+
+缺点: 实时性较差，尤其是进行dc同步控制时表现更为明显。
+</code></pre>
+<h2 id="2、本地型"><a href="#2、本地型" class="headerlink" title="2、本地型"></a>2、本地型</h2><pre><code>优点: native本地型网卡驱动是官方专门适配的几款Intel网卡，实时性方面有良好的保证
+
+缺点: 只支持几款网卡，并且还需专门的内核版本支持。
+</code></pre>
+<h1 id="二、安装通用型网卡驱动"><a href="#二、安装通用型网卡驱动" class="headerlink" title="二、安装通用型网卡驱动"></a>二、安装通用型网卡驱动</h1><h2 id="1、下载源码包"><a href="#1、下载源码包" class="headerlink" title="1、下载源码包"></a>1、下载源码包</h2><pre><code>https://sourceforge.net/p/etherlabmaster/code/ci/stable-1.5/tree/
+</code></pre>
+<h2 id="2、配置"><a href="#2、配置" class="headerlink" title="2、配置"></a>2、配置</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/ethercatMaster</span><br><span class="line">./bootstrap</span><br><span class="line"><span class="built_in">mkdir</span> etherlab</span><br><span class="line">./configure --prefix=/home/lufahai/xenohegongda/etherlabmaster/etherlab --with-linux-dir=/home/lufahai/xenohegongda/linux-4.9.51 --enable-cycles --enable-hrtimer --enable-8139too=no --enable-generic=<span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+configure中的路径需要根据本地实际路径修改
+</code></pre>
+<h2 id="3、编译及安装"><a href="#3、编译及安装" class="headerlink" title="3、编译及安装"></a>3、编译及安装</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">make -j16</span><br><span class="line">make modules -j16</span><br><span class="line">sudo make install</span><br><span class="line">sudo make modules_install</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="4、创建软连接"><a href="#4、创建软连接" class="headerlink" title="4、创建软连接"></a>4、创建软连接</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/ethercat/etherlab/modules</span><br><span class="line"><span class="built_in">cp</span> devices/ec_generic.ko etherlab/modules/</span><br><span class="line"><span class="built_in">cp</span> master/ec_master.ko etherlab/modules/</span><br><span class="line">sudo <span class="built_in">cp</span> -r etherlab/ /opt </span><br><span class="line">sudo <span class="built_in">ln</span> -fs /opt/etherlab/etc/init.d/ethercat /etc/init.d/</span><br><span class="line">sudo <span class="built_in">ln</span> -fs /opt/etherlab/bin/ethercat /usr/local/bin/</span><br><span class="line">sudo <span class="built_in">mkdir</span> /etc/sysconfig</span><br><span class="line">sudo <span class="built_in">ln</span> -fs /opt/etherlab/etc/sysconfig/ethercat /etc/sysconfig/</span><br><span class="line">sudo su</span><br><span class="line"><span class="built_in">echo</span> KERNEL==\&quot;EtherCAT[0-9]*\&quot;, MODE=\&quot;0664\&quot; &gt; /etc/udev/rules.d/99-EtherCAT.rules</span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line">sudo <span class="built_in">cp</span> /opt/etherlab/modules/ec_master.ko /lib/modules/4.9.51-xenomai3.1+</span><br><span class="line">sudo depmod</span><br></pre></td></tr></table></figure>
+此步骤中的路径需要根据本地实际路径修改
+</code></pre>
+<h2 id="5、配置网卡"><a href="#5、配置网卡" class="headerlink" title="5、配置网卡"></a>5、配置网卡</h2><pre><code>ifconfig 找出网卡的MAC地址
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/sysconfig/ethercat</span><br><span class="line">MASTER0_DEVICE=”b8:27:eb:7d:26:a2” //填写实际MAC</span><br><span class="line">DEVICE_MODULES=”generic”</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="6、增加系统路径"><a href="#6、增加系统路径" class="headerlink" title="6、增加系统路径"></a>6、增加系统路径</h2><pre><code>在~/.bashrc 末尾增加下面内容并source
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PATH=<span class="variable">$PATH</span>:/opt/etherlab/bin</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="7、添加库文件供程序链接"><a href="#7、添加库文件供程序链接" class="headerlink" title="7、添加库文件供程序链接"></a>7、添加库文件供程序链接</h2><pre><code>如果没有将xenomai的库添加到系统路径中，程序在链接的时候就会出现
+error: while loading shared libraries...
+解决：
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/ld.so.conf</span><br><span class="line">/usr/xenomai/lib  //文件中增加这一行</span><br><span class="line">sudo ldconfig -v  //使其生效</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h1 id="三、安装native型网卡驱动"><a href="#三、安装native型网卡驱动" class="headerlink" title="三、安装native型网卡驱动"></a>三、安装native型网卡驱动</h1><h2 id="1、内核及igh源码版本的下载地址"><a href="#1、内核及igh源码版本的下载地址" class="headerlink" title="1、内核及igh源码版本的下载地址"></a>1、内核及igh源码版本的下载地址</h2><pre><code>安装native型网卡驱动需要内核支持此网卡驱动，
+最好的内核无疑是igh官方经过优化后的，下载地址如下
+内核：https://source.denx.de/Xenomai/linux-dovetail 
+branch选择 v5.10.y-dovetail
+
+igh源码： https://gitlab.com/etherlab.org/ethercat/-/tree/e1000e-5.10
+branch选择 e1000e-5.10
+
+xenomai选择3.2.1版本
+</code></pre>
+<h2 id="2、Linux内核配置"><a href="#2、Linux内核配置" class="headerlink" title="2、Linux内核配置"></a>2、Linux内核配置</h2><pre><code>由于使用官方提供的内核，所以打补丁与另一篇搭建实时系统博客中的方法略有不同
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/kernel</span><br><span class="line">../xenomai-v3.2.1/scripts/prepare-kernel.sh --<span class="built_in">arch</span>=x86_64</span><br></pre></td></tr></table></figure>
+Linux5.10的内核配置可以参考下面的附录，编译及安装过程与4.x内核移植
+</code></pre>
+<h2 id="3、native型网卡配置"><a href="#3、native型网卡配置" class="headerlink" title="3、native型网卡配置"></a>3、native型网卡配置</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/ighsourceTree</span><br><span class="line">./scrip/bootstrap</span><br><span class="line"><span class="built_in">mkdir</span> etherlab</span><br><span class="line"></span><br><span class="line">./configure --prefix=/home/huger/rtlinux/ethercat-e1000e-5.10/etherlab -enable-8139too=no -enable-e1000e=<span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="4、编译及安装"><a href="#4、编译及安装" class="headerlink" title="4、编译及安装"></a>4、编译及安装</h2><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">make all modules -j16</span><br><span class="line">sudo make modules_install install -j16</span><br><span class="line">sudo depmod</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="5、创建软链接"><a href="#5、创建软链接" class="headerlink" title="5、创建软链接"></a>5、创建软链接</h2><pre><code>与通用型相同
+</code></pre>
+<h2 id="6、配置网卡"><a href="#6、配置网卡" class="headerlink" title="6、配置网卡"></a>6、配置网卡</h2><pre><code>sudo vi /etc/sysconfig/ethercat
+MASTER0_DEVICE=”b8:27:eb:7d:26:a2” //填写实际MAC
+DEVICE_MODULES=”e1000e”
+</code></pre>
+<h1 id="三、Linux5-10内核配置附录"><a href="#三、Linux5-10内核配置附录" class="headerlink" title="三、Linux5.10内核配置附录"></a>三、Linux5.10内核配置附录</h1><pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">Recommended options:</span><br><span class="line"></span><br><span class="line">* General setup</span><br><span class="line">  --&gt; Local version - append to kernel release: -xenomai-3.0.5</span><br><span class="line">  --&gt; Timers subsystem</span><br><span class="line">      --&gt; High Resolution Timer Support (Enable)</span><br><span class="line">* Xenomai/cobalt</span><br><span class="line">  --&gt; Sizes and static limits</span><br><span class="line">    --&gt; Number of registry slots (512 --&gt; 4096)</span><br><span class="line">    --&gt; Size of system heap (Kb) (512 --&gt; 4096)</span><br><span class="line">    --&gt; Size of private heap (Kb) (64 --&gt; 256)</span><br><span class="line">    --&gt; Size of shared heap (Kb) (64 --&gt; 256)</span><br><span class="line">    --&gt; Maximum number of POSIX timers per process (128 --&gt; 512)</span><br><span class="line">  --&gt; Drivers</span><br><span class="line">    --&gt; RTnet</span><br><span class="line">        --&gt; RTnet, TCP/IP socket interface (Enable)</span><br><span class="line">            --&gt; Drivers</span><br><span class="line">                --&gt; New intel(R) PRO/1000 PCIe (Enable)</span><br><span class="line">                --&gt; Realtek 8169 (Enable)</span><br><span class="line">                --&gt; Loopback (Enable)</span><br><span class="line">        --&gt; Add-Ons</span><br><span class="line">            --&gt; Real-Time Capturing Support (Enable)</span><br><span class="line">* Power management and ACPI options</span><br><span class="line">  --&gt; CPU Frequency scaling</span><br><span class="line">      --&gt; CPU Frequency scaling (Disable)</span><br><span class="line">  --&gt; ACPI (Advanced Configuration and Power Interface) Support</span><br><span class="line">      --&gt; Processor (Disable)</span><br><span class="line">  --&gt; CPU Idle</span><br><span class="line">      --&gt; CPU idle PM support (Disable)</span><br><span class="line">* Pocessor <span class="built_in">type</span> and features</span><br><span class="line">  --&gt; Enable maximum number of SMP processors and NUMA nodes (Disable)</span><br><span class="line">  // Ref : http://xenomai.org/pipermail/xenomai/2017-September/037718.html</span><br><span class="line">  --&gt; Processor family</span><br><span class="line">      --&gt; Core 2/newer Xeon (<span class="keyword">if</span> <span class="string">&quot;cat /proc/cpuinfo | grep family&quot;</span> returns 6, <span class="built_in">set</span> as Generic otherwise)</span><br><span class="line">  // Xenomai will issue a warning about CONFIG_MIGRATION, <span class="built_in">disable</span> those <span class="keyword">in</span> this order</span><br><span class="line">  --&gt; Transparent Hugepage Support (Disable)</span><br><span class="line">  --&gt; Allow <span class="keyword">for</span> memory compaction (Disable)</span><br><span class="line">  --&gt; Contiguous Memory Allocation (Disable)</span><br><span class="line">  --&gt; Allow <span class="keyword">for</span> memory compaction</span><br><span class="line">    --&gt; Page Migration (Disable)</span><br><span class="line">* Device Drivers</span><br><span class="line">  --&gt; Staging drivers</span><br><span class="line">      --&gt; Unisys SPAR driver support</span><br><span class="line">         --&gt; Unisys visorbus driver (Disable)	​ </span><br></pre></td></tr></table></figure>
+</code></pre>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/09/27/servoCtrl/x86%E5%B7%A5%E6%8E%A7%E6%9C%BA%E5%AE%89%E8%A3%85igh/" title="x86工控机安装igh" target="_blank" rel="external">http://example.com/2022/09/27/servoCtrl/x86工控机安装igh/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/09/28/servoCtrl/%E6%A0%91%E8%8E%93%E6%B4%BE3B-xenomai-igh/" title="树莓派3B+xenomai+igh"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/09/27/servoCtrl/x86%E5%B7%A5%E6%8E%A7%E6%9C%BA%E6%90%AD%E5%BB%BAubuntu18-xenomai%E5%AE%9E%E6%97%B6%E7%B3%BB%E7%BB%9F/" title="x86工控机搭建ubuntu18+xenomai实时系统"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
