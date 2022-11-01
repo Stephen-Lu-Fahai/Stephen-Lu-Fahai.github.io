@@ -18,15 +18,15 @@
   
   
   <title>Linux驱动[实践]:01--树莓派GPIO驱动LED | Stephen`s Blog</title>
-  <meta name="description" content="一、Linux中的地址Linux内核中，又三种地址:总线地址、物理地址和虚拟地址。 1) 总线地址： 一种计算机总线，CPU或者有DMA能力的单元中的内存组件或者物理地址在总线上有相对应的地址。比如CPU的寄存器也会在总线上有单独的地址，但是总线地址不等于真实的寄存器。又比如类似于IIC设备在IIC总线上的地址。总线的宽度决定了CPU能够访问内存的范围，32位的最大只能识别4G的内存； 2) 物理">
+  <meta name="description" content="一、Linux中的地址Linux内核中，又三种地址:总线地址、物理地址和虚拟地址。 1) 总线地址： 一种计算机总线，CPU或者有DMA能力的单元中的内存组件或者物理地址在总线上有相对应的地址。             比如CPU的寄存器也会在总线上有单独的地址，但是总线地址不等于真实的寄存器。             又比如类似于IIC设备在IIC总线上的地址。总线的宽度决定了CPU能够访问内存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux驱动[实践]:01--树莓派GPIO驱动LED">
 <meta property="og:url" content="http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-01-%E6%A0%91%E8%8E%93%E6%B4%BEGPIO%E9%A9%B1%E5%8A%A8LED/index.html">
 <meta property="og:site_name" content="StephenLu&#96;s Blog">
-<meta property="og:description" content="一、Linux中的地址Linux内核中，又三种地址:总线地址、物理地址和虚拟地址。 1) 总线地址： 一种计算机总线，CPU或者有DMA能力的单元中的内存组件或者物理地址在总线上有相对应的地址。比如CPU的寄存器也会在总线上有单独的地址，但是总线地址不等于真实的寄存器。又比如类似于IIC设备在IIC总线上的地址。总线的宽度决定了CPU能够访问内存的范围，32位的最大只能识别4G的内存； 2) 物理">
+<meta property="og:description" content="一、Linux中的地址Linux内核中，又三种地址:总线地址、物理地址和虚拟地址。 1) 总线地址： 一种计算机总线，CPU或者有DMA能力的单元中的内存组件或者物理地址在总线上有相对应的地址。             比如CPU的寄存器也会在总线上有单独的地址，但是总线地址不等于真实的寄存器。             又比如类似于IIC设备在IIC总线上的地址。总线的宽度决定了CPU能够访问内存">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-01T07:12:47.000Z">
-<meta property="article:modified_time" content="2022-11-01T13:51:05.749Z">
+<meta property="article:modified_time" content="2022-11-01T14:41:14.381Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="Linux驱动[实践]">
 <meta name="twitter:card" content="summary">
@@ -348,9 +348,11 @@
     <div class="article-entry marked-body" itemprop="articleBody">
       
         <h1 id="一、Linux中的地址"><a href="#一、Linux中的地址" class="headerlink" title="一、Linux中的地址"></a>一、Linux中的地址</h1><pre><code>Linux内核中，又三种地址:总线地址、物理地址和虚拟地址。
-1) 总线地址： 一种计算机总线，CPU或者有DMA能力的单元中的内存组件或者物理地址在总线上有相对应的地址。比如CPU的寄存器也会在总线上有单独的地址，但是总线地址不等于真实的寄存器。又比如类似于IIC设备在IIC总线上的地址。总线的宽度决定了CPU能够访问内存的范围，32位的最大只能识别4G的内存；
-2) 物理地址： 硬件中的实际地址或绝对地址:比如磁盘地址，比如51的寄存器，就是物理地址；
-3) 虚拟地址： 操作系统运行在保护模式下所使用的地址，也叫逻辑地址，它是基于算法的，处于软件层面。
+1) 总线地址： 一种计算机总线，CPU或者有DMA能力的单元中的内存组件或者物理地址在总线上有相对应的地址。
+            比如CPU的寄存器也会在总线上有单独的地址，但是总线地址不等于真实的寄存器。
+            又比如类似于IIC设备在IIC总线上的地址。总线的宽度决定了CPU能够访问内存的范围，32位的最大只能识别4G的内存；
+1) 物理地址： 硬件中的实际地址或绝对地址:比如磁盘地址，比如51的寄存器，就是物理地址；
+2) 虚拟地址： 操作系统运行在保护模式下所使用的地址，也叫逻辑地址，它是基于算法的，处于软件层面。
 
 树莓派IO口的地址介绍是物理地址，挂载到Linux内核虚拟地址，编程使用的是虚拟地址。
 </code></pre>
