@@ -26,7 +26,7 @@
 <meta property="og:description" content="一、驱动-总线-设备模型1、功能职责1) 驱动部分：负责实现设备的控制逻辑及用户接口，并注册到内核 2) 设备部分：负责描述设备的硬件资源，并告知内核 3) 总线部分：负责实现设备与驱动之间的感知、识别、匹配规则  2、样例platform_bus(即总线部分)内核已经实现了，所以我们只需要实现两边的 platform_xxx_driver和platform_xxx_device即可，然后把它们挂">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-01T07:18:05.000Z">
-<meta property="article:modified_time" content="2022-11-05T02:27:24.740Z">
+<meta property="article:modified_time" content="2022-11-05T02:27:36.268Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="Linux驱动[实践]">
 <meta name="twitter:card" content="summary">
@@ -337,7 +337,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-14-PDD%E4%B8%8E%E8%AE%BE%E5%A4%87%E6%A0%91/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 981(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 980(words)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
@@ -363,8 +363,6 @@ platform_xxx_driver和platform_xxx_device即可，然后把它们挂到平台总
    2) platform_bus会查找所有的driver.name，找到之后将设备和驱动进行绑定
    3) 绑定成功后，platform_driver.probe()将触发，刚才的设备作为参数传递进去
    4) 剩下的事情，就看你如何实现platform_driver了
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 </code></pre>
 <h1 id="二、树莓派设备树"><a href="#二、树莓派设备树" class="headerlink" title="二、树莓派设备树"></a>二、树莓派设备树</h1><h2 id="1、用设备树注册设备"><a href="#1、用设备树注册设备" class="headerlink" title="1、用设备树注册设备"></a>1、用设备树注册设备</h2><pre><code>led_driver.c 其他内容不变，仅仅是增加of_device_id属性。
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 首先用of_device_id声明了三种LED型号的表，支持设备树解析</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">of_device_id</span> <span class="title">of_leds_id</span>[] =</span> &#123;</span><br><span class="line">    &#123; .compatible = <span class="string">&quot;led_type_a&quot;</span> &#125;,</span><br><span class="line">    &#123; .compatible = <span class="string">&quot;led_type_b&quot;</span> &#125;,</span><br><span class="line">    &#123; .compatible = <span class="string">&quot;led_type_c&quot;</span> &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">platform_driver</span> <span class="title">led_driver</span> =</span> &#123;</span><br><span class="line">    .probe = led_probe,</span><br><span class="line">    .remove = led_remove,</span><br><span class="line">    .driver = &#123;</span><br><span class="line">        .name = <span class="string">&quot;my_led&quot;</span>,</span><br><span class="line">        .of_match_table = of_leds_id, <span class="comment">// 👈在驱动种添加对应属性</span></span><br><span class="line">        .owner = THIS_MODULE,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
