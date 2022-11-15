@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-11-01T07:21:32.548Z</updated>
+  <updated>2022-11-15T01:37:24.242Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>将STM32的JTAG口(PA15,PB3,PB4)配置成gpio</title>
+    <link href="http://example.com/2022/11/15/stm32/%E5%B0%86STM32%E7%9A%84JTAG%E5%8F%A3-PA15-PB3-PB4-%E9%85%8D%E7%BD%AE%E6%88%90gpio/"/>
+    <id>http://example.com/2022/11/15/stm32/%E5%B0%86STM32%E7%9A%84JTAG%E5%8F%A3-PA15-PB3-PB4-%E9%85%8D%E7%BD%AE%E6%88%90gpio/</id>
+    <published>2022-11-15T01:25:03.000Z</published>
+    <updated>2022-11-15T01:37:24.242Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、寄存器代码"><a href="#一、寄存器代码" class="headerlink" title="一、寄存器代码"></a>一、寄存器代码</h1><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RCC-&gt;APB2ENR|=<span class="number">1</span>&lt;&lt;<span class="number">2</span>;        <span class="comment">//使能PORTA时钟      </span></span><br><span class="line"> </span><br><span class="line">RCC-&gt;APB2ENR |= RCC_APB2ENR_AFIOEN; </span><br><span class="line">AFIO-&gt;MAPR = AFIO_MAPR_SWJ_CFG_JTAGDISABLE; <span class="comment">//关闭JTAG 释放出PB3,PB4,PA15</span></span><br><span class="line">GPIOA-&gt;CRH&amp;=<span class="number">0X0FFFFFFF</span>; <span class="comment">//A15</span></span><br><span class="line">GPIOA-&gt;CRH|=<span class="number">0X20000000</span>;    <span class="comment">//2MHz通用推挽输出 </span></span><br><span class="line">GPIOA-&gt;ODR|=<span class="number">0</span>&lt;&lt;<span class="number">15</span>;     <span class="comment">//PA15 输出低     </span></span><br></pre></td></tr></table></figure>注意: 1) 对寄存器AFIO_EVCR，AFIO_MAPR和AFIO_EXTICRX进行读写操作前，应当先打开AFIO的时钟     2) 必须以32位的方式操作这些外设寄存器</code></pre><h1 id="二、Hal库代码"><a href="#二、Hal库代码" class="headerlink" title="二、Hal库代码"></a>二、Hal库代码</h1><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOB, ENABLE);</span><br><span class="line">GPIO_PInRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);</span><br></pre></td></tr></table></figure></code></pre><h1 id="三、rtthread调用代码"><a href="#三、rtthread调用代码" class="headerlink" title="三、rtthread调用代码"></a>三、rtthread调用代码</h1><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__HAL_RCC_AFIO_CLK_ENABLE();</span><br><span class="line">__HAL_AFIO_REMAP_SWJ_NOJTAG();</span><br></pre></td></tr></table></figure></code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、寄存器代码&quot;&gt;&lt;a href=&quot;#一、寄存器代码&quot; class=&quot;headerlink&quot; title=&quot;一、寄存器代码&quot;&gt;&lt;/a&gt;一、寄存器代码&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+      
+    
+    
+    
+    <category term="STM32" scheme="http://example.com/categories/STM32/"/>
+    
+    
+    <category term="STM32" scheme="http://example.com/tags/STM32/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux驱动[实践]:15--使用内核现有驱动</title>
@@ -384,23 +408,6 @@
     <id>http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-12-USB%E4%B8%BB%E6%9C%BA%E5%8F%8A%E8%AE%BE%E5%A4%87%E4%B8%8EGadget%E9%A9%B1%E5%8A%A8/</id>
     <published>2022-11-01T05:14:51.000Z</published>
     <updated>2022-11-01T07:10:51.660Z</updated>
-    
-    
-    
-    
-    <category term="Linux驱动" scheme="http://example.com/categories/Linux%E9%A9%B1%E5%8A%A8/"/>
-    
-    
-    <category term="Linux驱动[理论]" scheme="http://example.com/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux驱动[理论]:11--I2C核心及总线与设备驱动</title>
-    <link href="http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-11-I2C%E6%A0%B8%E5%BF%83%E5%8F%8A%E6%80%BB%E7%BA%BF%E4%B8%8E%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/"/>
-    <id>http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-11-I2C%E6%A0%B8%E5%BF%83%E5%8F%8A%E6%80%BB%E7%BA%BF%E4%B8%8E%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</id>
-    <published>2022-11-01T05:14:15.000Z</published>
-    <updated>2022-11-01T07:10:48.396Z</updated>
     
     
     
