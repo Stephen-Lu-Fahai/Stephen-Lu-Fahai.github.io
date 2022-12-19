@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-12-01T03:01:15.127Z</updated>
+  <updated>2022-12-19T05:20:35.873Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ubuntu20编译4.9内核时重定向错误的解决</title>
+    <link href="http://example.com/2022/12/19/servoCtrl/ubuntu20%E7%BC%96%E8%AF%914-9%E5%86%85%E6%A0%B8%E6%97%B6%E9%87%8D%E5%AE%9A%E5%90%91%E9%94%99%E8%AF%AF%E7%9A%84%E8%A7%A3%E5%86%B3/"/>
+    <id>http://example.com/2022/12/19/servoCtrl/ubuntu20%E7%BC%96%E8%AF%914-9%E5%86%85%E6%A0%B8%E6%97%B6%E9%87%8D%E5%AE%9A%E5%90%91%E9%94%99%E8%AF%AF%E7%9A%84%E8%A7%A3%E5%86%B3/</id>
+    <published>2022-12-19T05:15:55.000Z</published>
+    <updated>2022-12-19T05:20:35.873Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、现象"><a href="#一、现象" class="headerlink" title="一、现象"></a>一、现象</h1><pre><code>RELOCS  arch/x86/boot/compressed/vmlinux.relocsUnsupported relocation type: R_X86_64_PLT32 (4)、</code></pre><h1 id="二、解决"><a href="#二、解决" class="headerlink" title="二、解决"></a>二、解决</h1><pre><code>手动依次修改以下三个文件arch/x86/kernel/machine_kexec_64.carch/x86/kernel/module.carch/x86/tools/relocs.c解决方法都是在这三个文件的switch目录下，增加对 R_X86_64_PLT32的支持<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> R_X86_64_PC32:</span><br><span class="line"><span class="keyword">case</span> R_X86_64_PLT32:</span><br></pre></td></tr></table></figure></code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、现象&quot;&gt;&lt;a href=&quot;#一、现象&quot; class=&quot;headerlink&quot; title=&quot;一、现象&quot;&gt;&lt;/a&gt;一、现象&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;RELOCS  arch/x86/boot/compressed/vmlinux.relocs
+Unsupp</summary>
+      
+    
+    
+    
+    <category term="伺服控制" scheme="http://example.com/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/"/>
+    
+    
+    <category term="伺服控制" scheme="http://example.com/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/"/>
+    
+  </entry>
   
   <entry>
     <title>ubuntu使用Systemback备份系统</title>
@@ -413,23 +438,6 @@
     <id>http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-14-ARM-Linux%E8%AE%BE%E5%A4%87%E6%A0%91/</id>
     <published>2022-11-01T05:15:59.000Z</published>
     <updated>2022-11-01T07:10:58.668Z</updated>
-    
-    
-    
-    
-    <category term="Linux驱动" scheme="http://example.com/categories/Linux%E9%A9%B1%E5%8A%A8/"/>
-    
-    
-    <category term="Linux驱动[理论]" scheme="http://example.com/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux驱动[理论]:13--I2C SPI USB架构类比</title>
-    <link href="http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-13-I2C-SPI-USB%E6%9E%B6%E6%9E%84%E7%B1%BB%E6%AF%94/"/>
-    <id>http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-13-I2C-SPI-USB%E6%9E%B6%E6%9E%84%E7%B1%BB%E6%AF%94/</id>
-    <published>2022-11-01T05:15:31.000Z</published>
-    <updated>2022-11-01T07:10:54.792Z</updated>
     
     
     
