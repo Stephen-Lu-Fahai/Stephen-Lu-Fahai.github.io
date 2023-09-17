@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-09-17T05:35:58.215Z</updated>
+  <updated>2023-09-17T08:22:09.772Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>树莓派系统定制化</title>
+    <link href="http://example.com/2023/09/17/ubuntu/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%B3%BB%E7%BB%9F%E5%AE%9A%E5%88%B6%E5%8C%96/"/>
+    <id>http://example.com/2023/09/17/ubuntu/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%B3%BB%E7%BB%9F%E5%AE%9A%E5%88%B6%E5%8C%96/</id>
+    <published>2023-09-17T08:21:33.000Z</published>
+    <updated>2023-09-17T08:22:09.772Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="自启动Xorg图形界面"><a href="#自启动Xorg图形界面" class="headerlink" title="自启动Xorg图形界面"></a>自启动Xorg图形界面</h1><h2 id="安装xorg"><a href="#安装xorg" class="headerlink" title="安装xorg"></a>安装xorg</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt instll xserver-xorg xinit</span><br></pre></td></tr></table></figure><h2 id="自启动图形界面及程序"><a href="#自启动图形界面及程序" class="headerlink" title="自启动图形界面及程序"></a>自启动图形界面及程序</h2><p>使用raspi-config设置console auto login<br>在home目录创建.bash_profile脚本并赋予可执行权限，当用户从tty终端登陆时，该脚本会被自动执行。脚本内容如下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$DISPLAY</span>&quot;</span> ] &amp;&amp; [ -n <span class="string">&quot;<span class="variable">$XDG_VTNR</span>&quot;</span> ] &amp;&amp; [ <span class="string">&quot;<span class="variable">$XDG_VTNR</span>&quot;</span> -eq 1 ]; <span class="keyword">then</span></span><br><span class="line">    startx -- -novtswitch -sharevts -nocursor :0  2&gt;/dev/null</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure><h2 id="启动应用程序"><a href="#启动应用程序" class="headerlink" title="启动应用程序"></a>启动应用程序</h2><p>在home目录创建.xinitrc文件，并赋予可执行权限。当xinit执行执行成功后.xinitrc 会被自动执行，可在这个脚本中启动应用程序。</p><h1 id="屏蔽系统信息"><a href="#屏蔽系统信息" class="headerlink" title="屏蔽系统信息"></a>屏蔽系统信息</h1><h2 id="屏蔽颜色检测"><a href="#屏蔽颜色检测" class="headerlink" title="屏蔽颜色检测"></a>屏蔽颜色检测</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /boot/config.txt</span><br></pre></td></tr></table></figure><p>在最后添加： disable_splash&#x3D;1</p><h2 id="屏蔽初始化中的代码流显示"><a href="#屏蔽初始化中的代码流显示" class="headerlink" title="屏蔽初始化中的代码流显示"></a>屏蔽初始化中的代码流显示</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /boot/cmdline.txt</span><br></pre></td></tr></table></figure><p>主要是把tty1改为tty3，以及增加logo.nologo loglevel&#x3D;3  修改如下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dwc_otg.lpm_enable=0 console=tty3 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=<span class="built_in">yes</span> rootwait quiet splash plymouth.ignore-serial-consoles logo.nologo loglevel=3 disable_overscan=1</span><br></pre></td></tr></table></figure><h2 id="设置启动屏幕"><a href="#设置启动屏幕" class="headerlink" title="设置启动屏幕"></a>设置启动屏幕</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install fbi</span><br><span class="line">sudo nano /etc/systemd/system/splashscreen.service</span><br></pre></td></tr></table></figure><p>在打开的文件中填入一下内容</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Splashscreen</span><br><span class="line">DefaultDependencies=no</span><br><span class="line">After=basic.target</span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/bin/fbi -d /dev/fb0 --noverbose -a /path/to/logo.png</span><br><span class="line">StandardInput=<span class="built_in">tty</span></span><br><span class="line">StandardOutput=<span class="built_in">tty</span></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=sysinit.target</span><br></pre></td></tr></table></figure><p>使其生效：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> splashscreen</span><br></pre></td></tr></table></figure><h2 id="屏蔽console登录信息"><a href="#屏蔽console登录信息" class="headerlink" title="屏蔽console登录信息"></a>屏蔽console登录信息</h2><p>只需在home目录下创建一个空文件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> .hushlogin</span><br></pre></td></tr></table></figure><h2 id="屏蔽自动登录时出现的提示"><a href="#屏蔽自动登录时出现的提示" class="headerlink" title="屏蔽自动登录时出现的提示"></a>屏蔽自动登录时出现的提示</h2><p>sudo nano &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;<a href="mailto:&#103;&#101;&#116;&#116;&#121;&#64;&#116;&#116;&#121;&#x31;&#x2e;&#115;&#x65;&#114;&#x76;&#105;&#x63;&#101;&#x2e;&#x64;">&#103;&#101;&#116;&#116;&#121;&#64;&#116;&#116;&#121;&#x31;&#x2e;&#115;&#x65;&#114;&#x76;&#105;&#x63;&#101;&#x2e;&#x64;</a>&#x2F;autologin.conf</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line">ExecStart=</span><br><span class="line">ExecStart=-/sbin/agetty --autologin proxinse --noissue --noclear --nohostname --nohints %I <span class="variable">$TERM</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;自启动Xorg图形界面&quot;&gt;&lt;a href=&quot;#自启动Xorg图形界面&quot; class=&quot;headerlink&quot; title=&quot;自启动Xorg图形界面&quot;&gt;&lt;/a&gt;自启动Xorg图形界面&lt;/h1&gt;&lt;h2 id=&quot;安装xorg&quot;&gt;&lt;a href=&quot;#安装xorg&quot; cla</summary>
+      
+    
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>debian多显卡自定义图形界面</title>
@@ -436,23 +460,6 @@ Unsupp</summary>
     
     
     <category term="Linux驱动[实践]" scheme="http://example.com/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux驱动[理论]:15--Linux设备驱动调试</title>
-    <link href="http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-15-Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95/"/>
-    <id>http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA-15-Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95/</id>
-    <published>2022-11-01T05:16:20.000Z</published>
-    <updated>2022-11-01T07:41:19.234Z</updated>
-    
-    
-    
-    
-    <category term="Linux驱动" scheme="http://example.com/categories/Linux%E9%A9%B1%E5%8A%A8/"/>
-    
-    
-    <category term="Linux驱动[理论]" scheme="http://example.com/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/"/>
     
   </entry>
   
