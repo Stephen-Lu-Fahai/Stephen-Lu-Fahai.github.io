@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2023/09/17/ubuntu/debian%E5%A4%9A%E6%98%BE%E5%8D%A1%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/</loc>
+    <lastmod>2023-09-17</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2022/12/19/servoCtrl/ubuntu20%E7%BC%96%E8%AF%914-9%E5%86%85%E6%A0%B8%E6%97%B6%E9%87%8D%E5%AE%9A%E5%90%91%E9%94%99%E8%AF%AF%E7%9A%84%E8%A7%A3%E5%86%B3/</loc>
     <lastmod>2022-12-19</lastmod>
   </url>
