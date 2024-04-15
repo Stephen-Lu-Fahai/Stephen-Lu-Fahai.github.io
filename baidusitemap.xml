@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2024/04/15/Qt/QCheckBox%E6%89%A9%E5%A4%A7%E6%93%8D%E4%BD%9C%E8%8C%83%E5%9B%B4/</loc>
+    <lastmod>2024-04-15</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2024/04/15/Qt/QSlider%E6%89%A9%E5%A4%A7%E6%BB%91%E5%9D%97%E7%9A%84%E6%93%8D%E4%BD%9C%E8%8C%83%E5%9B%B4/</loc>
     <lastmod>2024-04-15</lastmod>
   </url>
