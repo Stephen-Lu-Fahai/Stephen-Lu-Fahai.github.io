@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-04-24T05:30:19.434Z</updated>
+  <updated>2024-04-24T11:41:03.083Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>QComboBox自定义下拉框高度</title>
+    <link href="http://example.com/2024/04/24/Qt/QComboBox%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8B%E6%8B%89%E6%A1%86%E9%AB%98%E5%BA%A6/"/>
+    <id>http://example.com/2024/04/24/Qt/QComboBox%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8B%E6%8B%89%E6%A1%86%E9%AB%98%E5%BA%A6/</id>
+    <published>2024-04-24T11:35:13.000Z</published>
+    <updated>2024-04-24T11:41:03.083Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="下拉框子项的高度："><a href="#下拉框子项的高度：" class="headerlink" title="下拉框子项的高度："></a>下拉框子项的高度：</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setStyleSheet</span>(<span class="string">&quot;QComboBox &#123; min-height: 40px; min-width: 60px; font:20pt; &#125;&quot;</span></span><br><span class="line">            <span class="string">&quot;QComboBox QAbstractItemView &#123; font:20pt; &#125;&quot;</span></span><br><span class="line">            <span class="string">&quot;QComboBox QAbstractItemView::item &#123; min-height: 40px; min-width: 60px; &#125;&quot;</span>);  </span><br><span class="line">QComboBox *combo = <span class="keyword">new</span> <span class="built_in">QComboBox</span>(<span class="keyword">this</span>);  </span><br><span class="line">combo-&gt;<span class="built_in">setView</span>(<span class="keyword">new</span> <span class="built_in">QListView</span>());  </span><br></pre></td></tr></table></figure><p>主要是通过QComboBox QAbstractItemView::item的styleSheet来定义子项高度。<br>并且一定要使用setView(new QListView())，否则不生效。</p><h1 id="下拉框下拉列表的高度："><a href="#下拉框下拉列表的高度：" class="headerlink" title="下拉框下拉列表的高度："></a>下拉框下拉列表的高度：</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ui-&gt;m_qcombxType-&gt;<span class="built_in">setEditable</span>(<span class="literal">true</span>);</span><br><span class="line">ui-&gt;m_qcombxType-&gt;<span class="built_in">setMaxVisibleItems</span>(<span class="number">10</span>);</span><br></pre></td></tr></table></figure><p>setEditable 为true一定要放在前面，否则QComboBox是不可编辑的，后面的设置不生效。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;下拉框子项的高度：&quot;&gt;&lt;a href=&quot;#下拉框子项的高度：&quot; class=&quot;headerlink&quot; title=&quot;下拉框子项的高度：&quot;&gt;&lt;/a&gt;下拉框子项的高度：&lt;/h1&gt;&lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td </summary>
+      
+    
+    
+    
+    <category term="Qt" scheme="http://example.com/categories/Qt/"/>
+    
+    
+    <category term="Qt" scheme="http://example.com/tags/Qt/"/>
+    
+  </entry>
   
   <entry>
     <title>Qt自定义虚拟键盘高度</title>
@@ -440,23 +464,6 @@ Unsupp</summary>
     <id>http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-11-framebuff%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0/</id>
     <published>2022-11-01T07:16:42.000Z</published>
     <updated>2022-11-01T07:21:17.064Z</updated>
-    
-    
-    
-    
-    <category term="Linux驱动" scheme="http://example.com/categories/Linux%E9%A9%B1%E5%8A%A8/"/>
-    
-    
-    <category term="Linux驱动[实践]" scheme="http://example.com/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux驱动[实践]:10--SPI驱动</title>
-    <link href="http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-10-SPI%E9%A9%B1%E5%8A%A8/"/>
-    <id>http://example.com/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-10-SPI%E9%A9%B1%E5%8A%A8/</id>
-    <published>2022-11-01T07:16:20.000Z</published>
-    <updated>2022-11-01T07:21:14.424Z</updated>
     
     
     
