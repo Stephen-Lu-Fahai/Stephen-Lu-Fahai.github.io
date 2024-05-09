@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2024/05/09/ubuntu/nvidia%E6%98%BE%E5%8D%A1xorg%E5%A4%9A%E7%A7%8D%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/</loc>
+    <lastmod>2024-05-09</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/2024/05/09/ubuntu/jetsonNano%E5%B0%86DP%E5%92%8CHDMI%E9%85%8D%E7%BD%AE%E6%88%90%E7%8B%AC%E7%AB%8B%E7%9A%84xorg-screen/</loc>
+    <lastmod>2024-05-09</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2024/04/24/Qt/QComboBox%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8B%E6%8B%89%E6%A1%86%E9%AB%98%E5%BA%A6/</loc>
     <lastmod>2024-04-24</lastmod>
   </url>

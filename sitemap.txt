@@ -1,3 +1,5 @@
+http://example.com/2024/05/09/ubuntu/nvidia%E6%98%BE%E5%8D%A1xorg%E5%A4%9A%E7%A7%8D%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/
+http://example.com/2024/05/09/ubuntu/jetsonNano%E5%B0%86DP%E5%92%8CHDMI%E9%85%8D%E7%BD%AE%E6%88%90%E7%8B%AC%E7%AB%8B%E7%9A%84xorg-screen/
 http://example.com/2024/04/24/Qt/QComboBox%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8B%E6%8B%89%E6%A1%86%E9%AB%98%E5%BA%A6/
 http://example.com/2024/04/24/Qt/Qt%E8%87%AA%E5%AE%9A%E4%B9%89%E8%99%9A%E6%8B%9F%E9%94%AE%E7%9B%98%E9%AB%98%E5%BA%A6/
 http://example.com/2024/04/23/Qt/%E8%A7%A3%E5%86%B3QListWidget%E5%88%A0%E9%99%A4item%E5%AF%BC%E8%87%B4%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98/
