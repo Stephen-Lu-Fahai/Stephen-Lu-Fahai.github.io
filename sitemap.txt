@@ -1,3 +1,4 @@
+http://example.com/2024/05/17/ubuntu/Intel-xorg%E6%92%AD%E6%94%BE%E8%A7%86%E9%A2%91%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/
 http://example.com/2024/05/16/gstreamer/gstreamer%E6%88%AA%E5%8F%96%E8%A7%86%E9%A2%91%E5%B1%80%E9%83%A8%E5%8C%BA%E5%9F%9F%E5%B9%B6%E6%94%BE%E5%A4%A7%E6%92%AD%E6%94%BE/
 http://example.com/2024/05/09/ubuntu/nvidia%E6%98%BE%E5%8D%A1xorg%E5%A4%9A%E7%A7%8D%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/
 http://example.com/2024/05/09/ubuntu/jetsonNano%E5%B0%86DP%E5%92%8CHDMI%E9%85%8D%E7%BD%AE%E6%88%90%E7%8B%AC%E7%AB%8B%E7%9A%84xorg-screen/
