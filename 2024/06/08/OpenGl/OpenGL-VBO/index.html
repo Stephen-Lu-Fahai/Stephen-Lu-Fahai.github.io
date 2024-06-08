@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>OpenGL--VBO | Stephen`s Blog</title>
+  <meta name="description" content="一、概述GL_ARB_vertex_buffer_object扩展提供了顶点数组和显示列表等功能，这些功能可以在opengl渲染的时候避免重复的数据传输，提高opengl的性能。VBO允许一系列的顶点数据保存显存中，如果这个显存是用来存储像素数据，那么它被称为PBO。使用顶点数组可以减少调用相关的函数，并且增加顶点数据的重复利用。 一、创建PBO步骤1: 使用glGenBuffers()创建一个顶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL--VBO">
+<meta property="og:url" content="http://example.com/2024/06/08/OpenGl/OpenGL-VBO/index.html">
+<meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="一、概述GL_ARB_vertex_buffer_object扩展提供了顶点数组和显示列表等功能，这些功能可以在opengl渲染的时候避免重复的数据传输，提高opengl的性能。VBO允许一系列的顶点数据保存显存中，如果这个显存是用来存储像素数据，那么它被称为PBO。使用顶点数组可以减少调用相关的函数，并且增加顶点数据的重复利用。 一、创建PBO步骤1: 使用glGenBuffers()创建一个顶">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-08T07:38:07.000Z">
+<meta property="article:modified_time" content="2024-06-08T10:14:24.669Z">
+<meta property="article:author" content="Stephen Lu">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2024/06/08/OpenGl/OpenGL-VBO/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Stephen-Lu-Fahai" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">StephenLu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Embedded Software Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Stephen`s Blog!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E9%A9%B1%E5%8A%A8/">Linux驱动</a><span class="category-list-count">30</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenGL/">OpenGL</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/STM32/">STM32</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gstreamer/">gstreamer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/">伺服控制</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a><span class="category-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" rel="tag">Linux驱动[实践]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" rel="tag">Linux驱动[理论]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/STM32/" rel="tag">STM32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gstreamer/" rel="tag">gstreamer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="tag">模式设计</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/C/" style="font-size: 13.57px;">C++</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" style="font-size: 13.71px;">Linux驱动[实践]</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" style="font-size: 13.71px;">Linux驱动[理论]</a> <a href="/tags/OpenGL/" style="font-size: 13.14px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 13.43px;">Qt</a> <a href="/tags/STM32/" style="font-size: 13px;">STM32</a> <a href="/tags/gstreamer/" style="font-size: 13px;">gstreamer</a> <a href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" style="font-size: 13.86px;">ubuntu系统</a> <a href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" style="font-size: 13.29px;">伺服控制</a> <a href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 14px;">模式设计</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">六月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">五月 2024</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/04/">四月 2024</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/OpenGL/">OpenGL</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/08/OpenGl/OpenGL-PBO/" class="title">OpenGL--PBO</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-08T09:23:21.000Z" itemprop="datePublished">2024-06-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/OpenGL/">OpenGL</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/08/OpenGl/OpenGL-VBO/" class="title">OpenGL--VBO</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-08T07:38:07.000Z" itemprop="datePublished">2024-06-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/OpenGL/">OpenGL</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/30/OpenGl/nvidia-cuglInter-PBO%E8%8E%B7%E5%8F%96opengl%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" class="title">nvidia cuglInter PBO获取opengl的问题记录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-30T02:42:51.000Z" itemprop="datePublished">2024-05-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/17/ubuntu/Intel-xorg%E6%92%AD%E6%94%BE%E8%A7%86%E9%A2%91%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" class="title">Intel xorg播放视频踩坑记录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-17T05:44:08.000Z" itemprop="datePublished">2024-05-17</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/gstreamer/">gstreamer</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/16/gstreamer/gstreamer%E6%88%AA%E5%8F%96%E8%A7%86%E9%A2%91%E5%B1%80%E9%83%A8%E5%8C%BA%E5%9F%9F%E5%B9%B6%E6%94%BE%E5%A4%A7%E6%92%AD%E6%94%BE/" class="title">gstreamer截取视频局部区域并放大播放</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-16T11:17:14.000Z" itemprop="datePublished">2024-05-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-OpenGl/OpenGL-VBO" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OpenGL--VBO
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/06/08/OpenGl/OpenGL-VBO/" class="article-date">
+	  <time datetime="2024-06-08T07:38:07.000Z" itemprop="datePublished">2024-06-08</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/OpenGL/">OpenGL</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/OpenGL/" rel="tag">OpenGL</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/06/08/OpenGl/OpenGL-VBO/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 813(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h1><p>GL_ARB_vertex_buffer_object扩展提供了顶点数组和显示列表等功能，这些功能可以在opengl渲染的时候避免重复的数据传输，提高opengl的性能。VBO允许一系列的顶点数据保存显存中，如果这个显存是用来存储像素数据，那么它被称为PBO。使用顶点数组可以减少调用相关的函数，并且增加顶点数据的重复利用。</p>
+<h1 id="一、创建PBO"><a href="#一、创建PBO" class="headerlink" title="一、创建PBO"></a>一、创建PBO</h1><h2 id="步骤1-使用glGenBuffers-创建一个顶点缓冲区。"><a href="#步骤1-使用glGenBuffers-创建一个顶点缓冲区。" class="headerlink" title="步骤1: 使用glGenBuffers()创建一个顶点缓冲区。"></a>步骤1: 使用glGenBuffers()创建一个顶点缓冲区。</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">glGenBuffers</span><span class="params">(GLsizei n, GLuint* ids)</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤2-使用glBindBuffer-绑定这个顶点缓冲区。"><a href="#步骤2-使用glBindBuffer-绑定这个顶点缓冲区。" class="headerlink" title="步骤2: 使用glBindBuffer()绑定这个顶点缓冲区。"></a>步骤2: 使用glBindBuffer()绑定这个顶点缓冲区。</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">glBindBuffer</span><span class="params">(GLenum target, GLuint id)</span></span></span><br></pre></td></tr></table></figure>
+<p>Target参数是为了告诉VBO所要保存的数据是顶点数据GL_ARRAY_BUFFER还是顶点偏移数据GL_ELEMENT_ARRAY_BUFFER。一旦调用glBindBuffer，VBO就会将这个buffer初始化为空的缓冲区(大小为0)。</p>
+<h2 id="步骤3-使用glBindBuffer-传入顶点数据"><a href="#步骤3-使用glBindBuffer-传入顶点数据" class="headerlink" title="步骤3: 使用glBindBuffer()传入顶点数据"></a>步骤3: 使用glBindBuffer()传入顶点数据</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">glBufferData</span><span class="params">(GLenum target, GLsizei size, <span class="type">const</span> <span class="type">void</span>* data, GLenum usage)</span></span></span><br></pre></td></tr></table></figure>
+<p>前3个参数指的是数据的类型、大小和数据指针，最后一个参数代表这些数据是如何被使用的，可选的参数如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GL_STATIC_DRAW</span><br><span class="line">GL_STATIC_READ</span><br><span class="line">GL_STATIC_COPY</span><br><span class="line">GL_DYNAMIC_DRAW</span><br><span class="line">GL_DYNAMIC_READ</span><br><span class="line">GL_DYNAMIC_COPY</span><br><span class="line">GL_STREAM_DRAW</span><br><span class="line">GL_STREAM_READ</span><br><span class="line">GL_STREAM_COPY</span><br></pre></td></tr></table></figure>
+<p>在上面这9中使用标志中，带有Staic静态标识的说明VBO中的data是无法被修改的，带有Dynamic动态标识的说明数据在使用的过程中会被经常修改。而带有Draw后缀的说明这个顶点数据是为了给OpenGL用来渲染，而带有Read后缀的说明这个顶点数据是为了从OpenGL中回读，而Copy后缀代表既可以用作Draw也可以用做Read.<br>值得注意的是，Draw这个标识仅仅在VBO中才生效，而Read和copy标识一般是用在PBO和FBO中，用于从OpenGL中回读渲染后的场景。</p>
+<h2 id="glBufferSubData"><a href="#glBufferSubData" class="headerlink" title="glBufferSubData()"></a>glBufferSubData()</h2><p>和glBufferData()一样，glBufferSubData用来将数据传给VBO,但是它仅更新buffer中现有的数据，用被指定的数据偏移开始。因此在使用glBufferSubData之前一定要使用glBufferData设定整个buffer的大小。</p>
+<h2 id="glDeleteBuffers"><a href="#glDeleteBuffers" class="headerlink" title="glDeleteBuffers()"></a>glDeleteBuffers()</h2><p>用于删除不再使用的VBO</p>
+<h2 id="VBO的使用例子"><a href="#VBO的使用例子" class="headerlink" title="VBO的使用例子"></a>VBO的使用例子</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GLuint vboId;                              <span class="comment">// ID of VBO</span></span><br><span class="line">GLfloat* vertices = <span class="keyword">new</span> GLfloat[vCount*<span class="number">3</span>]; <span class="comment">// create vertex array</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">// generate a new VBO and get the associated ID</span></span><br><span class="line"><span class="built_in">glGenBuffers</span>(<span class="number">1</span>, &amp;vboId);</span><br><span class="line"></span><br><span class="line"><span class="comment">// bind VBO in order to use</span></span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, vboId);</span><br><span class="line"></span><br><span class="line"><span class="comment">// upload data to VBO</span></span><br><span class="line"><span class="built_in">glBufferData</span>(GL_ARRAY_BUFFER, dataSize, vertices, GL_STATIC_DRAW);</span><br><span class="line"></span><br><span class="line"><span class="comment">// it is safe to delete after copying data to VBO</span></span><br><span class="line"><span class="keyword">delete</span> [] vertices;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">// delete VBO when program terminated</span></span><br><span class="line"><span class="built_in">glDeleteBuffers</span>(<span class="number">1</span>, &amp;vboId);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="二、绘制PBO"><a href="#二、绘制PBO" class="headerlink" title="二、绘制PBO"></a>二、绘制PBO</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bind VBOs for vertex array and index array</span></span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, vboId1);            <span class="comment">// for vertex attributes</span></span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ELEMENT_ARRAY_BUFFER, vboId2);    <span class="comment">// for indices</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">glEnableClientState</span>(GL_VERTEX_ARRAY);             <span class="comment">// activate vertex position array</span></span><br><span class="line"><span class="built_in">glEnableClientState</span>(GL_NORMAL_ARRAY);             <span class="comment">// activate vertex normal array</span></span><br><span class="line"><span class="built_in">glEnableClientState</span>(GL_TEXTURE_COORD_ARRAY);      <span class="comment">// activate texture coord array</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// do same as vertex array except pointer</span></span><br><span class="line"><span class="built_in">glVertexPointer</span>(<span class="number">3</span>, GL_FLOAT, stride, offset1);    <span class="comment">// last param is offset, not ptr</span></span><br><span class="line"><span class="built_in">glNormalPointer</span>(GL_FLOAT, stride, offset2);</span><br><span class="line"><span class="built_in">glTexCoordPointer</span>(<span class="number">2</span>, GL_FLOAT, stride, offset3);</span><br><span class="line"></span><br><span class="line"><span class="comment">// draw 6 faces using offset of index array</span></span><br><span class="line"><span class="built_in">glDrawElements</span>(GL_TRIANGLES, <span class="number">36</span>, GL_UNSIGNED_BYTE, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">glDisableClientState</span>(GL_VERTEX_ARRAY);            <span class="comment">// deactivate vertex position array</span></span><br><span class="line"><span class="built_in">glDisableClientState</span>(GL_NORMAL_ARRAY);            <span class="comment">// deactivate vertex normal array</span></span><br><span class="line"><span class="built_in">glDisableClientState</span>(GL_TEXTURE_COORD_ARRAY);     <span class="comment">// deactivate vertex tex coord array</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// bind with 0, so, switch back to normal pointer operation</span></span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ELEMENT_ARRAY_BUFFER, <span class="number">0</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>从OpenGL 2.0开始就提供了glVertexAttribPointer(), glEnableVertexAttribArray() 和glDisableVertexAttribArray() 函数来传入多种顶点数据，只需要指定偏移即可</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// bind VBOs for vertex array and index array</span></span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, vboId1);            <span class="comment">// for vertex coordinates</span></span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ELEMENT_ARRAY_BUFFER, vboId2);    <span class="comment">// for indices</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">glEnableVertexAttribArray</span>(attribVertex);          <span class="comment">// activate vertex position array</span></span><br><span class="line"><span class="built_in">glEnableVertexAttribArray</span>(attribNormal);          <span class="comment">// activate vertex normal array</span></span><br><span class="line"><span class="built_in">glEnableVertexAttribArray</span>(attribTexCoord);        <span class="comment">// activate texture coords array</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// set vertex arrays with generic API</span></span><br><span class="line"><span class="built_in">glVertexAttribPointer</span>(attribVertex,   <span class="number">3</span>, GL_FLOAT, <span class="literal">false</span>, stride, offset1);</span><br><span class="line"><span class="built_in">glVertexAttribPointer</span>(attribNormal,   <span class="number">3</span>, GL_FLOAT, <span class="literal">false</span>, stride, offset2);</span><br><span class="line"><span class="built_in">glVertexAttribPointer</span>(attribTexCoord, <span class="number">2</span>, GL_FLOAT, <span class="literal">false</span>, stride, offset3);</span><br><span class="line"></span><br><span class="line"><span class="comment">// draw 6 faces using offset of index array</span></span><br><span class="line"><span class="built_in">glDrawElements</span>(GL_TRIANGLES, <span class="number">36</span>, GL_UNSIGNED_BYTE, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">glDisableVertexAttribArray</span>(attribVertex);         <span class="comment">// deactivate vertex position</span></span><br><span class="line"><span class="built_in">glDisableVertexAttribArray</span>(attribNormal);         <span class="comment">// deactivate vertex normal</span></span><br><span class="line"><span class="built_in">glDisableVertexAttribArray</span>(attribTexCoord);       <span class="comment">// deactivate texture coords</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// bind with 0, so, switch back to normal pointer operation</span></span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ARRAY_BUFFER, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">glBindBuffer</span>(GL_ELEMENT_ARRAY_BUFFER, <span class="number">0</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2024/06/08/OpenGl/OpenGL-VBO/" title="OpenGL--VBO" target="_blank" rel="external">http://example.com/2024/06/08/OpenGl/OpenGL-VBO/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2024/06/08/OpenGl/OpenGL-PBO/" title="OpenGL--PBO"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2024/05/30/OpenGl/nvidia-cuglInter-PBO%E8%8E%B7%E5%8F%96opengl%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" title="nvidia cuglInter PBO获取opengl的问题记录"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: '说点什么...',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
