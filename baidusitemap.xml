@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2024/06/14/cuda/%E4%BD%BF%E7%94%A8cuda%E5%B0%86%E5%90%84%E7%A7%8DYUV%E8%BD%AC%E4%B8%BARGBA/</loc>
+    <lastmod>2024-06-14</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2024/06/08/OpenGl/OpenGL-VBO/</loc>
     <lastmod>2024-06-08</lastmod>
   </url>
