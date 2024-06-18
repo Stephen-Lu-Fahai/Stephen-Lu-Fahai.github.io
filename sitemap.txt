@@ -1,3 +1,4 @@
+http://example.com/2024/06/18/ubuntu/linux-plymouth%E5%BC%80%E6%9C%BA%E5%8A%A8%E7%94%BB-%E7%BB%88%E6%9E%81%E7%89%88/
 http://example.com/2024/06/14/cuda/%E4%BD%BF%E7%94%A8cuda%E5%B0%86%E5%90%84%E7%A7%8DYUV%E8%BD%AC%E4%B8%BARGBA/
 http://example.com/2024/06/08/OpenGl/OpenGL-VBO/
 http://example.com/2024/06/08/OpenGl/OpenGL-PBO/
