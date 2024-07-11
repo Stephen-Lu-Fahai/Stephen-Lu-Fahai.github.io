@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2024/05/30/OpenGl/nvidia-cuglInter-PBO%E8%8E%B7%E5%8F%96opengl%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</loc>
+    <lastmod>2024-07-11</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2024/06/21/Qt/Qt-TimeEdit%E7%9A%84%E5%A4%84%E7%90%86%E6%8A%80%E5%B7%A7/</loc>
     <lastmod>2024-06-21</lastmod>
   </url>
@@ -23,10 +27,6 @@
   <url>
     <loc>http://example.com/2024/06/08/OpenGl/OpenGL-PBO/</loc>
     <lastmod>2024-06-08</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/2024/05/30/OpenGl/nvidia-cuglInter-PBO%E8%8E%B7%E5%8F%96opengl%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</loc>
-    <lastmod>2024-06-07</lastmod>
   </url>
   <url>
     <loc>http://example.com/2022/09/29/ubuntu/ubuntu%E6%90%AD%E5%BB%BAQt4Android%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
