@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-08-07T06:58:30.390Z</updated>
+  <updated>2024-08-07T09:19:10.018Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>获取X11显示器的插拔信号</title>
+    <link href="http://example.com/2024/08/07/ubuntu/%E8%8E%B7%E5%8F%96X11%E6%98%BE%E7%A4%BA%E5%99%A8%E7%9A%84%E6%8F%92%E6%8B%94%E4%BF%A1%E5%8F%B7/"/>
+    <id>http://example.com/2024/08/07/ubuntu/%E8%8E%B7%E5%8F%96X11%E6%98%BE%E7%A4%BA%E5%99%A8%E7%9A%84%E6%8F%92%E6%8B%94%E4%BF%A1%E5%8F%B7/</id>
+    <published>2024-08-07T09:13:34.000Z</published>
+    <updated>2024-08-07T09:19:10.018Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="使用Xev"><a href="#使用Xev" class="headerlink" title="使用Xev"></a>使用Xev</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; ++i) &#123;</span><br><span class="line">    QString display = <span class="string">&quot;:1.&quot;</span> + QString::number(i);</span><br><span class="line">    QProcess *process = new QProcess (this);</span><br><span class="line">    process-&gt;setObjectName(display);</span><br><span class="line">    connect(process, &amp;QProcess::readyRead,</span><br><span class="line">                this, &amp;Task::slotReadyRead);</span><br><span class="line"></span><br><span class="line">    QString args = QString(<span class="string">&quot;/usr/bin/xev -d %1 -root | &quot;</span></span><br><span class="line">                      <span class="string">&quot;grep --line-buffered &#x27;connection&#x27;&quot;</span>).arg(display);</span><br><span class="line"></span><br><span class="line">    process-&gt;start(<span class="string">&quot;sh&quot;</span>, QStringList() &lt;&lt; <span class="string">&quot;-c&quot;</span> &lt;&lt; args);</span><br><span class="line">    process-&gt;waitForStarted();</span><br><span class="line">    mProcessList.append(process);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="槽函数"><a href="#槽函数" class="headerlink" title="槽函数"></a>槽函数</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="type">void</span> <span class="title function_">Task::slotReadyRead</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    QProcess* process = qobject_cast&lt;QProcess*&gt;(sender());</span><br><span class="line">    QString name = process-&gt;objectName();</span><br><span class="line">    QString <span class="title function_">msg</span><span class="params">(process-&gt;readAllStandardOutput().trimmed())</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (msg.contains(<span class="string">&quot;RR_Connected&quot;</span>)) &#123;</span><br><span class="line">        qDebug() &lt;&lt; name &lt;&lt; <span class="string">&quot;   connected&quot;</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (msg.contains(<span class="string">&quot;RR_Disconnected&quot;</span>)) &#123;</span><br><span class="line">        qDebug() &lt;&lt; name &lt;&lt; <span class="string">&quot;   Disconnected&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;使用Xev&quot;&gt;&lt;a href=&quot;#使用Xev&quot; class=&quot;headerlink&quot; title=&quot;使用Xev&quot;&gt;&lt;/a&gt;使用Xev&lt;/h1&gt;&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr</summary>
+      
+    
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>nvidia显卡xrog固定display</title>
@@ -477,30 +501,6 @@
     
     
     <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>QCheckBox扩大操作范围</title>
-    <link href="http://example.com/2024/04/15/Qt/QCheckBox%E6%89%A9%E5%A4%A7%E6%93%8D%E4%BD%9C%E8%8C%83%E5%9B%B4/"/>
-    <id>http://example.com/2024/04/15/Qt/QCheckBox%E6%89%A9%E5%A4%A7%E6%93%8D%E4%BD%9C%E8%8C%83%E5%9B%B4/</id>
-    <published>2024-04-15T11:23:15.000Z</published>
-    <updated>2024-04-15T11:24:59.852Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><pre><code>QCheckBox使用时发现只能点击文本或者中间的小白框才能改变选中状态，想要点击控件的范围内都能改变选中状态</code></pre><h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="重写mousePressEvent"><a href="#重写mousePressEvent" class="headerlink" title="重写mousePressEvent"></a>重写mousePressEvent</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">PCheckBox::mousePressEvent</span><span class="params">(QMouseEvent *e)</span></span><br><span class="line">&#123;</span><br><span class="line">    Qt::CheckState state = this-&gt;checkState();</span><br><span class="line">    <span class="keyword">switch</span> (state) &#123;</span><br><span class="line">    <span class="keyword">case</span> Qt::Unchecked:</span><br><span class="line">        this-&gt;setCheckState(Qt::Checked);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">case</span> Qt::Checked:</span><br><span class="line">        this-&gt;setCheckState(Qt::Unchecked);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;方法&quot;&gt;&lt;a href=&quot;#方法&quot; class=&quot;headerlink&quot; title=&quot;方法&quot;&gt;&lt;/a&gt;方法&lt;/h1&gt;&lt;h2 id=&quot;原理&quot;&gt;&lt;a href=&quot;#原理&quot; class=&quot;headerlink&quot; title=&quot;原理&quot;&gt;&lt;/a&gt;原理&lt;/h2&gt;&lt;pre&gt;&lt;</summary>
-      
-    
-    
-    
-    <category term="Qt" scheme="http://example.com/categories/Qt/"/>
-    
-    
-    <category term="Qt" scheme="http://example.com/tags/Qt/"/>
     
   </entry>
   
