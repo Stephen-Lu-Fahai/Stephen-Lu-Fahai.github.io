@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-10-08T07:11:51.547Z</updated>
+  <updated>2024-10-25T01:19:50.446Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>编译ASSIMP的Android库</title>
+    <link href="http://example.com/2024/10/25/android/%E7%BC%96%E8%AF%91ASSIMP%E7%9A%84Android%E5%BA%93/"/>
+    <id>http://example.com/2024/10/25/android/%E7%BC%96%E8%AF%91ASSIMP%E7%9A%84Android%E5%BA%93/</id>
+    <published>2024-10-25T01:10:36.000Z</published>
+    <updated>2024-10-25T01:19:50.446Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><pre><code>assimp-5.0.1.zip</code></pre><h1 id="配置及编译"><a href="#配置及编译" class="headerlink" title="配置及编译"></a>配置及编译</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unzip assimp-5.0.1.zip</span><br><span class="line"><span class="built_in">cd</span> assimp-5.0.1</span><br></pre></td></tr></table></figure><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> buildAndroid</span><br><span class="line"><span class="built_in">cd</span> buildAndroid</span><br><span class="line">mdkir assimp</span><br><span class="line">./autoConfig.sh</span><br><span class="line">make -j16</span><br><span class="line">make install</span><br></pre></td></tr></table></figure><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cmake \</span><br><span class="line">-DCMAKE_TOOLCHAIN_FILE=/home/lufahai/deepLearning/qt4android/android-ndk-r19c/build/cmake/android.toolchain.cmake \</span><br><span class="line">-DCMAKE_INSTALL_PREFIX=./assimp \</span><br><span class="line">-DANDROID_ABI=arm64-v8a \</span><br><span class="line">-DANDROID_NATIVE_API_LEVEL=android-14 \</span><br><span class="line">-DANDROID_FORCE_ARM_BUILD=TRUE \</span><br><span class="line">-DANDROID_STL=c++_shared \</span><br><span class="line">-DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=FALSE \</span><br><span class="line">-DASSIMP_BUILD_OBJ_IMPORTER=TRUE \</span><br><span class="line">-DASSIMP_BUILD_FBX_IMPORTER=TRUE \</span><br><span class="line">-DANDROID_NDK=/home/lufahai/deepLearning/qt4android/android-ndk-r19c \</span><br><span class="line">-DCMAKE_BUILD_TYPE=Release \</span><br><span class="line">-DCMAKE_CXX_FLAGS=-Wno-c++11-narrowing \</span><br><span class="line">-DANDROID_TOOLCHAIN=clang \</span><br><span class="line">-DASSIMP_BUILD_TESTS=OFF \</span><br><span class="line">-DASSIMP_NO_EXPORT=TRUE \</span><br><span class="line">-DASSIMP_BUILD_ASSIMP_TOOLS=FALSE \</span><br><span class="line">-DASSIMP_BUILD_SAMPLES=FALSE \</span><br><span class="line">..</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;版本&quot;&gt;&lt;a href=&quot;#版本&quot; class=&quot;headerlink&quot; title=&quot;版本&quot;&gt;&lt;/a&gt;版本&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;assimp-5.0.1.zip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&quot;配置及编译&quot;&gt;&lt;a href=&quot;#配置及编译&quot;</summary>
+      
+    
+    
+    
+    <category term="Qt4Android" scheme="http://example.com/categories/Qt4Android/"/>
+    
+    
+    <category term="Qt4Android" scheme="http://example.com/tags/Qt4Android/"/>
+    
+  </entry>
   
   <entry>
     <title>cuda 高效访问24位RGB图像</title>
@@ -467,32 +493,6 @@
     <summary type="html">&lt;h1 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;默认情况下qtvirtualkeyboard占据了半个屏幕，可以根据实际需求调整。
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id</summary>
-      
-    
-    
-    
-    <category term="Qt" scheme="http://example.com/categories/Qt/"/>
-    
-    
-    <category term="Qt" scheme="http://example.com/tags/Qt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解决QListWidget删除item导致崩溃的问题</title>
-    <link href="http://example.com/2024/04/23/Qt/%E8%A7%A3%E5%86%B3QListWidget%E5%88%A0%E9%99%A4item%E5%AF%BC%E8%87%B4%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://example.com/2024/04/23/Qt/%E8%A7%A3%E5%86%B3QListWidget%E5%88%A0%E9%99%A4item%E5%AF%BC%E8%87%B4%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98/</id>
-    <published>2024-04-23T09:54:16.000Z</published>
-    <updated>2024-04-23T10:00:06.367Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><pre><code>QListWidge 调用clear或删除item的时候，程序直接崩溃</code></pre><h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><pre><code>从网上看到有人分析是由于访问连接到信号itemSelectionChanged()的时隙方法中的选定项引起的</code></pre><h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>QListWidget在执行删除或清空前，应该把信号槽关闭，清空结束后再重新连接。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ui-&gt;listWidget-&gt;<span class="built_in">blockSignals</span>(<span class="literal">true</span>);</span><br><span class="line">ui-&gt;listWidget-&gt;<span class="built_in">clear</span>();</span><br><span class="line">ui-&gt;listWidget-&gt;<span class="built_in">blockSignals</span>(<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;QListWidge 调用clear或删除item的时候，程序直接崩溃
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&quot;原因&quot;&gt;</summary>
       
     
     

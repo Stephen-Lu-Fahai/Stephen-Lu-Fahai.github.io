@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2022/09/29/android/ubuntu%E6%90%AD%E5%BB%BAQt4Android%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
+    <lastmod>2024-10-25</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/2024/10/25/android/%E7%BC%96%E8%AF%91ASSIMP%E7%9A%84Android%E5%BA%93/</loc>
+    <lastmod>2024-10-25</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2024/10/08/cuda/cuda-%E9%AB%98%E6%95%88%E8%AE%BF%E9%97%AE24%E4%BD%8DRGB%E5%9B%BE%E5%83%8F/</loc>
     <lastmod>2024-10-08</lastmod>
   </url>
@@ -51,10 +59,6 @@
   <url>
     <loc>http://example.com/2024/06/08/OpenGl/OpenGL-PBO/</loc>
     <lastmod>2024-06-08</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/2022/09/29/ubuntu/ubuntu%E6%90%AD%E5%BB%BAQt4Android%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
-    <lastmod>2024-05-23</lastmod>
   </url>
   <url>
     <loc>http://example.com/2024/05/17/ubuntu/Intel-xorg%E6%92%AD%E6%94%BE%E8%A7%86%E9%A2%91%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</loc>
