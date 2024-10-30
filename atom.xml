@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-10-25T01:19:50.446Z</updated>
+  <updated>2024-10-30T01:35:28.691Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>树莓派编译gcc</title>
+    <link href="http://example.com/2024/10/30/armLinux/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%BC%96%E8%AF%91gcc/"/>
+    <id>http://example.com/2024/10/30/armLinux/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%BC%96%E8%AF%91gcc/</id>
+    <published>2024-10-30T01:16:56.000Z</published>
+    <updated>2024-10-30T01:35:28.691Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>由于新版本的树莓派系统自带的gcc是10.2，并且没找到arm64版本的gcc。<br>在为树莓派交叉编译Qt时使用的是linrao release版本的gcc-7.5。<br>由于gcc版本不同，编译的库文件不兼容。</p><h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><h2 id="下载gcc"><a href="#下载gcc" class="headerlink" title="下载gcc"></a>下载gcc</h2><p>连接</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://ftp.gnu.org/gnu/gcc/</span><br></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar xvf gcc-7.5.0.tar.gz</span><br><span class="line"><span class="built_in">cd</span> gcc-7.5.0</span><br><span class="line">./contrib/download_prerequisites</span><br></pre></td></tr></table></figure><p>&#x2F;* 下载依赖 *&#x2F;</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./contrib/download_prerequisites</span><br></pre></td></tr></table></figure><p>但是如果没有梯子，一般下载失败，可以直接迅雷下载相应的源码。<br>gmp-6.1.0.tar.bz2<br>mpfr-3.1.4.tar.gz<br>mpc-1.0.3.tar.gz<br>isl-0.16.1.tar.bz2</p><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>注意树莓派4的CPU是a72</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../configure -v --enable-languages=c,c++ --with-cpu=cortex-a72 --build=arm-linux-gnueabihf--host=arm-linux-gnueabihf --target=arm-linux-gnueabihf --prefix=/usr/local/gcc-7.5.0</span><br></pre></td></tr></table></figure><h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make -j16</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;由于新版本的树莓派系统自带的gcc是10.2，并且没找到arm64版本的gcc。&lt;br&gt;在为树莓派交叉编译Qt时使用的是linrao rel</summary>
+      
+    
+    
+    
+    <category term="armLinux" scheme="http://example.com/categories/armLinux/"/>
+    
+    
+    <category term="armLinux" scheme="http://example.com/tags/armLinux/"/>
+    
+  </entry>
   
   <entry>
     <title>编译ASSIMP的Android库</title>
@@ -237,10 +261,10 @@
   
   <entry>
     <title>linux plymouth开机动画--终极版</title>
-    <link href="http://example.com/2024/06/18/ubuntu/linux-plymouth%E5%BC%80%E6%9C%BA%E5%8A%A8%E7%94%BB-%E7%BB%88%E6%9E%81%E7%89%88/"/>
-    <id>http://example.com/2024/06/18/ubuntu/linux-plymouth%E5%BC%80%E6%9C%BA%E5%8A%A8%E7%94%BB-%E7%BB%88%E6%9E%81%E7%89%88/</id>
+    <link href="http://example.com/2024/06/18/armLinux/linux-plymouth%E5%BC%80%E6%9C%BA%E5%8A%A8%E7%94%BB-%E7%BB%88%E6%9E%81%E7%89%88/"/>
+    <id>http://example.com/2024/06/18/armLinux/linux-plymouth%E5%BC%80%E6%9C%BA%E5%8A%A8%E7%94%BB-%E7%BB%88%E6%9E%81%E7%89%88/</id>
     <published>2024-06-18T11:50:00.000Z</published>
-    <updated>2024-09-03T06:00:55.187Z</updated>
+    <updated>2024-10-30T01:41:26.403Z</updated>
     
     <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>以前的开机动画是一张静态的图片, 可以多张图片做成动态。</p><p>主要参考：</p><p><a href="https://github.com/krishnan793/PlymouthTheme-Cat">https://github.com/krishnan793/PlymouthTheme-Cat</a></p><p><a href="https://github.com/jcklpe/Plymouth-Animated-Boot-Screen-Creator">https://github.com/jcklpe/Plymouth-Animated-Boot-Screen-Creator</a></p><h1 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h1><p>在老机器上试的时候，发现只有开机的时候显示动画，关机的时候会出现命令行，提示某些服务关闭。<br>gpt的回答是： 修改&#x2F;etc&#x2F;default&#x2F;grub   找到 GRUB_CMDLINE_LINUX_DEFAULT 行，将其中的 quiet splash 替换为 quiet splash plymouth.ignore-serial-consoles</p><p>验证后发现关机的时候不显示命令行了，暂时满足需求。</p><h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>由于plymouth需要依赖exim4邮件服务，但是apt install 安装了exim4软件后它需要在&#x2F;var&#x2F;log中创建自己的日志目录，但是由于已经把&#x2F;var&#x2F;log设为tmpfs，使得exim4没有权限创建目录。如何修改参考另一篇文章。</p>]]></content>
     
@@ -254,10 +278,10 @@
     
     
     
-    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    <category term="armLinux" scheme="http://example.com/categories/armLinux/"/>
     
     
-    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    <category term="armLinux" scheme="http://example.com/tags/armLinux/"/>
     
   </entry>
   
@@ -407,10 +431,10 @@
   
   <entry>
     <title>jetsonNano将DP和HDMI配置成独立的xorg screen</title>
-    <link href="http://example.com/2024/05/09/ubuntu/jetsonNano%E5%B0%86DP%E5%92%8CHDMI%E9%85%8D%E7%BD%AE%E6%88%90%E7%8B%AC%E7%AB%8B%E7%9A%84xorg-screen/"/>
-    <id>http://example.com/2024/05/09/ubuntu/jetsonNano%E5%B0%86DP%E5%92%8CHDMI%E9%85%8D%E7%BD%AE%E6%88%90%E7%8B%AC%E7%AB%8B%E7%9A%84xorg-screen/</id>
+    <link href="http://example.com/2024/05/09/armLinux/jetsonNano%E5%B0%86DP%E5%92%8CHDMI%E9%85%8D%E7%BD%AE%E6%88%90%E7%8B%AC%E7%AB%8B%E7%9A%84xorg-screen/"/>
+    <id>http://example.com/2024/05/09/armLinux/jetsonNano%E5%B0%86DP%E5%92%8CHDMI%E9%85%8D%E7%BD%AE%E6%88%90%E7%8B%AC%E7%AB%8B%E7%9A%84xorg-screen/</id>
     <published>2024-05-09T11:51:58.000Z</published>
-    <updated>2024-05-09T12:00:19.695Z</updated>
+    <updated>2024-10-30T01:41:26.411Z</updated>
     
     <content type="html"><![CDATA[<h1 id="xorg-conf"><a href="#xorg-conf" class="headerlink" title="xorg.conf"></a>xorg.conf</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment"># cat /etc/X11/xorg.conf</span></span><br><span class="line"><span class="comment"># Copyright (c) 2011-2015 NVIDIA CORPORATION.  All Rights Reserved.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># This is the minimal configuration necessary to use the Tegra driver.</span></span><br><span class="line"><span class="comment"># Please refer to the xorg.conf man page for more configuration</span></span><br><span class="line"><span class="comment"># options provided by the X server, including display-related options</span></span><br><span class="line"><span class="comment"># provided by RandR 1.2 and higher.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disable extensions not useful on Tegra.</span></span><br><span class="line">Section <span class="string">&quot;Module&quot;</span></span><br><span class="line">    Disable     <span class="string">&quot;dri&quot;</span></span><br><span class="line">    SubSection  <span class="string">&quot;extmod&quot;</span></span><br><span class="line">        Option  <span class="string">&quot;omit xfree86-dga&quot;</span></span><br><span class="line">    EndSubSection</span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;Device&quot;</span></span><br><span class="line">    Identifier  <span class="string">&quot;Device0&quot;</span></span><br><span class="line">    Driver      <span class="string">&quot;nvidia&quot;</span></span><br><span class="line">    Screen      0</span><br><span class="line">    Option      <span class="string">&quot;UseDisplayDevice&quot;</span> <span class="string">&quot;HDMI-0&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;AllowEmptyInitialConfiguration&quot;</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;AddARGBGLXVisuals&quot;</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;ConnectToAcpid&quot;</span> <span class="string">&quot;false&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;TegraReserveDisplayBandwidth&quot;</span> <span class="string">&quot;false&quot;</span></span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;Device&quot;</span></span><br><span class="line">    Identifier  <span class="string">&quot;Device1&quot;</span></span><br><span class="line">    Driver      <span class="string">&quot;nvidia&quot;</span></span><br><span class="line">    Screen      1</span><br><span class="line">    Option      <span class="string">&quot;UseDisplayDevice&quot;</span> <span class="string">&quot;DP-0&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;AllowEmptyInitialConfiguration&quot;</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;AddARGBGLXVisuals&quot;</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;ConnectToAcpid&quot;</span> <span class="string">&quot;false&quot;</span></span><br><span class="line">    Option      <span class="string">&quot;TegraReserveDisplayBandwidth&quot;</span> <span class="string">&quot;false&quot;</span></span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;Monitor&quot;</span></span><br><span class="line">    Identifier   <span class="string">&quot;Monitor0&quot;</span></span><br><span class="line">    HorizSync    18.0 - 99.0</span><br><span class="line">    VertRefresh  23.0 - 62.0</span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;Screen&quot;</span></span><br><span class="line">    Identifier   <span class="string">&quot;Screen0&quot;</span></span><br><span class="line">    Device       <span class="string">&quot;Device0&quot;</span></span><br><span class="line">    Monitor      <span class="string">&quot;Monitor0&quot;</span></span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;Monitor&quot;</span></span><br><span class="line">    Identifier   <span class="string">&quot;Monitor1&quot;</span></span><br><span class="line">    HorizSync    18.0 - 99.0</span><br><span class="line">    VertRefresh  23.0 - 62.0</span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;Screen&quot;</span></span><br><span class="line">    Identifier   <span class="string">&quot;Screen1&quot;</span></span><br><span class="line">    Device       <span class="string">&quot;Device1&quot;</span></span><br><span class="line">    Monitor      <span class="string">&quot;Monitor1&quot;</span></span><br><span class="line">EndSection</span><br><span class="line"></span><br><span class="line">Section <span class="string">&quot;ServerLayout&quot;</span></span><br><span class="line">    Identifier   <span class="string">&quot;ServerLayout0&quot;</span></span><br><span class="line">    Screen       0 <span class="string">&quot;Screen0&quot;</span> 0 0</span><br><span class="line">    Screen       1 <span class="string">&quot;Screen1&quot;</span> 0 0</span><br><span class="line">    Option       <span class="string">&quot;Xinerama&quot;</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">EndSection</span><br></pre></td></tr></table></figure><h1 id="url"><a href="#url" class="headerlink" title="url:"></a>url:</h1><p><a href="https://forums.developer.nvidia.com/t/multi-screen-configuration-puts-second-monitor-on-first-screen-if-not-initially-connected/143823">https://forums.developer.nvidia.com/t/multi-screen-configuration-puts-second-monitor-on-first-screen-if-not-initially-connected/143823</a></p>]]></content>
     
@@ -422,10 +446,10 @@
     
     
     
-    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    <category term="armLinux" scheme="http://example.com/categories/armLinux/"/>
     
     
-    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    <category term="armLinux" scheme="http://example.com/tags/armLinux/"/>
     
   </entry>
   
@@ -467,32 +491,6 @@
       
       
     <summary type="html">&lt;h1 id=&quot;下拉框子项的高度：&quot;&gt;&lt;a href=&quot;#下拉框子项的高度：&quot; class=&quot;headerlink&quot; title=&quot;下拉框子项的高度：&quot;&gt;&lt;/a&gt;下拉框子项的高度：&lt;/h1&gt;&lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td </summary>
-      
-    
-    
-    
-    <category term="Qt" scheme="http://example.com/categories/Qt/"/>
-    
-    
-    <category term="Qt" scheme="http://example.com/tags/Qt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Qt自定义虚拟键盘高度</title>
-    <link href="http://example.com/2024/04/24/Qt/Qt%E8%87%AA%E5%AE%9A%E4%B9%89%E8%99%9A%E6%8B%9F%E9%94%AE%E7%9B%98%E9%AB%98%E5%BA%A6/"/>
-    <id>http://example.com/2024/04/24/Qt/Qt%E8%87%AA%E5%AE%9A%E4%B9%89%E8%99%9A%E6%8B%9F%E9%94%AE%E7%9B%98%E9%AB%98%E5%BA%A6/</id>
-    <published>2024-04-24T05:19:08.000Z</published>
-    <updated>2024-04-24T05:30:19.434Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h1><pre><code>默认情况下qtvirtualkeyboard占据了半个屏幕，可以根据实际需求调整。</code></pre><h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="修改虚拟键盘源码"><a href="#修改虚拟键盘源码" class="headerlink" title="修改虚拟键盘源码"></a>修改虚拟键盘源码</h2><pre><code>修改源码下的文件./src/virtualkeyboard/desktopinputpanel.cpp</code></pre><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DesktopInputPanel::show</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    AppInputPanel::<span class="built_in">show</span>();</span><br><span class="line">    <span class="built_in">Q_D</span>(DesktopInputPanel);</span><br><span class="line">    <span class="keyword">if</span> (d-&gt;view) &#123;</span><br><span class="line">QRect rc = QGuiApplication::<span class="built_in">primaryScreen</span>()-&gt;<span class="built_in">geometry</span>();</span><br><span class="line">rc.<span class="built_in">moveTo</span>(<span class="number">0</span>, rc.<span class="built_in">height</span>()*<span class="number">48</span>/<span class="number">100</span>);</span><br><span class="line">rc.<span class="built_in">setHeight</span>(rc.<span class="built_in">height</span>()*<span class="number">62</span>/<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">repositionView</span>(rc);</span><br><span class="line">        <span class="comment">//repositionView(QGuiApplication::primaryScreen()-&gt;availableGeometry());</span></span><br><span class="line">        d-&gt;view-&gt;<span class="built_in">show</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><h2 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h2><p>直接使用qmake &amp;&amp; make 编译生成动态库文件，然后替换到Qt安装目录中对应的库文件。    </p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;默认情况下qtvirtualkeyboard占据了半个屏幕，可以根据实际需求调整。
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id</summary>
       
     
     
