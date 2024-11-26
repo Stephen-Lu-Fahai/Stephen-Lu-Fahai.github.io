@@ -17,17 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Category: Linux驱动 | Stephen`s Blog</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="StephenLu&#96;s Blog">
-<meta property="og:url" content="http://example.com/categories/Linux%E9%A9%B1%E5%8A%A8/index.html">
+  <title>QProcess未退出对主程序的影响 | Stephen`s Blog</title>
+  <meta name="description" content="现象主程序使用QProcess启动外部程序，在这种情况下QProcess会占用主程序的资源。具体例子：主程序打开&#x2F;dev&#x2F;video0视频设备，并使用QProcess启动外部程序。当pkill主程序的时候，外部程序不会退出，这时当主程序重启后无法打开&#x2F;dev&#x2F;video0设备。但只要kill掉外部程序 设备打开正常。 解决1、如果主副程序是平行的，那么应该在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QProcess未退出对主程序的影响">
+<meta property="og:url" content="http://example.com/2024/11/26/Qt/QProcess%E6%9C%AA%E9%80%80%E5%87%BA%E5%AF%B9%E4%B8%BB%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BD%B1%E5%93%8D/index.html">
 <meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="现象主程序使用QProcess启动外部程序，在这种情况下QProcess会占用主程序的资源。具体例子：主程序打开&#x2F;dev&#x2F;video0视频设备，并使用QProcess启动外部程序。当pkill主程序的时候，外部程序不会退出，这时当主程序重启后无法打开&#x2F;dev&#x2F;video0设备。但只要kill掉外部程序 设备打开正常。 解决1、如果主副程序是平行的，那么应该在">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-26T01:13:44.000Z">
+<meta property="article:modified_time" content="2024-11-26T02:05:40.345Z">
 <meta property="article:author" content="Stephen Lu">
-<meta property="article:tag" content="Stephen Lu">
+<meta property="article:tag" content="Qt">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/categories/Linux%E9%A9%B1%E5%8A%A8/index.html">
+  <link rel="canonical" href="http://example.com/2024/11/26/Qt/QProcess%E6%9C%AA%E9%80%80%E5%87%BA%E5%AF%B9%E4%B8%BB%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BD%B1%E5%93%8D/index.html">
   
     <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
   
@@ -286,171 +290,138 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="content article article-categories article-type-list" itemscope="">
-    <header class="article-header">
-      <h1 itemprop="name" class="hidden-xs">Category: Linux驱动</h1>
-      <p class="hidden-xs">Total 10 articles</p>
-      <nav role="navigation" id="nav-main" class="okayNav">
-        <ul>
-          <li><a href="/categories">All</a></li>
-          
-          <li><a href="/categories/C/">C++</a></li>
-          
-          <li><a href="/categories/模式设计/">模式设计</a></li>
-          
-          <li><a href="/categories/伺服控制/">伺服控制</a></li>
-          
-          <li><a href="/categories/ubuntu系统/">ubuntu系统</a></li>
-          
-          <li><a href="/categories/Linux驱动/">Linux驱动</a></li>
-          
-          <li><a href="/categories/STM32/">STM32</a></li>
-          
-          <li><a href="/categories/Qt/">Qt</a></li>
-          
-          <li><a href="/categories/gstreamer/">gstreamer</a></li>
-          
-          <li><a href="/categories/OpenGL/">OpenGL</a></li>
-          
-          <li><a href="/categories/cuda/">cuda</a></li>
-          
-          <li><a href="/categories/Qt4Android/">Qt4Android</a></li>
-          
-          <li><a href="/categories/armLinux/">armLinux</a></li>
-          
-        </ul>
-      </nav>
-    </header>
-    <!-- /header -->
-    <div class="article-body">
-      <div class="panel panel-default b-no">
-    <div class="panel-heading" role="tab">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" href="#collapseLinux驱动" aria-expanded="true">
-              <i class="icon icon-folder text-active"></i><i class="icon icon-folder-open text"></i>
-              Linux驱动
-            </a>
-            <small class="text-muted">(Total 10 articles)</small>
-        </h4>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Qt/QProcess未退出对主程序的影响" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      QProcess未退出对主程序的影响
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/11/26/Qt/QProcess%E6%9C%AA%E9%80%80%E5%87%BA%E5%AF%B9%E4%B8%BB%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BD%B1%E5%93%8D/" class="article-date">
+	  <time datetime="2024-11-26T01:13:44.000Z" itemprop="datePublished">2024-11-26</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Qt/">Qt</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Qt/" rel="tag">Qt</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/11/26/Qt/QProcess%E6%9C%AA%E9%80%80%E5%87%BA%E5%AF%B9%E4%B8%BB%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BD%B1%E5%93%8D/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 169(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
+	
+
+      </div>
     </div>
-    <div id="collapseLinux驱动" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingLinux驱动">
-        <div class="panel-body">
-            <div class="collection">
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-15-%E4%BD%BF%E7%94%A8%E5%86%85%E6%A0%B8%E7%8E%B0%E6%9C%89%E9%A9%B1%E5%8A%A8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:18:24.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:15--使用内核现有驱动
-</a>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h1><p>主程序使用QProcess启动外部程序，在这种情况下QProcess会占用主程序的资源。具体例子：主程序打开&#x2F;dev&#x2F;video0视频设备，并使用QProcess启动外部程序。当pkill主程序的时候，外部程序不会退出，这时当主程序重启后无法打开&#x2F;dev&#x2F;video0设备。<br>但只要kill掉外部程序 设备打开正常。</p>
+<h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>1、如果主副程序是平行的，那么应该在更外一层并行管理主副程序。<br>2、在主程序的析构函数中，退出的时候即使调用QProcess-&gt;kill() 去主动关闭外部程序。</p>
 
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-14-PDD%E4%B8%8E%E8%AE%BE%E5%A4%87%E6%A0%91/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:18:05.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:14--PDD与设备树
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-13-USB-%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:17:31.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:13--USB 驱动开发
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-12-USB-HID%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:17:04.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:12--USB HID驱动开发
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-11-framebuff%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:16:42.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:11--framebuff驱动学习
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-10-SPI%E9%A9%B1%E5%8A%A8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:16:20.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:10--SPI驱动
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-09-%E8%BE%93%E5%85%A5%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:16:04.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:09--输入子系统
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-08-I2C%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:15:44.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:08--I2C设备驱动
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-07-%E6%A0%91%E8%8E%93%E6%B4%BE%E8%AE%BE%E5%A4%87IO%E8%AE%BF%E9%97%AE/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:15:26.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:07--树莓派设备IO访问
-</a>
-
-
-              
-                
-<a href="/2022/11/01/linuxDrive/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5-06-%E6%A0%91%E8%8E%93%E6%B4%BEGPIO%E9%A9%B1%E5%8A%A8SR04%E8%B6%85%E5%A3%B0%E6%A8%A1%E5%9D%97/" class="collection-item"   itemprop="url">
-  <time datetime="2022-11-01T07:15:07.000Z" itemprop="datePublished">2022-11-01</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> Linux驱动[实践]:06--树莓派GPIO驱动SR04超声模块
-</a>
-
-
-              
-            </div>
-        </div>
+      
     </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2024/11/26/Qt/QProcess%E6%9C%AA%E9%80%80%E5%87%BA%E5%AF%B9%E4%B8%BB%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BD%B1%E5%93%8D/" title="QProcess未退出对主程序的影响" target="_blank" rel="external">http://example.com/2024/11/26/Qt/QProcess未退出对主程序的影响/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
 </div>
+
+
     </div>
   </article>
   
     
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev disabled">
-                <a href="javascript:;">
-                    <i class="icon icon-angle-left"></i>
-                    Prev
-                </a>
-            </li>
-            
-            
-            <li class="next">
-                <a href="/categories/Linux%E9%A9%B1%E5%8A%A8/page/2/">
-                    Next
-                    <i class="icon icon-angle-right"></i>
-                </a>
-            </li>
-            
-        </ul>
-            <div class="total-article bar-right">Page 1 of 3</div>
-        </div>
-    </nav>
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
     
- 
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2024/11/22/gstreamer/gsteamer-pipeline%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA%E5%AF%B9%E6%98%BE%E7%A4%BA%E5%BB%B6%E8%BF%9F%E7%9A%84%E5%BD%B1%E5%93%8D/" title="gsteamer pipeline在不同线程创建对显示延迟的影响"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -496,6 +467,39 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: '说点什么...',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
 
 
 
