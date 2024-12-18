@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-12-06T10:06:48.001Z</updated>
+  <updated>2024-12-18T01:26:24.841Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>rk3399pro交叉编译Qt--eglfs</title>
+    <link href="http://example.com/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/"/>
+    <id>http://example.com/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/</id>
+    <published>2024-12-18T01:21:49.000Z</published>
+    <updated>2024-12-18T01:26:24.841Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、事先准备"><a href="#一、事先准备" class="headerlink" title="一、事先准备"></a>一、事先准备</h1><h2 id="1、ubuntu-PC"><a href="#1、ubuntu-PC" class="headerlink" title="1、ubuntu PC"></a>1、ubuntu PC</h2><pre><code>1) 下载Qt5.15.2源码2) 下载文件系统  直接新建一个sysroot空目录即可，等会再同步树莓派的库文件</code></pre><h2 id="2、jetson-Nano"><a href="#2、jetson-Nano" class="headerlink" title="2、jetson Nano"></a>2、jetson Nano</h2><pre><code>1) 安装依赖选项</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install  libegl1-mesa-dev libdrm-dev libgles2-mesa-dev libgbm-dev</span><br></pre></td></tr></table></figure><h1 id="二、编译及安装"><a href="#二、编译及安装" class="headerlink" title="二、编译及安装"></a>二、编译及安装</h1><h2 id="1、同步文件系统"><a href="#1、同步文件系统" class="headerlink" title="1、同步文件系统"></a>1、同步文件系统</h2><p>注意，可以把usr 和lib的着整个目录都同步过来。可以解决交叉编译的很多问题。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rsync -avz root@192.168.10.201:/lib sysroot</span><br><span class="line">rsync -avz root@192.168.10.201:/usr sysroot</span><br></pre></td></tr></table></figure><h2 id="2、修复损坏的链接文件"><a href="#2、修复损坏的链接文件" class="headerlink" title="2、修复损坏的链接文件"></a>2、修复损坏的链接文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/Kukkimonsuta/rpi-buildqt/master/scripts/utils/sysroot-relativelinks.py</span><br><span class="line"><span class="built_in">chmod</span> -x sysroot-relativelinks.py</span><br><span class="line">./sysroot-relativelinks.py sysroot</span><br></pre></td></tr></table></figure><p>文件内容如下:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"><span class="comment"># source: https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Take a sysroot directory and turn all the absolute symlinks and turn them into</span></span><br><span class="line"><span class="comment"># relative ones such that the sysroot is usable within another system.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv) != 2:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Usage is &quot;</span> + sys.argv[0] + <span class="string">&quot;&lt;directory&gt;&quot;</span>)</span><br><span class="line">    sys.exit(1)</span><br><span class="line"></span><br><span class="line">topdir = sys.argv[1]</span><br><span class="line">topdir = os.path.abspath(topdir)</span><br><span class="line"></span><br><span class="line">def handlelink(filePath, subdir):</span><br><span class="line">    <span class="built_in">link</span> = os.readlink(filePath)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">link</span>[0] != <span class="string">&quot;/&quot;</span>:</span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    <span class="keyword">if</span> link.startswith(topdir):</span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    </span><br><span class="line">    newLink = os.path.relpath(topdir+<span class="built_in">link</span>, subdir)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\t%s replacing %s =&gt; %s&quot;</span> % (filePath, <span class="built_in">link</span>, newLink))</span><br><span class="line">    os.unlink(filePath)</span><br><span class="line">    os.symlink(newLink, filePath)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> subdir, <span class="built_in">dirs</span>, files <span class="keyword">in</span> os.walk(topdir):</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        filePath = os.path.join(subdir, file)</span><br><span class="line">        <span class="keyword">if</span> os.path.islink(filePath):</span><br><span class="line">            handlelink(filePath, subdir)</span><br></pre></td></tr></table></figure><p>将上面的文件保存到sysroot-relativelinks.py，并且赋予+x权限<br>如何使用:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sysroot-relativelinks.py sysroot</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、事先准备&quot;&gt;&lt;a href=&quot;#一、事先准备&quot; class=&quot;headerlink&quot; title=&quot;一、事先准备&quot;&gt;&lt;/a&gt;一、事先准备&lt;/h1&gt;&lt;h2 id=&quot;1、ubuntu-PC&quot;&gt;&lt;a href=&quot;#1、ubuntu-PC&quot; class=&quot;header</summary>
+      
+    
+    
+    
+    <category term="armLinux" scheme="http://example.com/categories/armLinux/"/>
+    
+    
+    <category term="armLinux" scheme="http://example.com/tags/armLinux/"/>
+    
+  </entry>
   
   <entry>
     <title>OpenGL不需要坐标直接渲染</title>
@@ -467,30 +491,6 @@
       
       
     <summary type="html">&lt;h1 id=&quot;一、概述&quot;&gt;&lt;a href=&quot;#一、概述&quot; class=&quot;headerlink&quot; title=&quot;一、概述&quot;&gt;&lt;/a&gt;一、概述&lt;/h1&gt;&lt;p&gt;GL_ARB_vertex_buffer_object扩展提供了顶点数组和显示列表等功能，这些功能可以在opengl渲染的时</summary>
-      
-    
-    
-    
-    <category term="OpenGL" scheme="http://example.com/categories/OpenGL/"/>
-    
-    
-    <category term="OpenGL" scheme="http://example.com/tags/OpenGL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nvidia cuglInter PBO获取opengl总结</title>
-    <link href="http://example.com/2024/05/30/OpenGl/nvidia-cuglInter-PBO%E8%8E%B7%E5%8F%96opengl%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
-    <id>http://example.com/2024/05/30/OpenGl/nvidia-cuglInter-PBO%E8%8E%B7%E5%8F%96opengl%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</id>
-    <published>2024-05-30T02:42:51.000Z</published>
-    <updated>2024-07-11T07:38:41.526Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>需要根据xorg配置的是10位屏幕还是8位屏幕来确定读取，如歌对应不上，虽然也能获取到视频，但是会占用很多CPU资源，导致严重掉帧。</p><h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><h2 id="8位"><a href="#8位" class="headerlink" title="8位"></a>8位</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> glBindBuffer(GL_PIXEL_PACK_BUFFER, mBufId);</span><br><span class="line">glReadPixels(<span class="number">0</span>, <span class="number">0</span>, mScreenSize.width(), mScreenSize.height(), GL_RGBA, GL_UNSIGNED_BYTE, <span class="number">0</span>);</span><br></pre></td></tr></table></figure><p>重新写入给另外一个Texture:</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glTexImage2D(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, mWidth, mHeight, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure><h2 id="10位"><a href="#10位" class="headerlink" title="10位"></a>10位</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> glBindBuffer(GL_PIXEL_PACK_BUFFER, mBufId);</span><br><span class="line">glReadPixels(<span class="number">0</span>, <span class="number">0</span>, mScreenSize.width(), mScreenSize.height(), GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, <span class="number">0</span>);</span><br></pre></td></tr></table></figure><p>重新写入给另外一个Texture:</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glTexImage2D(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, mWidth, mHeight, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, <span class="literal">NULL</span>);  </span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h1&gt;&lt;p&gt;需要根据xorg配置的是10位屏幕还是8位屏幕来确定读取，如歌对应不上，虽然也能获取到视频，但是会占用很多CPU资源，导致严</summary>
       
     
     
