@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>ISP pipeline之DPC | Stephen`s Blog</title>
+  <meta name="description" content="DPC概述由于sensor制造工艺技术瑕疵或光线采集存在缺陷，获得的原始图像数据就存在一些坏点，一般是某个邻域内的极亮或极暗点。 DPC矫正原理一般以一个5x5的邻域作为检测区域，并且常用梯度法进行检测。  如上图所示，Pc作为被检测点，步骤如下：1、先算出4个方向的二阶梯度：    水平方向：Dh1 &#x3D; |P1+P3-2P2|, Dh2 &#x3D; |P4+P5-2Pc|,Dh3 &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ISP pipeline之DPC">
+<meta property="og:url" content="http://example.com/2025/02/27/cameraIsp/ISP-pipeline%E4%B9%8BDPC/index.html">
+<meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="DPC概述由于sensor制造工艺技术瑕疵或光线采集存在缺陷，获得的原始图像数据就存在一些坏点，一般是某个邻域内的极亮或极暗点。 DPC矫正原理一般以一个5x5的邻域作为检测区域，并且常用梯度法进行检测。  如上图所示，Pc作为被检测点，步骤如下：1、先算出4个方向的二阶梯度：    水平方向：Dh1 &#x3D; |P1+P3-2P2|, Dh2 &#x3D; |P4+P5-2Pc|,Dh3 &amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-27T02:56:05.000Z">
+<meta property="article:modified_time" content="2025-02-28T08:41:29.282Z">
+<meta property="article:author" content="Stephen Lu">
+<meta property="article:tag" content="ISP">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2025/02/27/cameraIsp/ISP-pipeline%E4%B9%8BDPC/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Stephen-Lu-Fahai" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">StephenLu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Embedded Software Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Stephen`s Blog!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ISP/">ISP</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E9%A9%B1%E5%8A%A8/">Linux驱动</a><span class="category-list-count">30</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenGL/">OpenGL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt4Android/">Qt4Android</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/STM32/">STM32</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/armLinux/">armLinux</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/cuda/">cuda</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gstreamer/">gstreamer</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/">伺服控制</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a><span class="category-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ISP/" rel="tag">ISP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" rel="tag">Linux驱动[实践]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" rel="tag">Linux驱动[理论]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt4Android/" rel="tag">Qt4Android</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/STM32/" rel="tag">STM32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/armLinux/" rel="tag">armLinux</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cuda/" rel="tag">cuda</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gstreamer/" rel="tag">gstreamer</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="tag">模式设计</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/C/" style="font-size: 13.44px;">C++</a> <a href="/tags/ISP/" style="font-size: 13.11px;">ISP</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" style="font-size: 13.78px;">Linux驱动[实践]</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" style="font-size: 13.78px;">Linux驱动[理论]</a> <a href="/tags/OpenGL/" style="font-size: 13.33px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 13.56px;">Qt</a> <a href="/tags/Qt4Android/" style="font-size: 13.11px;">Qt4Android</a> <a href="/tags/STM32/" style="font-size: 13px;">STM32</a> <a href="/tags/armLinux/" style="font-size: 13.67px;">armLinux</a> <a href="/tags/cuda/" style="font-size: 13.11px;">cuda</a> <a href="/tags/gstreamer/" style="font-size: 13.22px;">gstreamer</a> <a href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" style="font-size: 13.89px;">ubuntu系统</a> <a href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" style="font-size: 13.33px;">伺服控制</a> <a href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 14px;">模式设计</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">二月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">十二月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/11/">十一月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">十月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">九月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">八月 2024</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">六月 2024</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">五月 2024</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/04/">四月 2024</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ISP/">ISP</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/02/27/cameraIsp/ISP-pipeline%E4%B9%8BDPC/" class="title">ISP pipeline之DPC</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-02-27T02:56:05.000Z" itemprop="datePublished">2025-02-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ISP/">ISP</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/02/27/cameraIsp/ISP-pipeline%E6%A6%82%E8%BF%B0/" class="title">ISP pipeline概述</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-02-27T02:48:04.000Z" itemprop="datePublished">2025-02-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/gstreamer/">gstreamer</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/02/19/gstreamer/gstreamer%E5%BD%95%E5%88%B6%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%BF%AE%E6%94%B9%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6mata%E4%BF%A1%E6%81%AF/" class="title">gstreamer录制过程中修改视频文件mata信息</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-02-19T06:41:20.000Z" itemprop="datePublished">2025-02-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/armLinux/">armLinux</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/" class="title">rk3399pro交叉编译Qt--eglfs</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-12-18T01:21:49.000Z" itemprop="datePublished">2024-12-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/OpenGL/">OpenGL</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/12/06/OpenGl/OpenGL%E4%B8%8D%E9%9C%80%E8%A6%81%E5%9D%90%E6%A0%87%E7%9B%B4%E6%8E%A5%E6%B8%B2%E6%9F%93/" class="title">OpenGL不需要坐标直接渲染</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-12-06T09:55:17.000Z" itemprop="datePublished">2024-12-06</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-cameraIsp/ISP-pipeline之DPC" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ISP pipeline之DPC
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2025/02/27/cameraIsp/ISP-pipeline%E4%B9%8BDPC/" class="article-date">
+	  <time datetime="2025-02-27T02:56:05.000Z" itemprop="datePublished">2025-02-27</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/ISP/">ISP</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/ISP/" rel="tag">ISP</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/02/27/cameraIsp/ISP-pipeline%E4%B9%8BDPC/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 546(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 2(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="DPC概述"><a href="#DPC概述" class="headerlink" title="DPC概述"></a>DPC概述</h1><p>由于sensor制造工艺技术瑕疵或光线采集存在缺陷，获得的原始图像数据就存在一些坏点，一般是某个邻域内的极亮或极暗点。</p>
+<h1 id="DPC矫正原理"><a href="#DPC矫正原理" class="headerlink" title="DPC矫正原理"></a>DPC矫正原理</h1><p>一般以一个5x5的邻域作为检测区域，并且常用梯度法进行检测。</p>
+<p><img src="data:image/jpeg;base64,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"></p>
+<p>如上图所示，Pc作为被检测点，步骤如下：<br>1、先算出4个方向的二阶梯度：<br>    水平方向：Dh1 &#x3D; |P1+P3-2<em>P2|, Dh2 &#x3D; |P4+P5-2</em>Pc|,Dh3 &#x3D; |P6+P8-2<em>P7|;<br>    竖直方向：Dv1 &#x3D; |P1+P6-2</em>P4|, Dv2 &#x3D; |P2+P7-2<em>Pc|,Dv3 &#x3D; |P3+P8-2</em>P5|;<br>    45°方向： D45_1 &#x3D; 2*|P4-P2|, D45_2 &#x3D;|P3+P6-2<em>Pc|, D45_3 &#x3D; 2</em>|P7-P5|;<br>    135°方向：D135_1 &#x3D; 2*|P2-P5|, D135_2 &#x3D;|P1+P8-2<em>Pc|, D135_3 &#x3D; 2</em>|P7-P4|;</p>
+<p>2、求取各方向梯度绝对值的中值。</p>
+<p>3、选取四个方向中值的最小值作为边缘方向。</p>
+<p>4、如果最小梯度方向为水平或者竖直，若过Pc那个梯度的绝对值大于同方向的另外两个梯度绝对值和的4倍，则Pc为坏点；</p>
+<p>5、如果是45°方向，则计算135°三个梯度绝对值两两之差的绝对值的和，<br>    D135_sum &#x3D; |D135_1 - D135_2| + |D135_1 - D135_3| + |D135_2 - D135_3|;<br>    如果D135_sum小于100，若此时D45_2 &gt; 3x(D45_1+D45_3) 且 D135_2&gt;3x(D135_1+D135_3)，则Pc为坏点。否则D45_2&gt;3x(D45_1+D45_3)就为坏点；</p>
+<p>6、135°方向和45°相反的方向计算和判断即可；</p>
+<p>7、为减少漏判，当Pc小于15且周围点都大于Pc40以上，则Pc为坏点。如果Pc大于230，且周围的点都下于Pc30以下，则该点为坏点；</p>
+<p>8、边缘为水平方向，且判断为坏点，如过|P4-Pc|&lt;|Pc-P5|则Pc更靠近P4，根据同一颜色通道亮度的渐变性可以推导出ouput&#x3D;P4+(P2+P7-P1-P6)&#x2F;2; 否则ouput&#x3D;P5+(P2+P7-P3-P8)&#x2F;2；</p>
+<p>9、如果为竖直方向可以参考水平方向求出。</p>
+<p>10、边缘为45°，如果|P3-Pc|&lt;|P6-Pc|则根据同一原则output&#x3D;P3+(P4+P7-P2-p5)&#x2F;2;否则为output&#x3D;P7+(P2+P5-P7-p3)&#x2F;2；</p>
+<p>11、边缘为135°则按照45°的方式反过来计算即可。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2025/02/27/cameraIsp/ISP-pipeline%E4%B9%8BDPC/" title="ISP pipeline之DPC" target="_blank" rel="external">http://example.com/2025/02/27/cameraIsp/ISP-pipeline之DPC/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2025/02/27/cameraIsp/ISP-pipeline%E6%A6%82%E8%BF%B0/" title="ISP pipeline概述"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: '说点什么...',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
