@@ -17,17 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Category: 模式设计 | Stephen`s Blog</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="StephenLu&#96;s Blog">
-<meta property="og:url" content="http://example.com/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/page/3/index.html">
+  <title>openGL纹理间拷贝纹理的两种方式 | Stephen`s Blog</title>
+  <meta name="description" content="一、方法1：先下载再贴图123456789unsigned char * data &#x3D; new unsigned char[normal_texture.width*normal_texture.height*4];glBindTexture(GL_TEXTURE_2D, src_id); &#x2F;&#x2F; 绑定 src_idglGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openGL纹理间拷贝纹理的两种方式">
+<meta property="og:url" content="http://example.com/2025/03/25/OpenGl/openGL%E7%BA%B9%E7%90%86%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%BA%B9%E7%90%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/index.html">
 <meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="一、方法1：先下载再贴图123456789unsigned char * data &#x3D; new unsigned char[normal_texture.width*normal_texture.height*4];glBindTexture(GL_TEXTURE_2D, src_id); &#x2F;&#x2F; 绑定 src_idglGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, G">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-25T09:44:47.000Z">
+<meta property="article:modified_time" content="2025-03-25T09:51:39.334Z">
 <meta property="article:author" content="Stephen Lu">
-<meta property="article:tag" content="Stephen Lu">
+<meta property="article:tag" content="OpenGL">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/page/3/index.html">
+  <link rel="canonical" href="http://example.com/2025/03/25/OpenGl/openGL%E7%BA%B9%E7%90%86%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%BA%B9%E7%90%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/index.html">
   
     <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
   
@@ -286,117 +290,141 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="content article article-categories article-type-list" itemscope="">
-    <header class="article-header">
-      <h1 itemprop="name" class="hidden-xs">Category: 模式设计</h1>
-      <p class="hidden-xs">Total 3 articles</p>
-      <nav role="navigation" id="nav-main" class="okayNav">
-        <ul>
-          <li><a href="/categories">All</a></li>
-          
-          <li><a href="/categories/C/">C++</a></li>
-          
-          <li><a href="/categories/模式设计/">模式设计</a></li>
-          
-          <li><a href="/categories/伺服控制/">伺服控制</a></li>
-          
-          <li><a href="/categories/ubuntu系统/">ubuntu系统</a></li>
-          
-          <li><a href="/categories/Linux驱动/">Linux驱动</a></li>
-          
-          <li><a href="/categories/STM32/">STM32</a></li>
-          
-          <li><a href="/categories/Qt/">Qt</a></li>
-          
-          <li><a href="/categories/gstreamer/">gstreamer</a></li>
-          
-          <li><a href="/categories/OpenGL/">OpenGL</a></li>
-          
-          <li><a href="/categories/cuda/">cuda</a></li>
-          
-          <li><a href="/categories/Qt4Android/">Qt4Android</a></li>
-          
-          <li><a href="/categories/armLinux/">armLinux</a></li>
-          
-          <li><a href="/categories/ISP/">ISP</a></li>
-          
-        </ul>
-      </nav>
-    </header>
-    <!-- /header -->
-    <div class="article-body">
-      <div class="panel panel-default b-no">
-    <div class="panel-heading" role="tab">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" href="#collapse模式设计" aria-expanded="true">
-              <i class="icon icon-folder text-active"></i><i class="icon icon-folder-open text"></i>
-              模式设计
-            </a>
-            <small class="text-muted">(Total 3 articles)</small>
-        </h4>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-OpenGl/openGL纹理间拷贝纹理的两种方式" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      openGL纹理间拷贝纹理的两种方式
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2025/03/25/OpenGl/openGL%E7%BA%B9%E7%90%86%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%BA%B9%E7%90%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="article-date">
+	  <time datetime="2025-03-25T09:44:47.000Z" itemprop="datePublished">2025-03-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/OpenGL/">OpenGL</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/OpenGL/" rel="tag">OpenGL</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/03/25/OpenGl/openGL%E7%BA%B9%E7%90%86%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%BA%B9%E7%90%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 219(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
+	
+
+      </div>
     </div>
-    <div id="collapse模式设计" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading模式设计">
-        <div class="panel-body">
-            <div class="collection">
-              
-                
-<a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-03-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-10-15T14:13:17.000Z" itemprop="datePublished">2022-10-15</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 设计模式:03--建造者模式
-</a>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、方法1：先下载再贴图"><a href="#一、方法1：先下载再贴图" class="headerlink" title="一、方法1：先下载再贴图"></a>一、方法1：先下载再贴图</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">char</span> * data = <span class="keyword">new</span> <span class="type">unsigned</span> <span class="type">char</span>[normal_texture.width*normal_texture.height*<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, src_id); <span class="comment">// 绑定 src_id</span></span><br><span class="line"><span class="built_in">glGetTexImage</span>(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE, data); <span class="comment">// 下载到 data</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, dest_id); <span class="comment">// 绑定 dest_id</span></span><br><span class="line"><span class="built_in">glTexSubImage2D</span>(GL_TEXTURE_2D, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data); <span class="comment">// 上传</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
 
+<h1 id="二、方法2：使用FBO"><a href="#二、方法2：使用FBO" class="headerlink" title="二、方法2：使用FBO"></a>二、方法2：使用FBO</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GLuint fbo;</span><br><span class="line"><span class="built_in">glGenFramebuffers</span>(<span class="number">1</span>, &amp;fbo);</span><br><span class="line"><span class="comment">// bind the FBO</span></span><br><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_READ_FRAMEBUFFER, fbo); <span class="comment">// 绑定 FBO</span></span><br><span class="line"><span class="comment">// attach the source texture to the fbo</span></span><br><span class="line"><span class="built_in">glFramebufferTexture2D</span>(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, src_id, <span class="number">0</span>); <span class="comment">// 绑定纹理到 FBO</span></span><br><span class="line"><span class="comment">// bind the destination texture</span></span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, dest_id); <span class="comment">// 绑定 dest_id</span></span><br><span class="line"><span class="comment">// copy from framebuffer (here, the FBO!) to the bound texture</span></span><br><span class="line"><span class="built_in">glCopyTexSubImage2D</span>(GL_TEXTURE_2D, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, width, height); <span class="comment">// 从 FBO 直接拷贝到 dest_id</span></span><br><span class="line"><span class="built_in">glBindTexture</span>(GL_TEXTURE_2D, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// unbind the FBO</span></span><br><span class="line"><span class="built_in">glBindFramebuffer</span>(GL_FRAMEBUFFER, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
 
-              
-                
-<a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-02-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-10-15T14:11:56.000Z" itemprop="datePublished">2022-10-15</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 设计模式:02--抽象工厂模式
-</a>
+<h1 id="扩展：对比PBO"><a href="#扩展：对比PBO" class="headerlink" title="扩展：对比PBO"></a>扩展：对比PBO</h1><p>使用pbo可以快速保存整个渲染场景而不是一个纹理数据，PBO与cuda的互操作可以让cuda直接获取到device内存上的openGL渲染图像。如果不依赖cuda的话，应该也可以使用PBO作为中转，将渲染场景拷贝到某个目标纹理。</p>
 
-
-              
-                
-<a href="/2022/10/15/designPatter/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-01-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2022-10-15T14:11:40.000Z" itemprop="datePublished">2022-10-15</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 设计模式:01--工厂方法模式
-</a>
-
-
-              
-            </div>
-        </div>
+      
     </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2025/03/25/OpenGl/openGL%E7%BA%B9%E7%90%86%E9%97%B4%E6%8B%B7%E8%B4%9D%E7%BA%B9%E7%90%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" title="openGL纹理间拷贝纹理的两种方式" target="_blank" rel="external">http://example.com/2025/03/25/OpenGl/openGL纹理间拷贝纹理的两种方式/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
 </div>
+
+
     </div>
   </article>
   
     
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev">
-                <a href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/page/2/">
-                    <i class="icon icon-angle-left"></i>
-                    Prev
-                </a>
-            </li>
-            
-            
-            <li class="next disabled">
-                <a href="javascript:;">
-                    Next
-                    <i class="icon icon-angle-right"></i>                    
-                </a>
-            </li>
-            
-        </ul>
-            <div class="total-article bar-right">Page 3 of 3</div>
-        </div>
-    </nav>
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
     
- 
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2025/03/07/cameraIsp/ISP-pipeline%E4%B9%8Bmipi%E4%B8%8Eraw10%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8C%85/" title="ISP pipeline之mipi与raw10数据的压缩与解包"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -442,6 +470,39 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: '说点什么...',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
 
 
 
