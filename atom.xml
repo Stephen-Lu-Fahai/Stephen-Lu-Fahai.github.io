@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-03-25T09:51:39.334Z</updated>
+  <updated>2025-03-31T02:06:46.634Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于armLinux openCL与EGL互操作的探究--基于rockchip</title>
+    <link href="http://example.com/2025/03/28/armLinux/%E5%85%B3%E4%BA%8EarmLinux-openCL%E4%B8%8EEGL%E4%BA%92%E6%93%8D%E4%BD%9C%E7%9A%84%E6%8E%A2%E7%A9%B6-%E5%9F%BA%E4%BA%8Erockchip/"/>
+    <id>http://example.com/2025/03/28/armLinux/%E5%85%B3%E4%BA%8EarmLinux-openCL%E4%B8%8EEGL%E4%BA%92%E6%93%8D%E4%BD%9C%E7%9A%84%E6%8E%A2%E7%A9%B6-%E5%9F%BA%E4%BA%8Erockchip/</id>
+    <published>2025-03-28T08:45:16.000Z</published>
+    <updated>2025-03-31T02:06:46.634Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>希望在Linux环境下使用mali GPU来对图像进行处理及显示，主要包括三个方面：<br>1、图像采集；2、图像处理；3、图像显示。<br>其中1和3都已被优化解决，唯独2暂时没优化到最理想的效果。</p><h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><p>图像采集可以使用mjpg硬件解码，可以获得高分辨下的较高帧率，基本满足。<br>图像渲染可以用openGL渲染，但考虑到交互和移植问题，使用了EGL渲染，不依赖X11或wayland,渲染效率更高。</p><p>图像处理使用的是openCL，可以很好的完成基本的图像处理。但目前瓶颈在于图像需要从CPU拷贝到GPU，最后再拷贝会CPU交给EGL渲染。<br>虽说做了一次优化：使用openCL定义buf的时候直接使用host memory的指针，即zero-copy，最后再交由egl渲染。 效果还不错。</p><p>但还有另外一种方案暂时未实现，值得去研究。<br>hostMem –&gt; dmaBuf –&gt; opencl_image –&gt; EGL<br>具体实现过程为EGL使用eglCreateImageKHR 创建一个openCL可以获取到的图像对象。openCL直接对图像进行处理后，EGL直接渲染出来。<br>这个过程涉及到dmaBuf的拷贝。</p><p>主要参考，特别要注意一些Linux环境下使用的细节<br><a href="https://registry.khronos.org/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt">https://registry.khronos.org/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;希望在Linux环境下使用mali GPU来对图像进行处理及显示，主要包括三个方面：&lt;br&gt;1、图像采集；2、图像处理；3、图像显示。&lt;br</summary>
+      
+    
+    
+    
+    <category term="armLinux" scheme="http://example.com/categories/armLinux/"/>
+    
+    
+    <category term="armLinux" scheme="http://example.com/tags/armLinux/"/>
+    
+  </entry>
   
   <entry>
     <title>openGL纹理间拷贝纹理的两种方式</title>
@@ -465,30 +489,6 @@
       
       
     <summary type="html">&lt;h1 id=&quot;主程序&quot;&gt;&lt;a href=&quot;#主程序&quot; class=&quot;headerlink&quot; title=&quot;主程序&quot;&gt;&lt;/a&gt;主程序&lt;/h1&gt;&lt;h2 id=&quot;创建及接收&quot;&gt;&lt;a href=&quot;#创建及接收&quot; class=&quot;headerlink&quot; title=&quot;创建及接收&quot;&gt;&lt;/a&gt;</summary>
-      
-    
-    
-    
-    <category term="Qt" scheme="http://example.com/categories/Qt/"/>
-    
-    
-    <category term="Qt" scheme="http://example.com/tags/Qt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Qt TimeEdit的处理技巧</title>
-    <link href="http://example.com/2024/06/21/Qt/Qt-TimeEdit%E7%9A%84%E5%A4%84%E7%90%86%E6%8A%80%E5%B7%A7/"/>
-    <id>http://example.com/2024/06/21/Qt/Qt-TimeEdit%E7%9A%84%E5%A4%84%E7%90%86%E6%8A%80%E5%B7%A7/</id>
-    <published>2024-06-21T01:04:26.000Z</published>
-    <updated>2024-06-21T01:16:22.322Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="现象描述"><a href="#现象描述" class="headerlink" title="现象描述"></a>现象描述</h1><p>timeEdit有的槽函数 on_timeEdit_userTimeChanged(const QTime &amp;time)，无论是用户修改的还是系统自动更新的，只要显示的时间改变就会执行此函数。 一般会在这个槽函数中同步系统的时间，但是测试同时观察到一个现象，如果每分钟系统时间改变的话，时间会变慢一点。 应该是和秒数有关，观察过几次秒数，显示都是0。</p><p>而正确的用法是忽略系统自动更新的时间，只在用户修改的时候做同步。</p><h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><p>timeEdit控件先注册个事件过滤。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ui-&gt;timeEdit-&gt;<span class="built_in">installEventFilter</span>(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure><p>在其父类的事件过滤函数中对这个控件的焦点做判断，确认是否是用户编辑。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Parent::eventFilter</span><span class="params">(QObject *obj, QEvent *event)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj == ui-&gt;timeEdit) &#123;</span><br><span class="line">        <span class="keyword">if</span> (event-&gt;<span class="built_in">type</span>() == QEvent::FocusIn) &#123;</span><br><span class="line">            mTimeChangedByManual = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (event-&gt;<span class="built_in">type</span>() == QEvent::FocusOut) &#123;</span><br><span class="line">            mTimeChangedByManual = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> QWidget::<span class="built_in">eventFilter</span>(obj, event);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>然后在它的槽函数中同步时间</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Parent::on_timeEdit_userTimeChanged</span><span class="params">(<span class="type">const</span> QTime &amp;time)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ( !mTimeChangedByManual) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    QString command;</span><br><span class="line"></span><br><span class="line">    command = <span class="built_in">QString</span>(<span class="string">&quot;date +%T -s %1:%2:%3&quot;</span>)</span><br><span class="line">            .<span class="built_in">arg</span>(time.<span class="built_in">hour</span>())</span><br><span class="line">            .<span class="built_in">arg</span>(time.<span class="built_in">minute</span>())</span><br><span class="line">            .<span class="built_in">arg</span>(time.<span class="built_in">second</span>());</span><br><span class="line">    <span class="built_in">runLinuxCommand</span>(command);</span><br><span class="line">    <span class="built_in">syncTimeSysToHw</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;现象描述&quot;&gt;&lt;a href=&quot;#现象描述&quot; class=&quot;headerlink&quot; title=&quot;现象描述&quot;&gt;&lt;/a&gt;现象描述&lt;/h1&gt;&lt;p&gt;timeEdit有的槽函数 on_timeEdit_userTimeChanged(const QTime &amp;amp;tim</summary>
       
     
     
