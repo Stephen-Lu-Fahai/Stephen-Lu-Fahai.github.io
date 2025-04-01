@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-03-31T02:06:46.634Z</updated>
+  <updated>2025-04-01T09:23:06.816Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux打印机使用总结</title>
+    <link href="http://example.com/2025/04/01/ubuntu/Linux%E6%89%93%E5%8D%B0%E6%9C%BA%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/"/>
+    <id>http://example.com/2025/04/01/ubuntu/Linux%E6%89%93%E5%8D%B0%E6%9C%BA%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</id>
+    <published>2025-04-01T08:59:42.000Z</published>
+    <updated>2025-04-01T09:23:06.816Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="图形界面使用"><a href="#图形界面使用" class="headerlink" title="图形界面使用"></a>图形界面使用</h1><pre><code>直接在设置页面添加即可。</code></pre><h1 id="命令行配合Qt程序使用"><a href="#命令行配合Qt程序使用" class="headerlink" title="命令行配合Qt程序使用"></a>命令行配合Qt程序使用</h1><h2 id="查找打印机"><a href="#查找打印机" class="headerlink" title="查找打印机"></a>查找打印机</h2><p>打印机使用USB方式连接到电脑，通过以下命令查询，注意加sudo权限</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">stephen@localhost:~$ sudo lpinfo -v</span><br><span class="line">file cups-brf:/</span><br><span class="line">network beh</span><br><span class="line">network socket</span><br><span class="line">network ipp</span><br><span class="line">network http</span><br><span class="line">network https</span><br><span class="line">network lpd</span><br><span class="line">network ipps</span><br><span class="line">serial serial:/dev/ttyS0?baud=115200</span><br><span class="line">direct usb://HP/LaserJet%20M203-M206?serial=VNC3J55865</span><br></pre></td></tr></table></figure><p>最后一个usb:&#x2F;&#x2F;HP…就是USB连接的惠普打印机。</p><h2 id="增加打印机"><a href="#增加打印机" class="headerlink" title="增加打印机"></a>增加打印机</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lpadmin -p HP_LaserJet -v usb://HP/LaserJet%20M203-M206?serial=VNC3J55865 -E</span><br></pre></td></tr></table></figure><p>-p 后面是自定义的打印机名称<br>-v 后面是上一步查看到的地址</p><p>这时候使用下面指令就可以查看到已经添加的打印机了</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lpstat -v</span><br></pre></td></tr></table></figure><h2 id="设置为默认"><a href="#设置为默认" class="headerlink" title="设置为默认"></a>设置为默认</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lpoptions -d HP_LaserJet</span><br></pre></td></tr></table></figure><p>或者</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lpadmin -d HP_LaserJet</span><br></pre></td></tr></table></figure><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lp a.pdf -d HP_LaserJet</span><br></pre></td></tr></table></figure><p>可以打印，但不知道为什么，上一步设为默认打印机后，使用lp指令要-d指定打印机，否则打印失败。<br>但是对于Qt程序可以直接识别到上步设置的默认打印机，因此没太纠结。</p><h2 id="Qt参考程序"><a href="#Qt参考程序" class="headerlink" title="Qt参考程序"></a>Qt参考程序</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">QPrinter printerPixmap;</span><br><span class="line">QPixmap pixmap = QPixmap::grabWidget(ui-&gt;lab_img, ui-&gt;lab_img-&gt;rect());  <span class="comment">//获取界面的图片</span></span><br><span class="line">printerPixmap.setOrientation(QPrinter::Landscape);<span class="comment">//纵向：Portrait 横向：Landscape</span></span><br><span class="line">printerPixmap.setPageSize(QPrinter::A4);<span class="comment">//设置纸张大小</span></span><br><span class="line">QPainter painterPixmap;</span><br><span class="line">painterPixmap.begin(&amp;printerPixmap);</span><br><span class="line">painterPixmap.scale(<span class="number">1</span>, <span class="number">1</span>);<span class="comment">//设置图像长宽是原图的多少倍</span></span><br><span class="line">painterPixmap.drawPixmap(<span class="number">300</span>, <span class="number">300</span> , pixmap);<span class="comment">//设置图像在A4中的开始坐标是什么</span></span><br><span class="line">painterPixmap.end();</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;图形界面使用&quot;&gt;&lt;a href=&quot;#图形界面使用&quot; class=&quot;headerlink&quot; title=&quot;图形界面使用&quot;&gt;&lt;/a&gt;图形界面使用&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;直接在设置页面添加即可。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&quot;命令行配合Qt程序使用</summary>
+      
+    
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>关于armLinux openCL与EGL互操作的探究--基于rockchip</title>
@@ -473,30 +499,6 @@
     
     
     <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>QProcess 启动外部程序并通讯</title>
-    <link href="http://example.com/2024/08/05/Qt/QProcess-%E5%90%AF%E5%8A%A8%E5%A4%96%E9%83%A8%E7%A8%8B%E5%BA%8F%E5%B9%B6%E9%80%9A%E8%AE%AF/"/>
-    <id>http://example.com/2024/08/05/Qt/QProcess-%E5%90%AF%E5%8A%A8%E5%A4%96%E9%83%A8%E7%A8%8B%E5%BA%8F%E5%B9%B6%E9%80%9A%E8%AE%AF/</id>
-    <published>2024-08-05T07:54:36.000Z</published>
-    <updated>2024-08-05T08:23:58.014Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="主程序"><a href="#主程序" class="headerlink" title="主程序"></a>主程序</h1><h2 id="创建及接收"><a href="#创建及接收" class="headerlink" title="创建及接收"></a>创建及接收</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mProcess = new QProcess(this);</span><br><span class="line">connect(mProcess, &amp;QProcess::readyRead, this, &amp;Task::readReady);</span><br><span class="line">mProcess-&gt;start(<span class="string">&quot;subProcess&quot;</span>);</span><br></pre></td></tr></table></figure><h2 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (mProcess-&gt;isOpen()) &#123;</span><br><span class="line">    QString msg = QString(<span class="string">&quot;cnt = %1&quot;</span>).arg(cnt++);</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">&quot;main send: &quot;</span> &lt;&lt; msg;</span><br><span class="line">    mProcess-&gt;write(msg.toLatin1());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="外部程序"><a href="#外部程序" class="headerlink" title="外部程序"></a>外部程序</h1><h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><p>使用QFile 和 QSocketNotifier接受stdin消息</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">QFile           mFileRead;</span><br><span class="line">QSocketNotifier *mNotifier;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mFileRead.open(<span class="built_in">stdin</span>, QFile::ReadOnly);</span><br><span class="line"><span class="keyword">if</span> (mFileRead.isOpen()) &#123;</span><br><span class="line">    mNotifier = new QSocketNotifier(mFileRead.handle(), QSocketNotifier::Read, this);</span><br><span class="line">    connect(mNotifier, SIGNAL(activated(<span class="type">int</span>)), this, SLOT(readyRead(<span class="type">int</span>)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="接收"><a href="#接收" class="headerlink" title="接收"></a>接收</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (handle == mFileRead.handle()) &#123;</span><br><span class="line">    <span class="type">char</span> mRec[<span class="number">128</span>];</span><br><span class="line">    <span class="type">int</span> ret = read(mFileRead.handle(), mRec, <span class="keyword">sizeof</span>(mRec));</span><br><span class="line">    mRec[ret] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    QString msg = QString::fromLatin1(mRec);</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">&quot;sub receive: &quot;</span> &lt;&lt; msg;</span><br><span class="line"></span><br><span class="line">    write(<span class="number">1</span>, msg.toLatin1(), msg.length());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><h2 id="process-创建的问题"><a href="#process-创建的问题" class="headerlink" title="process 创建的问题"></a>process 创建的问题</h2><p>QProcess 最好定义成成员指针变量，然后new 方法传入的父类是this, 如果直接定义QProcess为成员变量，则在有些外部程序可能收不到stdin的消息。</p><h2 id="外部进程写的问题"><a href="#外部进程写的问题" class="headerlink" title="外部进程写的问题"></a>外部进程写的问题</h2><p>外部程序写入stdout的时候，QFile不能再构造函数中open一次，然后在其他函数write，这样主进程接收不到。<br>如果要使用QFile, 则应该创建内部变量QFile，然后每次都要open后再write。<br>不过这种方法比较繁琐，可以直接调用Linux环境自带的write函数写入stdout</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;主程序&quot;&gt;&lt;a href=&quot;#主程序&quot; class=&quot;headerlink&quot; title=&quot;主程序&quot;&gt;&lt;/a&gt;主程序&lt;/h1&gt;&lt;h2 id=&quot;创建及接收&quot;&gt;&lt;a href=&quot;#创建及接收&quot; class=&quot;headerlink&quot; title=&quot;创建及接收&quot;&gt;&lt;/a&gt;</summary>
-      
-    
-    
-    
-    <category term="Qt" scheme="http://example.com/categories/Qt/"/>
-    
-    
-    <category term="Qt" scheme="http://example.com/tags/Qt/"/>
     
   </entry>
   
