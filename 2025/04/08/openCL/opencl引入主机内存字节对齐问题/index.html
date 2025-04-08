@@ -17,17 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Archive: 2023/9 | Stephen`s Blog</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="StephenLu&#96;s Blog">
-<meta property="og:url" content="http://example.com/archives/2023/09/index.html">
+  <title>opencl引入主机内存字节对齐问题 | Stephen`s Blog</title>
+  <meta name="description" content="主机内存拷贝到openCL内存方式1：定义cl_mem的时候设置Flag | CL_MEM_ALLOC_HOST_PTR 12size_t size &#x3D; mWidth * mHeight * 4;cl_mem srcBuf &#x3D; clCreateBuffer(mContext, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR, size, NULL, &amp;er">
+<meta property="og:type" content="article">
+<meta property="og:title" content="opencl引入主机内存字节对齐问题">
+<meta property="og:url" content="http://example.com/2025/04/08/openCL/opencl%E5%BC%95%E5%85%A5%E4%B8%BB%E6%9C%BA%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="主机内存拷贝到openCL内存方式1：定义cl_mem的时候设置Flag | CL_MEM_ALLOC_HOST_PTR 12size_t size &#x3D; mWidth * mHeight * 4;cl_mem srcBuf &#x3D; clCreateBuffer(mContext, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR, size, NULL, &amp;er">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-08T01:21:47.000Z">
+<meta property="article:modified_time" content="2025-04-08T02:29:09.536Z">
 <meta property="article:author" content="Stephen Lu">
-<meta property="article:tag" content="Stephen Lu">
+<meta property="article:tag" content="openGL">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/archives/2023/09/index.html">
+  <link rel="canonical" href="http://example.com/2025/04/08/openCL/opencl%E5%BC%95%E5%85%A5%E4%B8%BB%E6%9C%BA%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98/index.html">
   
     <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
   
@@ -288,58 +292,157 @@
   
   
 <main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">Archive: 2023/9</h1>
-	      <p class="text-muted">Total 116 articles</p>
-	    </header>
-	    <div class="article-body">
-	      
-  
-  
+  <div class="content">
+  <article id="post-openCL/opencl引入主机内存字节对齐问题" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      opencl引入主机内存字节对齐问题
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2023" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2023
-            </a>
-            <!-- <a href="/archives/2023" class="archive-year">2023</a> -->
-          </h3>
-        </div>
-        <div id="collapse2023" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2023">
-        <div class="panel-body">
-          <div class="collection">
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2025/04/08/openCL/opencl%E5%BC%95%E5%85%A5%E4%B8%BB%E6%9C%BA%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98/" class="article-date">
+	  <time datetime="2025-04-08T01:21:47.000Z" itemprop="datePublished">2025-04-08</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/openGL/">openGL</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/openGL/" rel="tag">openGL</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/04/08/openCL/opencl%E5%BC%95%E5%85%A5%E4%B8%BB%E6%9C%BA%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 343(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="主机内存拷贝到openCL内存"><a href="#主机内存拷贝到openCL内存" class="headerlink" title="主机内存拷贝到openCL内存"></a>主机内存拷贝到openCL内存</h1><h2 id="方式1："><a href="#方式1：" class="headerlink" title="方式1："></a>方式1：</h2><p>定义cl_mem的时候设置Flag | CL_MEM_ALLOC_HOST_PTR</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> size = mWidth * mHeight * <span class="number">4</span>;</span><br><span class="line">cl_mem srcBuf = clCreateBuffer(mContext, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR, size, <span class="literal">NULL</span>, &amp;err);</span><br></pre></td></tr></table></figure>
+
+<p>这样主机内存拷贝到opencl内存的时候就可以使用map方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *srcPtr = clEnqueueMapBuffer(mQueue, srcBuf, CL_FALSE, CL_MAP_WRITE, <span class="number">0</span>, size, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (srcPtr) &#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(srcPtr, *buf, size);</span><br><span class="line">    clEnqueueUnmapMemObject(mQueue, srcBuf, srcPtr, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式比直接写的方式效率更高。 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enqueueWriteBuffer(*mBufSrc, CL_FALSE, <span class="number">0</span>, mImgHalfSize, mVecSrc.data());</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="方式2："><a href="#方式2：" class="headerlink" title="方式2："></a>方式2：</h2><p>openCL直接引入主机内存可以避免上步骤的内存拷贝<br>前提是要查询openCL是否支持引入host内存的扩展。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cl_arm_import_memory </span><br><span class="line">cl_arm_import_memory_dma_buf </span><br><span class="line">cl_arm_import_memory_host </span><br><span class="line">cl_arm_import_memory_protected </span><br><span class="line">cl_arm_import_memory_android_hardware_buffer</span><br></pre></td></tr></table></figure>
+
+<p>测试1</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> imgSize = mImgWidth * mImgHeight * <span class="number">3</span> / <span class="number">2</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span>* imgBuf = <span class="built_in">malloc</span>(imgSize);</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> cl_import_properties_arm importProperties[] = &#123;</span><br><span class="line">    CL_IMPORT_TYPE_ARM,</span><br><span class="line">    CL_IMPORT_TYPE_HOST_ARM, <span class="number">0</span></span><br><span class="line">&#125;;</span><br><span class="line">cl_int imRet = CL_SUCCESS;</span><br><span class="line">cl_mem mSrcBuf = clImportMemoryARM(mContext, CL_MEM_READ_WRITE, importProperties, imgBuf, imgSize, &amp;imRet);</span><br><span class="line"><span class="keyword">if</span> (imRet != CL_SUCCESS) &#123;</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">&quot;failed to import host memory: &quot;</span> &lt;&lt; imRet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时程序返回的是-6，具体意思是out of host memory.</p>
+<p>解决参考</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:<span class="comment">//stackoverflow.com/questions/78786585/climportmemoryarm-opencl-sometime-return-error-6</span></span><br></pre></td></tr></table></figure>
+<p>简单来说就是内存对齐问题，直接通过malloc申请的内存无法保证内存字节对齐。<br>解决如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* arm64 OS */</span></span><br><span class="line"><span class="type">size_t</span> imgSize = mImgWidth * mImgHeight * <span class="number">3</span> / <span class="number">2</span>;</span><br><span class="line">posix_memalign((<span class="type">void</span>**)&amp;imgBuf, <span class="number">64</span>, imgSize);</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> cl_import_properties_arm importProperties[] = &#123;</span><br><span class="line">    CL_IMPORT_TYPE_ARM,</span><br><span class="line">    CL_IMPORT_TYPE_HOST_ARM, <span class="number">0</span></span><br><span class="line">&#125;;</span><br><span class="line">cl_int imRet = CL_SUCCESS;</span><br><span class="line">cl_mem mSrcBuf = clImportMemoryARM(mContext, CL_MEM_READ_WRITE, importProperties, imgBuf, imgSize, &amp;imRet);</span><br><span class="line"><span class="keyword">if</span> (imRet != CL_SUCCESS) &#123;</span><br><span class="line">    qDebug() &lt;&lt; <span class="string">&quot;failed to import host memory: &quot;</span> &lt;&lt; imRet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://registry.khronos.org/OpenCL/extensions/arm/cl_arm_import_memory.txt">https://registry.khronos.org/OpenCL/extensions/arm/cl_arm_import_memory.txt</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
     
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2025/04/08/openCL/opencl%E5%BC%95%E5%85%A5%E4%B8%BB%E6%9C%BA%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98/" title="opencl引入主机内存字节对齐问题" target="_blank" rel="external">http://example.com/2025/04/08/openCL/opencl引入主机内存字节对齐问题/</a>
+    </li>
     
-<a href="/2023/09/17/armLinux/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%B3%BB%E7%BB%9F%E5%AE%9A%E5%88%B6%E5%8C%96/" class="collection-item"   itemprop="url">
-  <time datetime="2023-09-17T08:21:33.000Z" itemprop="datePublished">2023-09-17</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 树莓派系统定制化
-</a>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
 
 
   
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
     
     
+    <li class="next">
+      <a href="/2025/04/02/ubuntu/ubuntu24%E8%A7%A3%E5%86%B3chrome-sandbox%E6%9D%83%E9%99%90%E5%AF%BC%E8%87%B4app%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/" title="ubuntu24解决chrome-sandbox权限导致app无法启动问题"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
     
-<a href="/2023/09/17/ubuntu/debian%E5%A4%9A%E6%98%BE%E5%8D%A1%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/" class="collection-item"   itemprop="url">
-  <time datetime="2023-09-17T05:34:54.000Z" itemprop="datePublished">2023-09-17</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> debian多显卡自定义图形界面
-</a>
-
-
+    
+  </ul>
   
   
-    </div></div></div></section>
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
   
 
-	    </div>
-  	</article>
-  	 	
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -385,6 +488,39 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: '说点什么...',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
 
 
 
