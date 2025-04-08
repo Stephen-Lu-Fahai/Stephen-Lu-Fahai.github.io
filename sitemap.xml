@@ -1171,7 +1171,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/openGL/</loc>
+    <loc>http://example.com/tags/openCL/</loc>
     <lastmod>2025-04-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1271,7 +1271,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/openGL/</loc>
+    <loc>http://example.com/categories/openCL/</loc>
     <lastmod>2025-04-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

@@ -131,7 +131,7 @@ http://example.com/tags/cuda/
 http://example.com/tags/Qt4Android/
 http://example.com/tags/armLinux/
 http://example.com/tags/ISP/
-http://example.com/tags/openGL/
+http://example.com/tags/openCL/
 http://example.com/categories/C/
 http://example.com/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/
 http://example.com/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/
@@ -145,4 +145,4 @@ http://example.com/categories/cuda/
 http://example.com/categories/Qt4Android/
 http://example.com/categories/armLinux/
 http://example.com/categories/ISP/
-http://example.com/categories/openGL/
+http://example.com/categories/openCL/
