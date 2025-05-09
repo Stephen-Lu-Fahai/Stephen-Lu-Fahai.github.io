@@ -26,7 +26,7 @@
 <meta property="og:description" content="两个显示器同一个screenDISPLAY都是 1，显示器为扩展方式，坐标分别为3840x2160+0+0 和  3840x2160+3840+0 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354Section &quot;ServerFlags&amp;q">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-09T11:50:57.000Z">
-<meta property="article:modified_time" content="2025-05-09T08:24:14.958Z">
+<meta property="article:modified_time" content="2025-05-09T08:39:12.855Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="ubuntu系统">
 <meta name="twitter:card" content="summary">
@@ -381,7 +381,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xinit -- -config xorg.conf.main -novtswitch -sharevts -nocursor -layout Main :1</span><br></pre></td></tr></table></figure>
 <p>改为：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/lib/xorg/Xorg -config xorg.conf.main -novtswitch -sharevts -nocursor -layout Main :1</span><br></pre></td></tr></table></figure>
-<p>这就避免了需要创建.xinitrc并且还要while(1)的问题，更避免了多创建一个用户的问题。<br>只需要分别启动两个后台，各自根据配置文件启动&#x2F;usr&#x2F;lib&#x2F;xorg&#x2F;Xorg 即可。</p>
+<p>这就避免了需要创建.xinitrc并且还要while(1)的问题，更避免了多创建一个用户的问题。<br>只需在同一个后台中开两个QProcess各自根据配置文件启动&#x2F;usr&#x2F;lib&#x2F;xorg&#x2F;Xorg 即可。</p>
 
       
     </div>
