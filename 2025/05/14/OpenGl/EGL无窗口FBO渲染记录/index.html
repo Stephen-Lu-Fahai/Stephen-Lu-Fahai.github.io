@@ -26,7 +26,7 @@
 <meta property="og:description" content="一、前言在原先的概念中，无论是openGL还是EGL都是建议在X 或者wayland等窗口上实现的渲染。由于项目中需要动态插拔显示器，甚至要求系统启动后才接入显示器。 这就要求动态创建X或wayland等窗口系统。好在“nvidia显卡xorg多种配置方案” 这篇文章中已经解决了动态X创建的问题。接下来解决的是渲染的问题。 二、渲染方案方案1：使用cuda指针IPC这种方式已经在项目中使用，但是缺">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-14T07:56:18.000Z">
-<meta property="article:modified_time" content="2025-05-14T09:24:25.970Z">
+<meta property="article:modified_time" content="2025-05-28T09:47:35.467Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="OpenGL">
 <meta name="twitter:card" content="summary">
@@ -337,10 +337,10 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/05/14/OpenGl/EGL%E6%97%A0%E7%AA%97%E5%8F%A3FBO%E6%B8%B2%E6%9F%93%E8%AE%B0%E5%BD%95/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 832(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 935(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 2(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
 	
 
       </div>
@@ -366,6 +366,7 @@
 </code></pre>
 <h3 id="小局限性"><a href="#小局限性" class="headerlink" title="小局限性:"></a>小局限性:</h3><pre><code>在ubuntu24自带的桌面系统环境下测试测试时，共享EGLimage方式失败。具体原因还不知道。不过使用Xorg创建的X window使用没什么问题。
 </code></pre>
+<h2 id="方案3：cuda与EGL使用image方式InterOp-然后再将这个纹理共享出去"><a href="#方案3：cuda与EGL使用image方式InterOp-然后再将这个纹理共享出去" class="headerlink" title="方案3：cuda与EGL使用image方式InterOp,然后再将这个纹理共享出去"></a>方案3：cuda与EGL使用image方式InterOp,然后再将这个纹理共享出去</h2><p>在方案2的基础上增加了cuda与EGL通过texture进行interOp, 然后和方案2一样把这个texture转为EglImage共享出去，<br>Cuda数据直接cudaMemcpy2DToArray，主程序连FBO渲染都省了，只需要对egl进行非常简单的初始化，然后创建一个texture。<br>更不会出现下面卡顿的问题。</p>
 <h1 id="三、问题记录"><a href="#三、问题记录" class="headerlink" title="三、问题记录"></a>三、问题记录</h1><pre><code>在上述方案2实现的过程中遇到一个非常有趣的问题，FBO渲染结束后，必须要用PBO将渲染的场景glReadPixel读取(尽管没有使用这个读取的结果)，否则副程序就会非常卡顿。
 具体的原因还有待确定，这也是无意中解决副程序卡顿的问题。
 最初的现象是：主程序渲染结束后，无论是否调用eglSwapBuffer，副程序渲染都会非常卡，画面几乎不动。 这时候想用PBO将渲染后的场景读取并录制成mp4，查看视频文件是否也卡顿。结果PBO读取后，副程序就非常流畅。
