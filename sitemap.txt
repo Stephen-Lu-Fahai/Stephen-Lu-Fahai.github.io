@@ -1,3 +1,4 @@
+http://example.com/2025/06/17/dicom/cmake%E7%BC%96%E8%AF%91dicom/
 http://example.com/2025/06/17/dicom/%E7%94%9F%E6%88%90dicom%E6%96%87%E4%BB%B6%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84tag/
 http://example.com/2025/03/28/armLinux/%E5%85%B3%E4%BA%8EarmLinux-openCL%E4%B8%8EEGL%E4%BA%92%E6%93%8D%E4%BD%9C%E7%9A%84%E6%8E%A2%E7%A9%B6-%E5%9F%BA%E4%BA%8Erockchip/
 http://example.com/2024/05/09/ubuntu/nvidia%E6%98%BE%E5%8D%A1xorg%E5%A4%9A%E7%A7%8D%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/
