@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-05-19T07:41:58.429Z</updated>
+  <updated>2025-06-17T06:34:26.200Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>生成dicom文件时需要的tag</title>
+    <link href="http://example.com/2025/06/17/dicom/%E7%94%9F%E6%88%90dicom%E6%96%87%E4%BB%B6%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84tag/"/>
+    <id>http://example.com/2025/06/17/dicom/%E7%94%9F%E6%88%90dicom%E6%96%87%E4%BB%B6%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84tag/</id>
+    <published>2025-06-17T06:32:10.000Z</published>
+    <updated>2025-06-17T06:34:26.200Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">可空 0x0008, 0x0020 DCM_StudyDate</span><br><span class="line">可空 0x0008, 0x0030 DCM_StudyTime</span><br><span class="line">可空 0x0008, 0x0050 DCM_AccessionNumber</span><br><span class="line">可空 0x0008, 0x0070 DCM_Manufacturer</span><br><span class="line">可空 0x0008, 0x0090 DCM_ReferringPhysiciansName</span><br><span class="line">可空 0x0020, 0x0010 DCM_StudyID</span><br><span class="line">可空 0x0008, 0x0023 DCM_ContentDate</span><br><span class="line">可空 0x0008, 0x0033 DCM_ContentTime</span><br><span class="line">可空 0x0008, 0x002a DCM_AcquisitionDatetime</span><br><span class="line">可空 0x0040, 0xa043 DCM_ConceptNameCodeSequence</span><br><span class="line"></span><br><span class="line">非空 0x0008, 0x0005 DCM_SpecificCharacterSet</span><br><span class="line">非空 0x0008, 0x0016 DCM_SOPClassUID</span><br><span class="line">非空 0x0008, 0x0060 DCM_Modality</span><br><span class="line">非空 0x0008, 0x0064 DCM_ConversionType</span><br><span class="line">非空 0x0042, 0x0012 DCM_MIMETypeOfEncapsulatedDocument</span><br><span class="line">非空 0x0020, 0x0011 DCM_SeriesNumber</span><br><span class="line">非空 0x0042, 0x0010 DCM_DocumentTitle</span><br><span class="line">非空 0x0010, 0x0010 DCM_PatientsName</span><br><span class="line">非空 0x0010, 0x0020 DCM_PatientID</span><br><span class="line">非空 0x0010, 0x0030 DCM_PatientsBirthDate</span><br><span class="line">非空 0x0010, 0x0040 DCM_PatientsSex</span><br><span class="line">非空 0x0028, 0x0301 DCM_BurnedInAnnotation</span><br><span class="line">非空 0x0020, 0x0013 DCM_InstanceNumber</span><br><span class="line">非空 0x0020, 0x000d DCM_StudyInstanceUID</span><br><span class="line">非空 0x0020, 0x000e DCM_SeriesInstanceUID</span><br><span class="line">非空 0x0008, 0x0018 DCM_SOPInstanceUID</span><br><span class="line">非空 0x0008, 0x0012 DCM_InstanceCreationDate</span><br><span class="line">非空 0x0008, 0x0013 DCM_InstanceCreationTime</span><br><span class="line"></span><br><span class="line">非空 0x0002, 0x0001 DCM_FileMetaInformationVersion</span><br><span class="line">非空 0x0002, 0x0002 DCM_MediaStorageSOPClassUID</span><br><span class="line">非空 0x0002, 0x0003 DCM_MediaStorageSOPInstanceUID</span><br><span class="line">非空 0x0002, 0x0010 DCM_TransferSyntaxUID</span><br><span class="line">非空 0x0002, 0x0012 DCM_ImplementationClassUID</span><br><span class="line">非空 0x0002, 0x0013 DCM_ImplementationVersionName</span><br><span class="line">非空 0x0028, 0x0004 DCM_PhotometricInterpretation</span><br><span class="line">非空 0x0028, 0x0002 DCM_SamplesPerPixel</span><br><span class="line">非空 0x0028, 0x0100 DCM_BitsAllocated</span><br><span class="line">非空 0x0028, 0x0101 DCM_BitsStored</span><br><span class="line">非空 0x0028, 0x0102 DCM_HighBit</span><br><span class="line">非空 0x0028, 0x0103 DCM_PixelRepresentation</span><br><span class="line">非空 0x0028, 0x0006 DCM_PlanarConfiguration</span><br><span class="line">非空 0x0028, 0x0010 DCM_Rows</span><br><span class="line">非空 0x0028, 0x0011 DCM_Columns</span><br><span class="line">非空 DCM_PixelData</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;l</summary>
+      
+    
+    
+    
+    <category term="dicom" scheme="http://example.com/categories/dicom/"/>
+    
+    
+    <category term="dicom" scheme="http://example.com/tags/dicom/"/>
+    
+  </entry>
   
   <entry>
     <title>QWaitCondition严谨的使用方法</title>
@@ -473,30 +497,6 @@
     
     
     <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>树莓派编译gcc</title>
-    <link href="http://example.com/2024/10/30/armLinux/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%BC%96%E8%AF%91gcc/"/>
-    <id>http://example.com/2024/10/30/armLinux/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%BC%96%E8%AF%91gcc/</id>
-    <published>2024-10-30T01:16:56.000Z</published>
-    <updated>2024-10-30T01:35:28.691Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>由于新版本的树莓派系统自带的gcc是10.2，并且没找到arm64版本的gcc。<br>在为树莓派交叉编译Qt时使用的是linrao release版本的gcc-7.5。<br>由于gcc版本不同，编译的库文件不兼容。</p><h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><h2 id="下载gcc"><a href="#下载gcc" class="headerlink" title="下载gcc"></a>下载gcc</h2><p>连接</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://ftp.gnu.org/gnu/gcc/</span><br></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar xvf gcc-7.5.0.tar.gz</span><br><span class="line"><span class="built_in">cd</span> gcc-7.5.0</span><br><span class="line">./contrib/download_prerequisites</span><br></pre></td></tr></table></figure><p>&#x2F;* 下载依赖 *&#x2F;</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./contrib/download_prerequisites</span><br></pre></td></tr></table></figure><p>但是如果没有梯子，一般下载失败，可以直接迅雷下载相应的源码。<br>gmp-6.1.0.tar.bz2<br>mpfr-3.1.4.tar.gz<br>mpc-1.0.3.tar.gz<br>isl-0.16.1.tar.bz2</p><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>注意树莓派4的CPU是a72</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../configure -v --enable-languages=c,c++ --with-cpu=cortex-a72 --build=arm-linux-gnueabihf--host=arm-linux-gnueabihf --target=arm-linux-gnueabihf --prefix=/usr/local/gcc-7.5.0</span><br></pre></td></tr></table></figure><h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make -j16</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;由于新版本的树莓派系统自带的gcc是10.2，并且没找到arm64版本的gcc。&lt;br&gt;在为树莓派交叉编译Qt时使用的是linrao rel</summary>
-      
-    
-    
-    
-    <category term="armLinux" scheme="http://example.com/categories/armLinux/"/>
-    
-    
-    <category term="armLinux" scheme="http://example.com/tags/armLinux/"/>
     
   </entry>
   
