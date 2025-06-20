@@ -17,21 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>rk3399pro交叉编译Qt--eglfs | Stephen`s Blog</title>
-  <meta name="description" content="一、事先准备1、ubuntu PC1) 下载Qt5.15.2源码  2) 下载文件系统   直接新建一个sysroot空目录即可，等会再同步树莓派的库文件  2、jetson Nano1) 安装依赖选项  1sudo apt-get install  libegl1-mesa-dev libdrm-dev libgles2-mesa-dev libgbm-dev libxcb-dri2-0-dev">
+  <title>dicom文件插入私有Tag | Stephen`s Blog</title>
+  <meta name="description" content="前言dicom有两种类型的tag，一种是dicom自有的tag, 保存在偶数组号中； 另一种是自定义的tag，保存在奇数组号中。  私有数据元素实现时可能需要不包含在标准数据元素中的信息通讯。私有数据元素需要包含这些信息。 　　私有数据元素与指定在7.1部分（即，数据元素标签字段，可选VR字段，长度字段和值字段）中的标准数据元素有相同的结构。使用在私有数据元素的元素标签中的组号码应该是一个奇数号码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rk3399pro交叉编译Qt--eglfs">
-<meta property="og:url" content="http://example.com/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/index.html">
+<meta property="og:title" content="dicom文件插入私有Tag">
+<meta property="og:url" content="http://example.com/2025/06/20/dicom/dicom%E6%96%87%E4%BB%B6%E6%8F%92%E5%85%A5%E7%A7%81%E6%9C%89Tag/index.html">
 <meta property="og:site_name" content="StephenLu&#96;s Blog">
-<meta property="og:description" content="一、事先准备1、ubuntu PC1) 下载Qt5.15.2源码  2) 下载文件系统   直接新建一个sysroot空目录即可，等会再同步树莓派的库文件  2、jetson Nano1) 安装依赖选项  1sudo apt-get install  libegl1-mesa-dev libdrm-dev libgles2-mesa-dev libgbm-dev libxcb-dri2-0-dev">
+<meta property="og:description" content="前言dicom有两种类型的tag，一种是dicom自有的tag, 保存在偶数组号中； 另一种是自定义的tag，保存在奇数组号中。  私有数据元素实现时可能需要不包含在标准数据元素中的信息通讯。私有数据元素需要包含这些信息。 　　私有数据元素与指定在7.1部分（即，数据元素标签字段，可选VR字段，长度字段和值字段）中的标准数据元素有相同的结构。使用在私有数据元素的元素标签中的组号码应该是一个奇数号码">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-12-18T01:21:49.000Z">
-<meta property="article:modified_time" content="2024-12-19T03:15:33.057Z">
+<meta property="article:published_time" content="2025-06-20T05:39:47.000Z">
+<meta property="article:modified_time" content="2025-06-20T06:46:17.565Z">
 <meta property="article:author" content="Stephen Lu">
-<meta property="article:tag" content="armLinux">
+<meta property="article:tag" content="dicom">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/index.html">
+  <link rel="canonical" href="http://example.com/2025/06/20/dicom/dicom%E6%96%87%E4%BB%B6%E6%8F%92%E5%85%A5%E7%A7%81%E6%9C%89Tag/index.html">
   
     <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
   
@@ -293,14 +293,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-armLinux/rk3399pro交叉编译Qt-eglfs" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-dicom/dicom文件插入私有Tag" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      rk3399pro交叉编译Qt--eglfs
+      dicom文件插入私有Tag
     </h1>
   
 
@@ -308,20 +308,20 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/" class="article-date">
-	  <time datetime="2024-12-18T01:21:49.000Z" itemprop="datePublished">2024-12-18</time>
+	<a href="/2025/06/20/dicom/dicom%E6%96%87%E4%BB%B6%E6%8F%92%E5%85%A5%E7%A7%81%E6%9C%89Tag/" class="article-date">
+	  <time datetime="2025-06-20T05:39:47.000Z" itemprop="datePublished">2025-06-20</time>
 	</a>
 </span>
         
   <span class="article-category">
     <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/armLinux/">armLinux</a>
+    <a class="article-category-link" href="/categories/dicom/">dicom</a>
   </span>
 
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/armLinux/" rel="tag">armLinux</a>
+	<a class="article-tag-link-link" href="/tags/dicom/" rel="tag">dicom</a>
   </span>
 
 
@@ -334,51 +334,35 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/06/20/dicom/dicom%E6%96%87%E4%BB%B6%E6%8F%92%E5%85%A5%E7%A7%81%E6%9C%89Tag/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 778(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 915(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="一、事先准备"><a href="#一、事先准备" class="headerlink" title="一、事先准备"></a>一、事先准备</h1><h2 id="1、ubuntu-PC"><a href="#1、ubuntu-PC" class="headerlink" title="1、ubuntu PC"></a>1、ubuntu PC</h2><pre><code>1) 下载Qt5.15.2源码
-
-2) 下载文件系统
-  直接新建一个sysroot空目录即可，等会再同步树莓派的库文件
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><pre><code>dicom有两种类型的tag，一种是dicom自有的tag, 保存在偶数组号中；
+另一种是自定义的tag，保存在奇数组号中。
 </code></pre>
-<h2 id="2、jetson-Nano"><a href="#2、jetson-Nano" class="headerlink" title="2、jetson Nano"></a>2、jetson Nano</h2><pre><code>1) 安装依赖选项
-</code></pre>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install  libegl1-mesa-dev libdrm-dev libgles2-mesa-dev libgbm-dev libxcb-dri2-0-dev</span><br></pre></td></tr></table></figure>
+<h2 id="私有数据元素"><a href="#私有数据元素" class="headerlink" title="私有数据元素"></a>私有数据元素</h2><p>实现时可能需要不包含在标准数据元素中的信息通讯。私有数据元素需要包含这些信息。</p>
+<p>　　私有数据元素与指定在7.1部分（即，数据元素标签字段，可选VR字段，长度字段和值字段）中的标准数据元素有相同的结构。使用在私有数据元素的元素标签中的组号码应该是一个奇数号码。私有数据元素应以数据元素标签的递增数字顺序包含在数据集中。私有数据元素的值字段应具有标准6.2部分中指定的VRs中的任意一种。</p>
+<p>　　对于每一个信息对象定义或SOP类定义，按照说明在DICOM标准的第3部分和第4部分中的内容，特定数据元素是必需的。私有数据元素不能代替所需的标准数据元素。</p>
+<h2 id="私有数据元素标签"><a href="#私有数据元素标签" class="headerlink" title="私有数据元素标签"></a>私有数据元素标签</h2><p>多个实现者定义带有相同（奇数）组号码的情况是可能的。为了避免冲突，私有元素将根据下面的规则来分配私有数据元素标签。</p>
+<p>　　1)     编号为（gggg,0010-00FF）（gggg为奇数）的私有创作者数据元素用来存储由私人使用的组号码为gggg的一组元素。系统将给这一系列私有元素中的第一个未使用的（未赋值的）元素插入标识码。私有标识码的VR将成为LO,VM将等于1。</p>
+<p>　　2)     私有创作者数据元素（gggg,0010）是等同于系统存储元素（gggg,1000-10FF）的1类数据元素，私有创作者数据元素（gggg,0011）等同于系统存储元素（gggg,1100-11FF），以此类推，直到私有创作者数据元素（gggg,00FF）等同于系统存储元素　　（gggg,FF00-FFFF）。</p>
+<p>　　3)     私有数据元素的编码器能够动态地将私有数据分配到私有组中的任一可利用块中，并详细说明分配所对应的私有创作者数据元素。私有数据的译码器能够由对应的私有创作者数据元素在私有组中的任何位置使用给定的私有创作者标识码识别存储块。</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;dcmtk/config/osconfig.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;dcmtk/dcmdata/dctk.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIVATE_CREATOR_NAME <span class="string">&quot;Stephen&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIVATE_CREATOR_TAG  0x0029, 0x0010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIVATE_ELEMENT1_TAG 0x0029, 0x0011</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIVATE_ELEMENT2_TAG 0x0029, 0x0012</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIVATE_ELEMENT3_TAG 0x0029, 0x0013</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRIVATE_ELEMENT4_TAG 0x0029, 0x0014</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRV_PrivateCreator   DcmTag(PRIVATE_CREATOR_TAG)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRV_PrivateElement1  DcmTag(PRIVATE_ELEMENT1_TAG, PRIVATE_CREATOR_NAME)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRV_PrivateElement2  DcmTag(PRIVATE_ELEMENT2_TAG, PRIVATE_CREATOR_NAME)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRV_PrivateElement3  DcmTag(PRIVATE_ELEMENT3_TAG, PRIVATE_CREATOR_NAME)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PRV_PrivateElement4  DcmTag(PRIVATE_ELEMENT4_TAG, PRIVATE_CREATOR_NAME)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">registerPrivateTags</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    DcmDataDictionary &amp;dict = dcmDataDict.wrlock();</span><br><span class="line">    dict.addEntry(new DcmDictEntry(PRIVATE_ELEMENT1_TAG, EVR_LO, <span class="string">&quot;PrivateText&quot;</span>,    <span class="number">1</span>, <span class="number">1</span>, <span class="string">&quot;private&quot;</span>, OFTrue, PRIVATE_CREATOR_NAME));</span><br><span class="line">    dict.addEntry(new DcmDictEntry(PRIVATE_ELEMENT2_TAG, EVR_US, <span class="string">&quot;PrivateInteger&quot;</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">&quot;private&quot;</span>, OFTrue, PRIVATE_CREATOR_NAME));</span><br><span class="line">    dict.addEntry(new DcmDictEntry(PRIVATE_ELEMENT3_TAG, EVR_OB, <span class="string">&quot;PrivateBlob&quot;</span>,    <span class="number">1</span>, <span class="number">1</span>, <span class="string">&quot;private&quot;</span>, OFTrue, PRIVATE_CREATOR_NAME));</span><br><span class="line">    dict.addEntry(new DcmDictEntry(PRIVATE_ELEMENT4_TAG, EVR_US, <span class="string">&quot;PrivateInteger&quot;</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">&quot;private&quot;</span>, OFTrue, PRIVATE_CREATOR_NAME));</span><br><span class="line"></span><br><span class="line">    dcmDataDict.wrunlock();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">addPrivateElements</span><span class="params">(DcmItem &amp;item)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!item.tagExists(PRV_PrivateCreator)) &#123;</span><br><span class="line">        item.putAndInsertString(PRV_PrivateCreator, PRIVATE_CREATOR_NAME);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!item.tagExists(PRV_PrivateElement1)) &#123;</span><br><span class="line">        item.putAndInsertString(PRV_PrivateElement1, <span class="string">&quot;Some Text&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!item.tagExists(PRV_PrivateElement2)) &#123;</span><br><span class="line">        item.putAndInsertUint16(PRV_PrivateElement2, <span class="number">12345</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!item.tagExists(PRV_PrivateElement3)) &#123;</span><br><span class="line">        <span class="type">unsigned</span> <span class="type">char</span> data[] = &#123;<span class="string">&quot;9527&quot;</span>&#125;;</span><br><span class="line">        item.putAndInsertUint8Array(PRV_PrivateElement3, data, <span class="keyword">sizeof</span>(data));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!item.tagExists(PRV_PrivateElement4)) &#123;</span><br><span class="line">        item.putAndInsertUint16(PRV_PrivateElement4, <span class="number">1306</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    DcmFileFormat fileformat;</span><br><span class="line">    registerPrivateTags();</span><br><span class="line">    addPrivateElements(*fileformat.getDataset());</span><br><span class="line">    fileformat.saveFile(<span class="string">&quot;test_out.dcm&quot;</span>, EXS_LittleEndianExplicit);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<h1 id="二、编译及安装"><a href="#二、编译及安装" class="headerlink" title="二、编译及安装"></a>二、编译及安装</h1><h2 id="1、同步文件系统"><a href="#1、同步文件系统" class="headerlink" title="1、同步文件系统"></a>1、同步文件系统</h2><p>注意，可以把usr 和lib的着整个目录都同步过来。可以解决交叉编译的很多问题。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rsync -avz root@192.168.10.201:/lib sysroot</span><br><span class="line">rsync -avz root@192.168.10.201:/usr sysroot</span><br></pre></td></tr></table></figure>
-<h2 id="2、修复损坏的链接文件"><a href="#2、修复损坏的链接文件" class="headerlink" title="2、修复损坏的链接文件"></a>2、修复损坏的链接文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/Kukkimonsuta/rpi-buildqt/master/scripts/utils/sysroot-relativelinks.py</span><br><span class="line"><span class="built_in">chmod</span> -x sysroot-relativelinks.py</span><br><span class="line">./sysroot-relativelinks.py sysroot</span><br></pre></td></tr></table></figure>
+<p>生成的dcm文件dump信息如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(0029,0010) LO [Stephen]                                <span class="comment">#   8, 1 PrivateCreator</span></span><br><span class="line">(0029,0011) LO [Some Text]                              <span class="comment">#  10, 1 PrivateCreator</span></span><br><span class="line">(0029,0012) US 12345                                    <span class="comment">#   2, 1 PrivateCreator</span></span><br><span class="line">(0029,0013) OB 39\35\32\37\00\00                        <span class="comment">#   6, 1 PrivateCreator</span></span><br><span class="line">(0029,0014) US 1306                                     <span class="comment">#   2, 1 PrivateCreator</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>文件内容如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"><span class="comment"># source: https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Take a sysroot directory and turn all the absolute symlinks and turn them into</span></span><br><span class="line"><span class="comment"># relative ones such that the sysroot is usable within another system.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv) != 2:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Usage is &quot;</span> + sys.argv[0] + <span class="string">&quot;&lt;directory&gt;&quot;</span>)</span><br><span class="line">    sys.exit(1)</span><br><span class="line"></span><br><span class="line">topdir = sys.argv[1]</span><br><span class="line">topdir = os.path.abspath(topdir)</span><br><span class="line"></span><br><span class="line">def handlelink(filePath, subdir):</span><br><span class="line">    <span class="built_in">link</span> = os.readlink(filePath)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">link</span>[0] != <span class="string">&quot;/&quot;</span>:</span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    <span class="keyword">if</span> link.startswith(topdir):</span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    </span><br><span class="line">    newLink = os.path.relpath(topdir+<span class="built_in">link</span>, subdir)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\t%s replacing %s =&gt; %s&quot;</span> % (filePath, <span class="built_in">link</span>, newLink))</span><br><span class="line">    os.unlink(filePath)</span><br><span class="line">    os.symlink(newLink, filePath)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> subdir, <span class="built_in">dirs</span>, files <span class="keyword">in</span> os.walk(topdir):</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        filePath = os.path.join(subdir, file)</span><br><span class="line">        <span class="keyword">if</span> os.path.islink(filePath):</span><br><span class="line">            handlelink(filePath, subdir)</span><br></pre></td></tr></table></figure>
-<p>将上面的文件保存到sysroot-relativelinks.py，并且赋予+x权限<br>如何使用:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sysroot-relativelinks.py sysroot</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3、修改QT配置文件"><a href="#3、修改QT配置文件" class="headerlink" title="3、修改QT配置文件"></a>3、修改QT配置文件</h2><p>修改该配置文件: qt-everywhere-src-5.15.2&#x2F;qtbase&#x2F;mkspecs&#x2F;devices&#x2F;linux-firefly-rk3399pro-g++&#x2F;qmake.conf<br>主要是添加链接库和头文件，从而识别openGL的相关库文件，修改如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">include(../common/linux_device_pre.conf)</span><br><span class="line"> </span><br><span class="line">QMAKE_INCDIR_POST += \</span><br><span class="line">    $$[QT_SYSROOT]/usr/include \</span><br><span class="line">    $$[QT_SYSROOT]/usr/include/aarch64-linux-gnu</span><br><span class="line"> </span><br><span class="line">QMAKE_LIBDIR_POST += \</span><br><span class="line">    $$[QT_SYSROOT]/usr/lib \</span><br><span class="line">    $$[QT_SYSROOT]/lib/aarch64-linux-gnu \</span><br><span class="line">    $$[QT_SYSROOT]/usr/lib/aarch64-linux-gnu</span><br><span class="line"> </span><br><span class="line">QMAKE_RPATHLINKDIR_POST += \</span><br><span class="line">    $$[QT_SYSROOT]/usr/lib \</span><br><span class="line">    $$[QT_SYSROOT]/usr/lib/aarch64-linux-gnu \</span><br><span class="line">    $$[QT_SYSROOT]/lib/aarch64-linux-gnu</span><br><span class="line"></span><br><span class="line">                                                                   </span><br><span class="line">QMAKE_INCDIR_OPENGL[_ES2] += \</span><br><span class="line">    $$[QT_SYSROOT]/usr/include \</span><br><span class="line">    $$[QT_SYSROOT]/usr/include/EGL \</span><br><span class="line">    $$[QT_SYSROOT]/usr/include/GLES2 \</span><br><span class="line">    $$[QT_SYSROOT]/usr/include/GLES3 \</span><br><span class="line">    $$[QT_SYSROOT]/usr/include/KHR</span><br><span class="line"></span><br><span class="line">QMAKE_LIBDIR_OPENGL[_ES2] += \</span><br><span class="line">    $$[QT_SYSROOT]/usr/lib/aarch64-linux-gnu/tegra \</span><br><span class="line">    $$[QT_SYSROOT]/usr/lib/aarch64-linux-gnu</span><br><span class="line">                                         </span><br><span class="line">QMAKE_LIBS_OPENGL[_ES2] += -lGLESv2 -lEGL</span><br><span class="line"></span><br><span class="line">QMAKE_INCDIR_EGL += $<span class="variable">$QMAKE_INCDIR_OPENGL</span>[_ES2]</span><br><span class="line">QMAKE_LIBDIR_EGL += $<span class="variable">$QMAKE_LIBDIR_OPENGL</span>[_ES2]</span><br><span class="line"></span><br><span class="line">QMAKE_LIBS_EGL         += -lGLESv2 -lEGL</span><br><span class="line">QMAKE_LIBS_OPENGL_ES2  += -lGLESv2 -lEGL</span><br><span class="line"></span><br><span class="line">QMAKE_CXXFLAGS          = $<span class="variable">$QMAKE_CFLAGS</span></span><br><span class="line"></span><br><span class="line">EGLFS_DEVICE_INTEGRATION = eglfs_kms</span><br><span class="line"></span><br><span class="line">load(qt_config)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">../configure \</span><br><span class="line">-extprefix /home/lufahai/data/rockchip/firefly/rk3399pro/qt4Rk3399pro/qt5.15.2 \</span><br><span class="line">-prefix /home/lufahai/data/rockchip/firefly/rk3399pro/qt4Rk3399pro/qt5.15.2 \</span><br><span class="line">-hostprefix /home/lufahai/data/rockchip/firefly/rk3399pro/qt4Rk3399pro/hostQt5.15.2 \</span><br><span class="line">-confirm-license \</span><br><span class="line">-opensource \</span><br><span class="line">-device-option CROSS_COMPILE=/opt/aarch64-linux-gcc/bin/aarch64-linux-gnu- \</span><br><span class="line">-device linux-firefly-rk3399pro-g++ \</span><br><span class="line">-sysroot /home/lufahai/data/rockchip/firefly/rk3399pro/qt4Rk3399pro/sysroot \</span><br><span class="line">-opengl es2 \</span><br><span class="line">-skip qtscript \</span><br><span class="line">-skip wayland \</span><br><span class="line">-skip qtwebengine \</span><br><span class="line">-force-debug-info \</span><br><span class="line">-skip qtdatavis3d \</span><br><span class="line">-skip qtlocation \</span><br><span class="line">-nomake examples \</span><br><span class="line">-make libs -pkg-config -no-use-gold-linker -v \</span><br><span class="line">-no-openssl -shared -release -pch -no-cups \</span><br><span class="line">-no-glib -no-dbus -no-xcb \</span><br><span class="line">-no-separate-debug-info \</span><br><span class="line">-no-fontconfig \</span><br><span class="line">-nomake tests -no-iconv -no-tslib</span><br></pre></td></tr></table></figure>
-
-<p>qt支持多种后台插件，即便是eglfs也可以分为eglfs_x11 和 eglfs_kms，前者必须在一个X上运行。<br>而kms是直接底层驱动图形接口，不需要依赖于其他桌面系统，渲染效率更高。</p>
-<p>如何修改：<br>在qmake.conf 增加-lgbm以及它对应的库文件和头文件路径(与glesv2一样)，并且下面的<br>EGLFS_DEVICE_INTEGRATION &#x3D; eglfs_x11<br>要改为 EGLFS_DEVICE_INTEGRATION &#x3D; eglfs_kms</p>
-<p>如何确定是否可行：<br>要保证EGLFS details中的EGLDevice 和 GBM为yes</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">EGLFS details:</span><br><span class="line">EGLFS OpenWFD ........................ no</span><br><span class="line">EGLFS i.Mx6 .......................... no</span><br><span class="line">EGLFS i.Mx6 Wayland .................. no</span><br><span class="line">EGLFS RCAR ........................... no</span><br><span class="line">EGLFS EGLDevice ...................... <span class="built_in">yes</span></span><br><span class="line">EGLFS GBM ............................ <span class="built_in">yes</span></span><br><span class="line">EGLFS VSP2 ........................... no</span><br><span class="line">EGLFS Mali ........................... no</span><br><span class="line">EGLFS Raspberry Pi ................... no</span><br><span class="line">EGLFS X11 ............................ <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
-
-<p>然后直接make &amp;&amp; make install</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>url:  <a target="_blank" rel="noopener" href="https://www.cnblogs.com/0523jy/p/9338142.html">https://www.cnblogs.com/0523jy/p/9338142.html</a></p>
 
       
     </div>
@@ -388,7 +372,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://example.com/2024/12/18/armLinux/rk3399pro%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91Qt-eglfs/" title="rk3399pro交叉编译Qt--eglfs" target="_blank" rel="external">http://example.com/2024/12/18/armLinux/rk3399pro交叉编译Qt-eglfs/</a>
+      <a href="http://example.com/2025/06/20/dicom/dicom%E6%96%87%E4%BB%B6%E6%8F%92%E5%85%A5%E7%A7%81%E6%9C%89Tag/" title="dicom文件插入私有Tag" target="_blank" rel="external">http://example.com/2025/06/20/dicom/dicom文件插入私有Tag/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -434,13 +418,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2025/02/19/gstreamer/gstreamer%E5%BD%95%E5%88%B6%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%BF%AE%E6%94%B9%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6mata%E4%BF%A1%E6%81%AF/" title="gstreamer录制过程中修改视频文件mata信息"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2024/12/06/OpenGl/OpenGL%E4%B8%8D%E9%9C%80%E8%A6%81%E5%9D%90%E6%A0%87%E7%9B%B4%E6%8E%A5%E6%B8%B2%E6%9F%93/" title="OpenGL不需要坐标直接渲染"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2025/06/20/dicom/dicom%E4%BF%9D%E5%AD%98h264%E5%8F%8Ah265mp4%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6/" title="dicom保存h264及h265mp4视频文件"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
