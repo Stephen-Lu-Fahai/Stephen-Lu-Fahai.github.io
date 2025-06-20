@@ -17,21 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>QWaitCondition严谨的使用方法 | Stephen`s Blog</title>
-  <meta name="description" content="前言最近需要将QOpenGL的渲染改为EGL渲染，那么就无法使用Qt提供的条件执行函数update();粗糙的实现方式是 EGL在 while (1)循环中先检测数据是否被更新的Flag, 被更新就渲染；没有就msleep一小会。数据可能在msleep的过程中就已经被更新，导致无法及时被处理，即便是减小msleep的参数，也会造成系统频繁挂起与检测。 综合测试下来这是一种非常粗糙的实现方式。 下面">
+  <title>dicom保存h264及h265mp4视频文件 | Stephen`s Blog</title>
+  <meta name="description" content="h264编码方式的mp4h264只支持 high profile的mp4，因此需要注意mp4的profile，以gstreamer为例。 1gst-launch-1.0 videotestsrc ! video&#x2F;x-raw,format&#x3D;RGBA,width&#x3D;1920,height&#x3D;1080,framerate&#x3D;30&#x2F;1 ! nvh264enc ! h264parse ! video&#x2F;x-h264">
 <meta property="og:type" content="article">
-<meta property="og:title" content="QWaitCondition严谨的使用方法">
-<meta property="og:url" content="http://example.com/2025/05/19/Qt/QWaitCondition%E4%B8%A5%E8%B0%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:title" content="dicom保存h264及h265mp4视频文件">
+<meta property="og:url" content="http://example.com/2025/06/20/dicom/dicom%E4%BF%9D%E5%AD%98h264%E5%8F%8Ah265mp4%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6/index.html">
 <meta property="og:site_name" content="StephenLu&#96;s Blog">
-<meta property="og:description" content="前言最近需要将QOpenGL的渲染改为EGL渲染，那么就无法使用Qt提供的条件执行函数update();粗糙的实现方式是 EGL在 while (1)循环中先检测数据是否被更新的Flag, 被更新就渲染；没有就msleep一小会。数据可能在msleep的过程中就已经被更新，导致无法及时被处理，即便是减小msleep的参数，也会造成系统频繁挂起与检测。 综合测试下来这是一种非常粗糙的实现方式。 下面">
+<meta property="og:description" content="h264编码方式的mp4h264只支持 high profile的mp4，因此需要注意mp4的profile，以gstreamer为例。 1gst-launch-1.0 videotestsrc ! video&#x2F;x-raw,format&#x3D;RGBA,width&#x3D;1920,height&#x3D;1080,framerate&#x3D;30&#x2F;1 ! nvh264enc ! h264parse ! video&#x2F;x-h264">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-05-19T07:11:27.000Z">
-<meta property="article:modified_time" content="2025-05-19T07:41:58.429Z">
+<meta property="article:published_time" content="2025-06-20T03:05:09.000Z">
+<meta property="article:modified_time" content="2025-06-20T03:30:11.917Z">
 <meta property="article:author" content="Stephen Lu">
-<meta property="article:tag" content="Qt">
+<meta property="article:tag" content="dicom">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2025/05/19/Qt/QWaitCondition%E4%B8%A5%E8%B0%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/index.html">
+  <link rel="canonical" href="http://example.com/2025/06/20/dicom/dicom%E4%BF%9D%E5%AD%98h264%E5%8F%8Ah265mp4%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6/index.html">
   
     <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
   
@@ -293,14 +293,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-Qt/QWaitCondition严谨的使用方法" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-dicom/dicom保存h264及h265mp4视频文件" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      QWaitCondition严谨的使用方法
+      dicom保存h264及h265mp4视频文件
     </h1>
   
 
@@ -308,20 +308,20 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2025/05/19/Qt/QWaitCondition%E4%B8%A5%E8%B0%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" class="article-date">
-	  <time datetime="2025-05-19T07:11:27.000Z" itemprop="datePublished">2025-05-19</time>
+	<a href="/2025/06/20/dicom/dicom%E4%BF%9D%E5%AD%98h264%E5%8F%8Ah265mp4%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6/" class="article-date">
+	  <time datetime="2025-06-20T03:05:09.000Z" itemprop="datePublished">2025-06-20</time>
 	</a>
 </span>
         
   <span class="article-category">
     <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Qt/">Qt</a>
+    <a class="article-category-link" href="/categories/dicom/">dicom</a>
   </span>
 
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Qt/" rel="tag">Qt</a>
+	<a class="article-tag-link-link" href="/tags/dicom/" rel="tag">dicom</a>
   </span>
 
 
@@ -334,10 +334,10 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/05/19/Qt/QWaitCondition%E4%B8%A5%E8%B0%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/06/20/dicom/dicom%E4%BF%9D%E5%AD%98h264%E5%8F%8Ah265mp4%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 464(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 267(words)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
@@ -347,20 +347,17 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近需要将QOpenGL的渲染改为EGL渲染，那么就无法使用Qt提供的条件执行函数update();<br>粗糙的实现方式是 EGL在 while (1)循环中先检测数据是否被更新的Flag, 被更新就渲染；没有就msleep一小会。<br>数据可能在msleep的过程中就已经被更新，导致无法及时被处理，即便是减小msleep的参数，也会造成系统频繁挂起与检测。 综合测试下来这是一种非常粗糙的实现方式。</p>
-<p>下面是使用QWaitCondition 替代msleep的过程。</p>
-<h1 id="有缺陷的用法"><a href="#有缺陷的用法" class="headerlink" title="有缺陷的用法"></a>有缺陷的用法</h1><p>渲染线程如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//define QMutex and QWaitConditio</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    mutex.<span class="built_in">lock</span>();</span><br><span class="line">    condition.<span class="built_in">wait</span>(&amp;mutex); </span><br><span class="line">    <span class="built_in">render</span>();</span><br><span class="line">    mutex.<span class="built_in">unlock</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="h264编码方式的mp4"><a href="#h264编码方式的mp4" class="headerlink" title="h264编码方式的mp4"></a>h264编码方式的mp4</h1><p>h264只支持 high profile的mp4，因此需要注意mp4的profile，以gstreamer为例。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gst-launch-1.0 videotestsrc ! video/x-raw,format=RGBA,width=1920,height=1080,framerate=30/1 ! nvh264enc ! h264parse ! video/x-h264, profile=high ! mp4mux ! filesink location=1080p264Hight.mp4 -e</span><br></pre></td></tr></table></figure>
 
-<p>数据更新线程如下:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cudaMemCpy</span>(...);</span><br><span class="line"><span class="comment">/* 数据已更新，唤起渲染线程 */</span></span><br><span class="line">condition.<span class="built_in">wakeAll</span>();</span><br></pre></td></tr></table></figure>
+<p>主要是以下几个接口要指定264</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dataset-&gt;putAndInsertOFStringArray(DCM_TransferSyntaxUID, UID_MPEG4HighProfileLevel4_1TransferSyntax);</span><br><span class="line"></span><br><span class="line">pixelData-&gt;putOriginalRepresentation(EXS_MPEG4HighProfileLevel4_1, nullptr, pixelSequence);</span><br><span class="line"></span><br><span class="line">OFCondition status = fileformat.saveFile(<span class="string">&quot;videoTest.dcm&quot;</span>, EXS_MPEG4HighProfileLevel4_1);</span><br></pre></td></tr></table></figure>
 
-<p>上述的QMutex并没有起到真正的作用，加锁和解锁在同一个while中没什么意义。考虑这种情况：<br>由于系统调度的原因，即 无法保证每次渲染线程中的condition.wait(&amp;mutex)都会优先于数据线程中的condition.wakeAll()。有一定概率下，wakeAll()会被先执行，那么渲染线程就会在那里等待，知道下一帧数据更新才会被唤起。<br>这种情况在渲染中倒也影响不大，最多就是不更新这一帧，不过也可能会出现视频轻微卡顿一下的情况。<br>但如果使用场景是一些连续通信数据包的处理，那就会出现中间丢包的情况，这就比较麻烦。</p>
-<p>为了避免上述的概率性问题，可以使用下面的做法。</p>
-<h1 id="正确用法"><a href="#正确用法" class="headerlink" title="正确用法"></a>正确用法</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//define QMutex and QWaitConditio</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    mutex.<span class="built_in">lock</span>();</span><br><span class="line">    condition.<span class="built_in">wait</span>(&amp;mutex); </span><br><span class="line">    <span class="built_in">render</span>();</span><br><span class="line">    mutex.<span class="built_in">unlock</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>数据更新线程如下:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cudaMemCpy</span>(...);</span><br><span class="line"><span class="comment">/* 数据已更新，唤起渲染线程 */</span></span><br><span class="line">mutex.<span class="built_in">lock</span>();</span><br><span class="line">condition.<span class="built_in">wakeAll</span>();</span><br><span class="line">mutex.<span class="built_in">unlock</span>();</span><br></pre></td></tr></table></figure>
+<h1 id="h265编码方式的mp4"><a href="#h265编码方式的mp4" class="headerlink" title="h265编码方式的mp4"></a>h265编码方式的mp4</h1><p>错误的尝试：<br>将上述接口分别改为对应h265的选项：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dataset-&gt;putAndInsertOFStringArray(DCM_TransferSyntaxUID, UID_HEVCMainProfileLevel5_1TransferSyntax);</span><br><span class="line">pixelData-&gt;putOriginalRepresentation(EXS_HEVCMainProfileLevel5_1, nullptr, pixelSequence);</span><br><span class="line">OFCondition status = fileformat.saveFile(<span class="string">&quot;videoTest.dcm&quot;</span>, EXS_HEVCMainProfileLevel5_1);</span><br></pre></td></tr></table></figure>
+<p>感觉应该没啥问题，但是生成的dcm文件只有1kb，也就是只有tag，没有视频信息。</p>
+<p>但是，如果保持h264的参数配置，只是将视频文件从264换成265，即把265视频当成264处理，生成的dcm文件竟然没问题。<br>而且使用第三方工具打开这个dcm文件，可以看到265视频，将该视频导出，格式也是h265。</p>
+<p>暂时还不知道dicom内部是怎么处理的，有点神奇。 那么UID_HEVCMainProfileLevel5_1TransferSyntax的意义在哪？</p>
 
       
     </div>
@@ -370,7 +367,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://example.com/2025/05/19/Qt/QWaitCondition%E4%B8%A5%E8%B0%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="QWaitCondition严谨的使用方法" target="_blank" rel="external">http://example.com/2025/05/19/Qt/QWaitCondition严谨的使用方法/</a>
+      <a href="http://example.com/2025/06/20/dicom/dicom%E4%BF%9D%E5%AD%98h264%E5%8F%8Ah265mp4%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6/" title="dicom保存h264及h265mp4视频文件" target="_blank" rel="external">http://example.com/2025/06/20/dicom/dicom保存h264及h265mp4视频文件/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -416,13 +413,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2025/06/17/dicom/%E7%94%9F%E6%88%90dicom%E6%96%87%E4%BB%B6%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84tag/" title="生成dicom文件时需要的tag"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2025/05/19/C++/C-07-%E6%A8%A1%E6%9D%BF/" title="C++07--模板"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2025/06/17/dicom/cmake%E7%BC%96%E8%AF%91dicom/" title="cmake编译dicom"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
