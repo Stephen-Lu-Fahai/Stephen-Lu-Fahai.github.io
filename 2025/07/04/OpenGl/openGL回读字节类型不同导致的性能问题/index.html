@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>openGL回读字节类型不同导致的性能问题 | Stephen`s Blog</title>
+  <meta name="description" content="问题来源前提：Xorg.conf中将X窗口配置成depth&#x3D;10。然后使用cuda-OGL互操作方式，将OGL渲染结果回读到PBO。最开始设置的字节是GL_UNSIGNED_INT_2_10_10_10_REV，性能没问题。 12glBindBuffer(GL_PIXEL_PACK_BUFFER, mPboId);glReadPixels(0, 0, mWidth, mHeight, G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openGL回读字节类型不同导致的性能问题">
+<meta property="og:url" content="http://example.com/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="问题来源前提：Xorg.conf中将X窗口配置成depth&#x3D;10。然后使用cuda-OGL互操作方式，将OGL渲染结果回读到PBO。最开始设置的字节是GL_UNSIGNED_INT_2_10_10_10_REV，性能没问题。 12glBindBuffer(GL_PIXEL_PACK_BUFFER, mPboId);glReadPixels(0, 0, mWidth, mHeight, G">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-04T01:49:48.000Z">
+<meta property="article:modified_time" content="2025-07-04T02:25:47.053Z">
+<meta property="article:author" content="Stephen Lu">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Stephen-Lu-Fahai" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">StephenLu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Embedded Software Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Stephen`s Blog!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ISP/">ISP</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E9%A9%B1%E5%8A%A8/">Linux驱动</a><span class="category-list-count">30</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenGL/">OpenGL</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt4Android/">Qt4Android</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/STM32/">STM32</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/armLinux/">armLinux</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/cuda/">cuda</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dicom/">dicom</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gstreamer/">gstreamer</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/openCL/">openCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/">伺服控制</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a><span class="category-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ISP/" rel="tag">ISP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" rel="tag">Linux驱动[实践]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" rel="tag">Linux驱动[理论]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt4Android/" rel="tag">Qt4Android</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/STM32/" rel="tag">STM32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/armLinux/" rel="tag">armLinux</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cuda/" rel="tag">cuda</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dicom/" rel="tag">dicom</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gstreamer/" rel="tag">gstreamer</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openCL/" rel="tag">openCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="tag">模式设计</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/C/" style="font-size: 13.44px;">C++</a> <a href="/tags/ISP/" style="font-size: 13.22px;">ISP</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" style="font-size: 13.78px;">Linux驱动[实践]</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" style="font-size: 13.78px;">Linux驱动[理论]</a> <a href="/tags/OpenGL/" style="font-size: 13.44px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 13.56px;">Qt</a> <a href="/tags/Qt4Android/" style="font-size: 13.11px;">Qt4Android</a> <a href="/tags/STM32/" style="font-size: 13px;">STM32</a> <a href="/tags/armLinux/" style="font-size: 13.67px;">armLinux</a> <a href="/tags/cuda/" style="font-size: 13.11px;">cuda</a> <a href="/tags/dicom/" style="font-size: 13.33px;">dicom</a> <a href="/tags/gstreamer/" style="font-size: 13.33px;">gstreamer</a> <a href="/tags/openCL/" style="font-size: 13px;">openCL</a> <a href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" style="font-size: 13.89px;">ubuntu系统</a> <a href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" style="font-size: 13.33px;">伺服控制</a> <a href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 14px;">模式设计</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/07/">七月 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/05/">五月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/03/">三月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">二月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">十二月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/11/">十一月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">十月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">九月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">八月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">六月 2024</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">五月 2024</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/04/">四月 2024</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/OpenGL/">OpenGL</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/" class="title">openGL回读字节类型不同导致的性能问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-07-04T01:49:48.000Z" itemprop="datePublished">2025-07-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/06/23/ubuntu/Linux%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E8%84%9A%E6%9C%AC/" class="title">Linux批量处理动态链接库脚本</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-06-23T07:40:34.000Z" itemprop="datePublished">2025-06-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/gstreamer/">gstreamer</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/06/23/gstreamer/gstreamer%E4%BD%BF%E7%94%A8USB%E9%BA%A6%E5%85%8B%E9%A3%8E%E5%BD%95%E5%88%B6%E8%B8%A9%E5%9D%91/" class="title">gstreamer使用USB麦克风录制踩坑</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-06-23T07:19:01.000Z" itemprop="datePublished">2025-06-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/dicom/">dicom</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/06/20/dicom/dicom%E6%96%87%E4%BB%B6%E6%8F%92%E5%85%A5%E7%A7%81%E6%9C%89Tag/" class="title">dicom文件插入私有Tag</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-06-20T05:39:47.000Z" itemprop="datePublished">2025-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/dicom/">dicom</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/06/20/dicom/dicom%E4%BF%9D%E5%AD%98h264%E5%8F%8Ah265mp4%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6/" class="title">dicom保存h264及h265mp4视频文件</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-06-20T03:05:09.000Z" itemprop="datePublished">2025-06-20</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-OpenGl/openGL回读字节类型不同导致的性能问题" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      openGL回读字节类型不同导致的性能问题
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/" class="article-date">
+	  <time datetime="2025-07-04T01:49:48.000Z" itemprop="datePublished">2025-07-04</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/OpenGL/">OpenGL</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/OpenGL/" rel="tag">OpenGL</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 581(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 2(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h1><p>前提：Xorg.conf中将X窗口配置成depth&#x3D;10。<br>然后使用cuda-OGL互操作方式，将OGL渲染结果回读到PBO。<br>最开始设置的字节是GL_UNSIGNED_INT_2_10_10_10_REV，性能没问题。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">glBindBuffer(GL_PIXEL_PACK_BUFFER, mPboId);</span><br><span class="line">glReadPixels(<span class="number">0</span>, <span class="number">0</span>, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>后面由于更改需求，需要动态缩放openGL渲染结果，并且为了和其他部分代码统一，考虑使用nppiResize.<br>为了减少改动，直接将回读方式改为GL_UNSIGNED_BYTE, 事实上也得到正确的渲染结果。<br>但是测试后发现这样回导致openGL渲染线程的cpu占用率剧增，甚至导致严重掉帧。初步怀疑openGL内部做了某些字节类型的转换，但还未进一步排查。</p>
+<p>经过测试发现，GL_UNSIGNED_INT_2_10_10_10_REV格式的渲染结果和gstreamer中的RGB10A2_LE格式一致。<br>也就是只需要将gstreamer中的appsrc caps设置为”video&#x2F;x-raw(memory:CUDAMemory),format&#x3D;RGB10A2_LE”，<br>就可以直接录制通过GL_UNSIGNED_INT_2_10_10_10_REV抓取到的渲染结果。</p>
+<p>但是好巧不巧，只有nvh265enc支持RGB10A2_LE，nvh264enc不支持，项目上需要支持h264。</p>
+<p>基于上述原因，考虑到nppiResize 和 nvh264enc都不支持RGB10A2，为了代码的统一，只能考虑使用cuda将RGB10A2_LE<br>转为RGBA, 接着nppiResize后再录制。</p>
+<h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>之前一直没搞懂GL_UNSIGNED_INT_2_10_10_10_REV后缀REV代表什么意思，直到它和gstreamer中的RGB10A2_LE格式一致，才有了思路。<br>原来代表的是反转的意思，字面上 2_10_10_10_REV，反转后数据格式为 10_10_10_2，这也就是像素的实际分布，只不过反转还有另一层意思，字面上是RGB10A2LE，实际应为 (B)10_(G)10_(R)10_(A)2<br>根据这个思路，不难写出GL_UNSIGNED_INT_2_10_10_10_REV方式抓取的OGL渲染结果转换成RGBA8的cuda代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">cuVerticalFlip_RGB10A2_To_RGBA8</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> *pSrc, <span class="type">unsigned</span> <span class="type">char</span> *pDst, <span class="type">int</span> iWidth, <span class="type">int</span> iHeight, <span class="type">int</span> iSrcStride, <span class="type">int</span> iDstStride)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> dx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> dy = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="keyword">if</span> (dx &gt;= iWidth || dy &gt;= iHeight) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> idxSrc = dy * iSrcStride + dx;</span><br><span class="line">    <span class="type">int</span> idxDst = (iHeight - dy - <span class="number">1</span>) * iDstStride + dx * <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    uint v = pSrc[idxSrc];</span><br><span class="line">    pDst[idxDst]     = ((v &gt;&gt; <span class="number">2</span>)) &amp; <span class="number">255</span>;</span><br><span class="line">    pDst[idxDst + <span class="number">1</span>] = ((v &gt;&gt; <span class="number">12</span>)) &amp; <span class="number">255</span>;</span><br><span class="line">    pDst[idxDst + <span class="number">2</span>] = ((v &gt;&gt; <span class="number">22</span>)) &amp; <span class="number">255</span>;</span><br><span class="line">    pDst[idxDst + <span class="number">3</span>] = <span class="number">255</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">verticalFlip_RGB10A2_To_RGBA8</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> *pSrc, <span class="type">unsigned</span> <span class="type">char</span> *pDst, <span class="type">int</span> iWidth, <span class="type">int</span> iHeight, <span class="type">int</span> iSrcStride, <span class="type">int</span> iDstStride)</span></span><br><span class="line">&#123;</span><br><span class="line">    dim3 <span class="title function_">numThreads</span><span class="params">(NUM_THREAD_X, NUM_THREAD_Y, <span class="number">1</span>)</span>;</span><br><span class="line">    dim3 <span class="title function_">numBlocks</span><span class="params">(DivUp(iWidth, numThreads.x), DivUp(iHeight, numThreads.y))</span>;</span><br><span class="line">    cuVerticalFlip_RGB10A2_To_RGBA8&lt;&lt;&lt;numBlocks, numThreads&gt;&gt;&gt;(pSrc, pDst, iWidth, iHeight, iSrcStride, iDstStride);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/" title="openGL回读字节类型不同导致的性能问题" target="_blank" rel="external">http://example.com/2025/07/04/OpenGl/openGL回读字节类型不同导致的性能问题/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2025/06/23/ubuntu/Linux%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E8%84%9A%E6%9C%AC/" title="Linux批量处理动态链接库脚本"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: '说点什么...',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
