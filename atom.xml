@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-07-07T01:48:27.613Z</updated>
+  <updated>2025-07-13T06:17:20.137Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>openGL获取原数据并转换</title>
+    <link href="http://example.com/2025/07/13/OpenGl/openGL%E8%8E%B7%E5%8F%96%E5%9B%BE%E5%83%8F%E5%8E%9F%E6%95%B0%E6%8D%AE%E5%B9%B6%E8%BD%AC%E6%8D%A2/"/>
+    <id>http://example.com/2025/07/13/OpenGl/openGL%E8%8E%B7%E5%8F%96%E5%9B%BE%E5%83%8F%E5%8E%9F%E6%95%B0%E6%8D%AE%E5%B9%B6%E8%BD%AC%E6%8D%A2/</id>
+    <published>2025-07-13T07:56:18.000Z</published>
+    <updated>2025-07-13T06:17:20.137Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、问题来源"><a href="#一、问题来源" class="headerlink" title="一、问题来源"></a>一、问题来源</h1><p>为了在多个进程间共享图像数据，之前项目中的做法是创建共享cuda内存指针，不过要进行两次D2D的拷贝，A –&gt; Shm –&gt; B；并且<br>多一个进程就要多两次拷贝，更要命的是还有一些PIP数据的输入，需要共享出去，拷贝的次数更多。当然，使用FBO可以解决PIP这些额外数据的拷贝，<br>即由FBO渲染后，直接将渲染结果拷贝给对方。但是多一个进程就多两次拷贝的本质不变，性能得不到改善。</p><h1 id="二、解决"><a href="#二、解决" class="headerlink" title="二、解决"></a>二、解决</h1><p>在之前的探究中，EGL可以将一个Texture转换成EGLImage,并且可以将这个EGLImage的基本属性共享出去，另一个进程只需要获取一次这些基本数据，就能再转换成EGLimage, 并且这个纹理内容是实时被共享方更新的。这样就避免了两个进程间的任何拷贝，A直接更新，B直接渲染。<br>值得说明的是，A可以将这个纹理与cudaArray进行互操作绑定，可以直接在kernel中就更新这个纹理。</p><h1 id="三、缺陷"><a href="#三、缺陷" class="headerlink" title="三、缺陷"></a>三、缺陷</h1><p>上述步骤只支持一些常见的数据格式，例如RGBA8，但是不支持RGB10A2。为了获得更细腻的视觉体验，10bit图像渲染必不可少。<br>有一个思路是，创建的时候按照RGBA8格式去创建纹理，并且共享出去，但在cuda内核中实际按照将RGB的高2位依次写入Alpha通道，<br>然后再GLSL的fragment着色器中将它还原成10bit数据。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">gRGB10A2ToRGBA</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> *pSrc, cudaSurfaceObject_t dstSurfObj, <span class="type">int</span> iWidth, <span class="type">int</span> iHeight)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> dx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> dy = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="keyword">if</span> (dx &gt;= iWidth || dy &gt;= iHeight) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> idxSrc = dy * iWidth + dx;</span><br><span class="line">    uchar4 pixel;</span><br><span class="line"></span><br><span class="line">    uint v = pSrc[idxSrc];</span><br><span class="line"></span><br><span class="line">    uint R = (v &gt;&gt; <span class="number">2</span>) &amp; <span class="number">1023</span>;</span><br><span class="line">    uint G = (v &gt;&gt; <span class="number">12</span>) &amp; <span class="number">1023</span>;</span><br><span class="line">    uint B = (v &gt;&gt; <span class="number">22</span>) &amp; <span class="number">1023</span>;</span><br><span class="line"></span><br><span class="line">    uint L8R = R &amp; <span class="number">255</span>;</span><br><span class="line">    uint L8G = G &amp; <span class="number">255</span>;</span><br><span class="line">    uint L8B = B &amp; <span class="number">255</span>;</span><br><span class="line"></span><br><span class="line">    uint H2R = (R &gt;&gt; <span class="number">8</span>) &amp; <span class="number">3</span>;</span><br><span class="line">    uint H2G = (G &gt;&gt; <span class="number">8</span>) &amp; <span class="number">3</span>;</span><br><span class="line">    uint H2B = (B &gt;&gt; <span class="number">8</span>) &amp; <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    pixel.x = L8R;</span><br><span class="line">    pixel.y = L8G;</span><br><span class="line">    pixel.z = L8B;</span><br><span class="line">    pixel.w = ((H2R &lt;&lt; <span class="number">4</span>) | (H2G &lt;&lt; <span class="number">2</span>) | H2B);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">surf2Dwrite</span>(pixel, dstSurfObj, dx * <span class="number">4</span>, dy);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">RGB10A2ToRGBA</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> *pSrc, cudaSurfaceObject_t dstSurfObj, <span class="type">int</span> iWidth, <span class="type">int</span> iHeight)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">dim3 <span class="title">numThreads</span><span class="params">(NUM_THREAD_X, NUM_THREAD_Y, <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">numBlocks</span><span class="params">(DivUp(iWidth, numThreads.x), DivUp(iHeight, numThreads.y))</span></span>;</span><br><span class="line">    gRGB10A2ToRGBA&lt;&lt;&lt;numBlocks, numThreads&gt;&gt;&gt;(pSrc, dstSurfObj, iWidth, iHeight);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>GLSL的Fragment着色器中还原成10bit，<br>需要说明的是，texture要定义成int类型的isampler2D，<br>并且不能通过之前的 texture2D(tex_y, TexCoord)来获取像素值，<br>因为这是经过重采样归一化后的值，无法精确获取原像素值。<br>需要 texelFetch获取当前pos的像素值。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">out ivec4 FragColor;</span><br><span class="line">in vec2 TexCoord;</span><br><span class="line"></span><br><span class="line">uniform isampler2D ourTexture;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ivec2 pos = <span class="built_in">ivec2</span>(<span class="built_in">int</span>(TexCoord.x * <span class="number">800</span>), <span class="built_in">int</span>(TexCoord.y * <span class="number">480</span>));</span><br><span class="line"></span><br><span class="line">    ivec4 color = <span class="built_in">texelFetch</span>(ourTexture, pos, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> r = (((color.w &gt;&gt; <span class="number">4</span>) &amp; <span class="number">3</span>) &lt;&lt; <span class="number">8</span>) | color.x;</span><br><span class="line">    <span class="type">int</span> g = (((color.w &gt;&gt; <span class="number">2</span>) &amp; <span class="number">3</span>) &lt;&lt; <span class="number">8</span>) | color.y;</span><br><span class="line">    <span class="type">int</span> b = ((color.w  &amp; <span class="number">3</span>) &lt;&lt; <span class="number">8</span>) | color.z;</span><br><span class="line"></span><br><span class="line">    FragColor = <span class="built_in">ivec4</span>(r, g, b, <span class="number">3</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、问题来源&quot;&gt;&lt;a href=&quot;#一、问题来源&quot; class=&quot;headerlink&quot; title=&quot;一、问题来源&quot;&gt;&lt;/a&gt;一、问题来源&lt;/h1&gt;&lt;p&gt;为了在多个进程间共享图像数据，之前项目中的做法是创建共享cuda内存指针，不过要进行两次D2D的拷贝，A –</summary>
+      
+    
+    
+    
+    <category term="OpenGL" scheme="http://example.com/categories/OpenGL/"/>
+    
+    
+    <category term="OpenGL" scheme="http://example.com/tags/OpenGL/"/>
+    
+  </entry>
   
   <entry>
     <title>openGL回读字节类型不同导致的性能问题</title>
@@ -473,30 +497,6 @@
     
     
     <category term="ISP" scheme="http://example.com/tags/ISP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>gstreamer录制过程中修改视频文件mata信息</title>
-    <link href="http://example.com/2025/02/19/gstreamer/gstreamer%E5%BD%95%E5%88%B6%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%BF%AE%E6%94%B9%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6mata%E4%BF%A1%E6%81%AF/"/>
-    <id>http://example.com/2025/02/19/gstreamer/gstreamer%E5%BD%95%E5%88%B6%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%BF%AE%E6%94%B9%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6mata%E4%BF%A1%E6%81%AF/</id>
-    <published>2025-02-19T06:41:20.000Z</published>
-    <updated>2025-02-19T08:22:43.040Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="背景：之前不全面的用法"><a href="#背景：之前不全面的用法" class="headerlink" title="背景：之前不全面的用法"></a>背景：之前不全面的用法</h1><p>之前就有一个需求：在录制视频文件中增加一些额外的meta信息，示例：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gst-launch-1.0 videotestsrc ! taginject tags=\&quot;title=testTitle\&quot; ! nvh264enc ! h264parse ! mp4mux ! filesink location=tmp.mp4</span><br></pre></td></tr></table></figure><p>这种方法确实能写入title信息，但具体信息要在pipeline启动前就确定好，playing过程中无法修改更新，准确来说是taginject插件只能被初始化一次。</p><h1 id="正确的用法"><a href="#正确的用法" class="headerlink" title="正确的用法"></a>正确的用法</h1><p>实际应用过程中上面的方法就可能不适用，例如给录制的视频增加章节，每个章节具体的起止点都是在录制过程中才能确定的，很难预先确定。<br>这种场景下就只能在end-of-stream之前再写入meta数据，具体方法API ：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">videotestsrc ! taginject name=tagger ! nvh264enc ! h264parse ! mp4mux ! filesink location=tmp.mp4</span><br></pre></td></tr></table></figure><p>使用API接口解析上述pipeline并获取name&#x3D;tagger的元素，需要注意的是pipeline中不能对它的tags属性进行初始化，原因如上。</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GstElement *tagger = gst_bin_get_by_name(GST_BIN(pipeline), <span class="string">&quot;tagger&quot;</span>);</span><br></pre></td></tr></table></figure><p>然后在录制结束在发送EOS之调用：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g_object_set(tagger, <span class="string">&quot;tags&quot;</span>, <span class="string">&quot;title=testTitle,common=testCom&quot;</span>);</span><br></pre></td></tr></table></figure><h1 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h1><p>如上，taginject插件的tags只能被设置一次，其余的多次设置均不生效。如果需要动态多次更新可以考虑以下几个方向：<br>1、研究GstMeta<br>2、后处理，使用工具，如FFmpeg或ExifTool，已试过，MKV文件处理速度快，MP4巨慢<br>3、后处理，gstreamer，无论mp4还是MKV，速度稍快(因为不用重新编解码)，处理时间略等于视频时长的十分之一，示例：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gst-launch-1.0 filesrc location=test.mp4 ! qtdemux ! h264parse ! taginject tags=<span class="string">&quot;your tags&quot;</span> ! mp4mux ! filesink location=testTagged.mp4</span><br></pre></td></tr></table></figure><h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>验证:</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffprobe -v error -show_entries format_tags=comment -of default=noprint_wrappers=1:nokey=1 video-2025-02-19-15-56-51.mp4</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;背景：之前不全面的用法&quot;&gt;&lt;a href=&quot;#背景：之前不全面的用法&quot; class=&quot;headerlink&quot; title=&quot;背景：之前不全面的用法&quot;&gt;&lt;/a&gt;背景：之前不全面的用法&lt;/h1&gt;&lt;p&gt;之前就有一个需求：在录制视频文件中增加一些额外的meta信息，示例：</summary>
-      
-    
-    
-    
-    <category term="gstreamer" scheme="http://example.com/categories/gstreamer/"/>
-    
-    
-    <category term="gstreamer" scheme="http://example.com/tags/gstreamer/"/>
     
   </entry>
   
