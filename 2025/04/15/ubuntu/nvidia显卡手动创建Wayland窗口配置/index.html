@@ -26,7 +26,7 @@
 <meta property="og:description" content="前提确认Nvida显卡的card12lufahai@ubuntu24:~$ ls &#x2F;dev&#x2F;dri&#x2F;by-path  card1  card2  renderD128  renderD129 可以看到系统中有card1 和 card2，分别对应intel集成显卡和nvidia显卡。进一步可以通过下面指令查看是否是nvidia显卡, 123lufahai@ubuntu24:~$ udevadm in">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-15T07:02:19.000Z">
-<meta property="article:modified_time" content="2025-04-28T09:59:10.312Z">
+<meta property="article:modified_time" content="2025-08-20T02:07:14.440Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="ubuntu系统">
 <meta name="twitter:card" content="summary">
@@ -337,10 +337,10 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/04/15/ubuntu/nvidia%E6%98%BE%E5%8D%A1%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BAWayland%E7%AA%97%E5%8F%A3%E9%85%8D%E7%BD%AE/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 814(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 953(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
 	
 
       </div>
@@ -358,6 +358,11 @@
 <p>解决：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/default/grub</span><br><span class="line"></span><br><span class="line">修改cmdline并保存退出:</span><br><span class="line">GRUB_CMDLINE_LINUX_DEFAULT=<span class="string">&quot;quiet splash nvidia-drm.modeset=1 nvidia-drm.fbdev=1&quot;</span></span><br><span class="line"></span><br><span class="line">sudo update-grub</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
 <p>重启后重新查询&#x2F;sys&#x2F;…&#x2F;modeset,这回输出Y</p>
+<h1 id="查询已连接显示器"><a href="#查询已连接显示器" class="headerlink" title="查询已连接显示器"></a>查询已连接显示器</h1><p>在&#x2F;sys&#x2F;class&#x2F;drm 路径下有所有输出口的连接信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /sys/class/drm/</span><br><span class="line">card1       card1-DP-2   card1-HDMI-A-1  card1-HDMI-A-3  card2       card2-DP-4  card2-HDMI-A-5  renderD129</span><br><span class="line">card1-DP-1  card1-eDP-1  card1-HDMI-A-2  card1-HDMI-A-4  card2-DP-3  card2-DP-5  renderD128      version</span><br></pre></td></tr></table></figure>
+<p>eu<br>上面已确定card2是nvidia显卡，那么先确定card2-HDMI-A-5的连接状态，返回connected</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /sys/class/drm/card2-HDMI-A-5/status</span><br><span class="line">connected</span><br></pre></td></tr></table></figure>
+<p>这就可以确定HDMI接口的名称为HDMI-A-5<br>同理可以确定连接的是哪个DP接口</p>
 <h1 id="创建配置文件"><a href="#创建配置文件" class="headerlink" title="创建配置文件"></a>创建配置文件</h1><p>weston.ini</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[core]</span><br><span class="line">backend=drm-backend.so</span><br><span class="line">require-input=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line">[output]</span><br><span class="line">name=HDMI-A-1</span><br><span class="line">mode=3840x2160</span><br><span class="line">transform=normal</span><br></pre></td></tr></table></figure>
 
