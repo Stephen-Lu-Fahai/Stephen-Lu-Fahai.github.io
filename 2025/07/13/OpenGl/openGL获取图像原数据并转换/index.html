@@ -26,7 +26,7 @@
 <meta property="og:description" content="一、问题来源为了在多个进程间共享图像数据，之前项目中的做法是创建共享cuda内存指针，不过要进行两次D2D的拷贝，A –&gt; Shm –&gt; B；并且多一个进程就要多两次拷贝，更要命的是还有一些PIP数据的输入，需要共享出去，拷贝的次数更多。当然，使用FBO可以解决PIP这些额外数据的拷贝，即由FBO渲染后，直接将渲染结果拷贝给对方。但是多一个进程就多两次拷贝的本质不变，性能得不到改善。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-07-13T07:56:18.000Z">
-<meta property="article:modified_time" content="2025-07-13T06:17:20.137Z">
+<meta property="article:modified_time" content="2025-07-23T02:14:36.323Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="OpenGL">
 <meta name="twitter:card" content="summary">

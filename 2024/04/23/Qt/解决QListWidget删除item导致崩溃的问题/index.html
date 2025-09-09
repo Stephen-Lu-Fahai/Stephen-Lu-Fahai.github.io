@@ -26,7 +26,7 @@
 <meta property="og:description" content="问题QListWidge 调用clear或删除item的时候，程序直接崩溃  原因从网上看到有人分析是由于访问连接到信号itemSelectionChanged()的时隙方法中的选定项引起的  解决QListWidget在执行删除或清空前，应该把信号槽关闭，清空结束后再重新连接。 123ui-&gt;listWidget-&gt;blockSignals(true);ui-&gt;listWidg">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-23T09:54:16.000Z">
-<meta property="article:modified_time" content="2024-04-23T10:00:06.367Z">
+<meta property="article:modified_time" content="2024-04-23T10:00:06.000Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="Qt">
 <meta name="twitter:card" content="summary">

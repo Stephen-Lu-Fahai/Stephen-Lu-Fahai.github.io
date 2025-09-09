@@ -26,7 +26,7 @@
 <meta property="og:description" content="问题来源利用GPU进行图像处理加速时，图像格式一般是RGB 3通道图像，每个通占用一个字节，即24位像素图像．  而cuda访问数据元素时，若每个线程访问8bit,16bit,32bit,64bit时，对应数据段长可以是32Byte,64Byte,128Byte,128Byte，可以达到全局内存合并访问的要求，提高访问访问全局内存性能．若每个线程访问24bit将无法达到全局内存合并访问的要求，影响">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-10-08T07:04:42.000Z">
-<meta property="article:modified_time" content="2024-10-08T07:11:51.547Z">
+<meta property="article:modified_time" content="2024-10-08T07:11:51.000Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="cuda">
 <meta name="twitter:card" content="summary">
