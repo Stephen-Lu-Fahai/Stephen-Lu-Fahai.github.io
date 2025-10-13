@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-09-25T01:09:07.193Z</updated>
+  <updated>2025-10-13T09:42:52.618Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ssh转发使用总结</title>
+    <link href="http://example.com/2025/10/13/ubuntu/ssh%E8%BD%AC%E5%8F%91%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/"/>
+    <id>http://example.com/2025/10/13/ubuntu/ssh%E8%BD%AC%E5%8F%91%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</id>
+    <published>2025-10-13T08:59:33.000Z</published>
+    <updated>2025-10-13T09:42:52.618Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近研究内网穿透，需求很简单，只需要把nas的端口暴露给公网，从而可以在任意地方通过 公网IP:公网Port 就可以ssh连接到nas。<br>目前情况: 白嫖一个公用的公网IP，虽说有权限，但毕竟是公用，还是要谨慎使用。<br>之前就了解到有frp等服务可以实现内网穿透，不过不太熟悉，更重要的是，不想在服务器做过多的部署。<br>但最近了解到其实ssh本身就可以实现反向隧道，并不需要增加太多东西。</p><h1 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程:"></a>配置过程:</h1><p>NAS端：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -R 32022:localhost:22 root@serverIp</span><br></pre></td></tr></table></figure><p>这个指令可以将NAS的22端口，映射到服务器的32022端口。前提是&#x2F;etc&#x2F;ssh&#x2F;sshd_config中的AllowTcpForwarding 要设为yes<br>否者使用 -R 参数进行ssh转发失败。</p><p>Server端</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh user@NasIp -p 32022 </span><br></pre></td></tr></table></figure><p>在server端就可以通过它自己的32022端口连接到nas，实现了内网穿透。</p><p>但我们希望家里的电脑不需要登录server，再从server访问自身32022端口登录nas; 而是家里电脑直接通过 user@serverIp -p 32022就可以直接访问到nas。<br>解决方案有两种：</p><h2 id="方案1："><a href="#方案1：" class="headerlink" title="方案1："></a>方案1：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config </span><br><span class="line">change: GatewayPorts To <span class="built_in">yes</span></span><br><span class="line">/etc/init.d/ssh restart</span><br></pre></td></tr></table></figure><p>原因：默认情况下GatewayPort为No, 那么nas端执行ssh -R 只能将nas的22端口映射到server自身127.0.0.1的32022端口，而不是 0.0.0.0:32022，因此只能从server终端访问自身的127.0.0.1:32022，外部电脑当然无法访问到。而将GatewayPort设为yes相当于暴露server的全部端口到0.0.0.0，那么外部电脑也能访问。<br>但很不幸，服务器的公网IP处于安全考虑，并未开放GatewayPort，毕竟随便一台外部电脑都能访问公网的全端口，这实在太危险。</p><h2 id="方案2："><a href="#方案2：" class="headerlink" title="方案2："></a>方案2：</h2><p>server转发自身端口，指令如下：<br>server端：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L 0.0.0.0:12345:127.0.0.1:32022 localhost</span><br></pre></td></tr></table></figure><p>这条指令可以让服务器将自身的12345端口(由于ip&#x3D;0.0.0.0，外部能访问)映射到本机的32022端口，那么外部电脑访问服务器的12345端口，实际上访问的是Nas映射到的32022端口。</p><p>相比于修改sshd_config开放全部端口，这种单个端口映射到自身某个端口更安全，也更不易被察觉。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;最近研究内网穿透，需求很简单，只需要把nas的端口暴露给公网，从而可以在任意地方通过 公网IP:公网Port 就可以ssh连接到nas。&lt;b</summary>
+      
+    
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>树莓派zero-w使用buildroot构建系统</title>
@@ -463,32 +487,6 @@
       
     <summary type="html">&lt;h1 id=&quot;问题来源&quot;&gt;&lt;a href=&quot;#问题来源&quot; class=&quot;headerlink&quot; title=&quot;问题来源&quot;&gt;&lt;/a&gt;问题来源&lt;/h1&gt;&lt;p&gt;安装了新版本的ubuntu24，之前的clash软件启动后提示&lt;/p&gt;
 &lt;figure class=&quot;highlight b</summary>
-      
-    
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux打印机使用总结</title>
-    <link href="http://example.com/2025/04/01/ubuntu/Linux%E6%89%93%E5%8D%B0%E6%9C%BA%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/"/>
-    <id>http://example.com/2025/04/01/ubuntu/Linux%E6%89%93%E5%8D%B0%E6%9C%BA%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</id>
-    <published>2025-04-01T08:59:42.000Z</published>
-    <updated>2025-04-08T01:23:09.544Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="图形界面使用"><a href="#图形界面使用" class="headerlink" title="图形界面使用"></a>图形界面使用</h1><pre><code>直接在设置页面添加即可。</code></pre><h1 id="命令行配合Qt程序使用"><a href="#命令行配合Qt程序使用" class="headerlink" title="命令行配合Qt程序使用"></a>命令行配合Qt程序使用</h1><h2 id="查找打印机"><a href="#查找打印机" class="headerlink" title="查找打印机"></a>查找打印机</h2><p>打印机使用USB方式连接到电脑，通过以下命令查询，注意加sudo权限</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">stephen@localhost:~$ sudo lpinfo -v</span><br><span class="line">file cups-brf:/</span><br><span class="line">network beh</span><br><span class="line">network socket</span><br><span class="line">network ipp</span><br><span class="line">network http</span><br><span class="line">network https</span><br><span class="line">network lpd</span><br><span class="line">network ipps</span><br><span class="line">serial serial:/dev/ttyS0?baud=115200</span><br><span class="line">direct usb://HP/LaserJet%20M203-M206?serial=VNC3J55865</span><br></pre></td></tr></table></figure><p>最后一个usb:&#x2F;&#x2F;HP…就是USB连接的惠普打印机。</p><h2 id="增加打印机"><a href="#增加打印机" class="headerlink" title="增加打印机"></a>增加打印机</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lpadmin -p HP_LaserJet -v usb://HP/LaserJet%20M203-M206?serial=VNC3J55865 -E</span><br></pre></td></tr></table></figure><p>-p 后面是自定义的打印机名称<br>-v 后面是上一步查看到的地址</p><p>这时候使用下面指令就可以查看到已经添加的打印机了</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lpstat -v</span><br></pre></td></tr></table></figure><h2 id="设置为默认"><a href="#设置为默认" class="headerlink" title="设置为默认"></a>设置为默认</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lpadmin -d HP_LaserJet</span><br></pre></td></tr></table></figure><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lp a.pdf -d HP_LaserJet</span><br></pre></td></tr></table></figure><p>可以打印，但不知道为什么，上一步设为默认打印机后，使用lp指令要-d指定打印机，否则打印失败。<br>但是对于Qt程序可以直接识别到上步设置的默认打印机，因此没太纠结。</p><h2 id="Qt参考程序"><a href="#Qt参考程序" class="headerlink" title="Qt参考程序"></a>Qt参考程序</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">QPrinter printerPixmap;</span><br><span class="line">QPixmap pixmap = QPixmap::grabWidget(ui-&gt;lab_img, ui-&gt;lab_img-&gt;rect());  <span class="comment">//获取界面的图片</span></span><br><span class="line">printerPixmap.setOrientation(QPrinter::Landscape);<span class="comment">//纵向：Portrait 横向：Landscape</span></span><br><span class="line">printerPixmap.setPageSize(QPrinter::A4);<span class="comment">//设置纸张大小</span></span><br><span class="line">QPainter painterPixmap;</span><br><span class="line">painterPixmap.begin(&amp;printerPixmap);</span><br><span class="line">painterPixmap.scale(<span class="number">1</span>, <span class="number">1</span>);<span class="comment">//设置图像长宽是原图的多少倍</span></span><br><span class="line">painterPixmap.drawPixmap(<span class="number">300</span>, <span class="number">300</span> , pixmap);<span class="comment">//设置图像在A4中的开始坐标是什么</span></span><br><span class="line">painterPixmap.end();</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;图形界面使用&quot;&gt;&lt;a href=&quot;#图形界面使用&quot; class=&quot;headerlink&quot; title=&quot;图形界面使用&quot;&gt;&lt;/a&gt;图形界面使用&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;直接在设置页面添加即可。
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&quot;命令行配合Qt程序使用</summary>
       
     
     
