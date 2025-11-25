@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-10-14T06:37:57.527Z</updated>
+  <updated>2025-11-25T09:19:56.732Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Qt处理xml中文乱码的问题</title>
+    <link href="http://example.com/2025/11/25/Qt/Qt%E5%A4%84%E7%90%86xml%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://example.com/2025/11/25/Qt/Qt%E5%A4%84%E7%90%86xml%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <published>2025-11-25T09:14:15.000Z</published>
+    <updated>2025-11-25T09:19:56.732Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>使用QDomElement处理包含中文字符的xml文件，得到的中文属性信息是乱码。<br>使用下面方式解决。</p><h1 id="处理前"><a href="#处理前" class="headerlink" title="处理前:"></a>处理前:</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">QFile xmlFile;</span><br><span class="line">xmlFile.<span class="built_in">setFileName</span>(file);</span><br><span class="line"><span class="keyword">if</span>(! xmlFile.<span class="built_in">open</span>(QIODevice::ReadOnly)) &#123;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;failed to open xml: &quot;</span> &lt;&lt; file;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">QDomDocument mXml;</span><br><span class="line"><span class="keyword">if</span>(! mXml.<span class="built_in">setContent</span>(&amp;xmlFile)) &#123;</span><br><span class="line">    xmlFile.<span class="built_in">close</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">xmlFile.<span class="built_in">close</span>();</span><br></pre></td></tr></table></figure><h1 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式:"></a>解决方式:</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">QFile xmlFile;</span><br><span class="line">xmlFile.<span class="built_in">setFileName</span>(file);</span><br><span class="line"><span class="keyword">if</span>(! xmlFile.<span class="built_in">open</span>(QIODevice::ReadOnly)) &#123;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;failed to open xml: &quot;</span> &lt;&lt; file;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">QTextStream <span class="title">txtStream</span><span class="params">(&amp;xmlFile)</span></span>;</span><br><span class="line">QTextCodec *codec = QTextCodec::<span class="built_in">codecForName</span>(<span class="string">&quot;GBK&quot;</span>);</span><br><span class="line">txtStream.<span class="built_in">setCodec</span>(codec);</span><br><span class="line">QString content = txtStream.<span class="built_in">readAll</span>();</span><br><span class="line">xmlFile.<span class="built_in">close</span>();</span><br><span class="line"></span><br><span class="line">QDomDocument mXml;</span><br><span class="line"><span class="keyword">if</span>(! mXml.<span class="built_in">setContent</span>(content)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="备注"><a href="#备注" class="headerlink" title="备注:"></a>备注:</h1><p>网上有人提到，设置QTextCodec::codecForName为”UTF-8”也可正常加载中文，<br>但是在测试中还是乱码，使用GBK中文就正确。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;使用QDomElement处理包含中文字符的xml文件，得到的中文属性信息是乱码。&lt;br&gt;使用下面方式解决。&lt;/p&gt;
+&lt;h1 id=&quot;处理前</summary>
+      
+    
+    
+    
+    <category term="Qt" scheme="http://example.com/categories/Qt/"/>
+    
+    
+    <category term="Qt" scheme="http://example.com/tags/Qt/"/>
+    
+  </entry>
   
   <entry>
     <title>ssh转发使用总结</title>
@@ -470,31 +495,6 @@
     
     
     <category term="openCL" scheme="http://example.com/tags/openCL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ubuntu24解决chrome-sandbox权限导致app无法启动问题</title>
-    <link href="http://example.com/2025/04/02/ubuntu/ubuntu24%E8%A7%A3%E5%86%B3chrome-sandbox%E6%9D%83%E9%99%90%E5%AF%BC%E8%87%B4app%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/"/>
-    <id>http://example.com/2025/04/02/ubuntu/ubuntu24%E8%A7%A3%E5%86%B3chrome-sandbox%E6%9D%83%E9%99%90%E5%AF%BC%E8%87%B4app%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/</id>
-    <published>2025-04-02T03:19:51.000Z</published>
-    <updated>2025-04-02T03:23:59.723Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h1><p>安装了新版本的ubuntu24，之前的clash软件启动后提示</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[42711:0402/111553.491149:FATAL:setuid_sandbox_host.cc(157)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I<span class="string">&#x27;m aborting now. You need to make sure that /opt/clash/chrome-sandbox is owned by root and has mode 4755.</span></span><br></pre></td></tr></table></figure><p>程序无法启动。</p><h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>根据提示先chown再chmod，分两步进行，但不生效。最后发现要&amp;&amp;并作一条指令才生效，令人匪夷所思。</p><p>正解如下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> root /opt/clash/chrome-sandbox &amp;&amp; sudo <span class="built_in">chmod</span> 4755 /opt/clash/chrome-sandbox</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;问题来源&quot;&gt;&lt;a href=&quot;#问题来源&quot; class=&quot;headerlink&quot; title=&quot;问题来源&quot;&gt;&lt;/a&gt;问题来源&lt;/h1&gt;&lt;p&gt;安装了新版本的ubuntu24，之前的clash软件启动后提示&lt;/p&gt;
-&lt;figure class=&quot;highlight b</summary>
-      
-    
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   
