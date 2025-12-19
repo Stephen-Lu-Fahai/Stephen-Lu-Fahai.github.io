@@ -18,15 +18,15 @@
   
   
   <title>debian12自定义plymouth开机画面 | Stephen`s Blog</title>
-  <meta name="description" content="配置plymonth安装plymonth及其主题1sudo apt install plymonth plymonth-themes  配置plymonth选中script作为主题 1sudo plymonth-set-default-theme script  修改script主题 1sudo nano &#x2F;usr&#x2F;share&#x2F;plymouth&#x2F;themes&#x2F;script.script 可以根据实">
+  <meta name="description" content="配置plymonth安装plymonth及其主题1sudo apt install plymouth plymouth-themes  配置plymonth选中script作为主题 1sudo plymouth-set-default-theme script  修改script主题 1sudo nano &#x2F;usr&#x2F;share&#x2F;plymouth&#x2F;themes&#x2F;script.script 可以根据实">
 <meta property="og:type" content="article">
 <meta property="og:title" content="debian12自定义plymouth开机画面">
 <meta property="og:url" content="http://example.com/2024/04/19/ubuntu/debian12%E8%87%AA%E5%AE%9A%E4%B9%89plymouth%E5%BC%80%E6%9C%BA%E7%94%BB%E9%9D%A2/index.html">
 <meta property="og:site_name" content="StephenLu&#96;s Blog">
-<meta property="og:description" content="配置plymonth安装plymonth及其主题1sudo apt install plymonth plymonth-themes  配置plymonth选中script作为主题 1sudo plymonth-set-default-theme script  修改script主题 1sudo nano &#x2F;usr&#x2F;share&#x2F;plymouth&#x2F;themes&#x2F;script.script 可以根据实">
+<meta property="og:description" content="配置plymonth安装plymonth及其主题1sudo apt install plymouth plymouth-themes  配置plymonth选中script作为主题 1sudo plymouth-set-default-theme script  修改script主题 1sudo nano &#x2F;usr&#x2F;share&#x2F;plymouth&#x2F;themes&#x2F;script.script 可以根据实">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-19T05:49:27.000Z">
-<meta property="article:modified_time" content="2024-04-19T09:07:26.000Z">
+<meta property="article:modified_time" content="2025-12-19T09:45:48.390Z">
 <meta property="article:author" content="Stephen Lu">
 <meta property="article:tag" content="ubuntu系统">
 <meta name="twitter:card" content="summary">
@@ -347,10 +347,10 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="配置plymonth"><a href="#配置plymonth" class="headerlink" title="配置plymonth"></a>配置plymonth</h1><h2 id="安装plymonth及其主题"><a href="#安装plymonth及其主题" class="headerlink" title="安装plymonth及其主题"></a>安装plymonth及其主题</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install plymonth plymonth-themes</span><br></pre></td></tr></table></figure>
+        <h1 id="配置plymonth"><a href="#配置plymonth" class="headerlink" title="配置plymonth"></a>配置plymonth</h1><h2 id="安装plymonth及其主题"><a href="#安装plymonth及其主题" class="headerlink" title="安装plymonth及其主题"></a>安装plymonth及其主题</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install plymouth plymouth-themes</span><br></pre></td></tr></table></figure>
 
 <h2 id="配置plymonth-1"><a href="#配置plymonth-1" class="headerlink" title="配置plymonth"></a>配置plymonth</h2><p>选中script作为主题</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo plymonth-set-default-theme script</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo plymouth-set-default-theme script</span><br></pre></td></tr></table></figure>
 
 <p>修改script主题</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /usr/share/plymouth/themes/script.script</span><br></pre></td></tr></table></figure>
@@ -360,7 +360,7 @@
 <p>script主题还是会将其文件夹下的icon显示出来，简单的做法就是把其目录下的icon<br>备份到一个新的目录下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/plymouth/themes/script</span><br><span class="line">sudo <span class="built_in">mkdir</span> icons</span><br><span class="line">sudo <span class="built_in">mv</span> ./*.png icons</span><br></pre></td></tr></table></figure>
 
-<h2 id="rebuild-plymonth"><a href="#rebuild-plymonth" class="headerlink" title="rebuild plymonth"></a>rebuild plymonth</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo plymonth-set-default-theme -R script</span><br></pre></td></tr></table></figure>
+<h2 id="rebuild-plymonth"><a href="#rebuild-plymonth" class="headerlink" title="rebuild plymonth"></a>rebuild plymonth</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo plymouth-set-default-theme -R script</span><br></pre></td></tr></table></figure>
 
 
 
