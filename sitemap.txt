@@ -1,5 +1,5 @@
-http://example.com/2024/04/19/ubuntu/debian12%E8%87%AA%E5%AE%9A%E4%B9%89plymouth%E5%BC%80%E6%9C%BA%E7%94%BB%E9%9D%A2/
 http://example.com/2025/12/12/ubuntu/windows10-%E8%BD%AC%E5%8C%96%E5%8F%8A%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC%E5%B9%B6%E5%AE%89%E8%A3%85WSL%E5%AD%90%E7%B3%BB%E7%BB%9F/
+http://example.com/2024/04/19/ubuntu/debian12%E8%87%AA%E5%AE%9A%E4%B9%89plymouth%E5%BC%80%E6%9C%BA%E7%94%BB%E9%9D%A2/
 http://example.com/2024/06/18/armLinux/linux-plymouth%E5%BC%80%E6%9C%BA%E5%8A%A8%E7%94%BB-%E7%BB%88%E6%9E%81%E7%89%88/
 http://example.com/2025/12/03/OpenGl/win10%E7%BC%96%E8%AF%91minGW%E7%89%88%E6%9C%AC%E7%9A%84assimp/
 http://example.com/2025/11/25/Qt/Qt%E5%A4%84%E7%90%86xml%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98/
