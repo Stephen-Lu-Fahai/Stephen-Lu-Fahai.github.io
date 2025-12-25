@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>windows10 minGW编译vtk | Stephen`s Blog</title>
+  <meta name="description" content="一、版本12345winGW版本: Qt5.12.12自带的 MinGW-W64 gcc7.3vtk版本: VTK-8.2.0.tar.gzcmake版本: 3.22.2注意: 由于minGW是gcc7.3,如果使用最新的vtk9.5以上版本会报错：gcc版本过低，请使用gcc8.0以上版本。经过测试，VTK-8.2.0满足需求  二、配置在cmake-gui中选择vtk源码路径和编译路径，随后选">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows10 minGW编译vtk">
+<meta property="og:url" content="http://example.com/2025/12/25/windows/windows10-minGW%E7%BC%96%E8%AF%91vtk/index.html">
+<meta property="og:site_name" content="StephenLu&#96;s Blog">
+<meta property="og:description" content="一、版本12345winGW版本: Qt5.12.12自带的 MinGW-W64 gcc7.3vtk版本: VTK-8.2.0.tar.gzcmake版本: 3.22.2注意: 由于minGW是gcc7.3,如果使用最新的vtk9.5以上版本会报错：gcc版本过低，请使用gcc8.0以上版本。经过测试，VTK-8.2.0满足需求  二、配置在cmake-gui中选择vtk源码路径和编译路径，随后选">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-25T08:26:54.000Z">
+<meta property="article:modified_time" content="2025-12-25T08:47:44.656Z">
+<meta property="article:author" content="Stephen Lu">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2025/12/25/windows/windows10-minGW%E7%BC%96%E8%AF%91vtk/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="StephenLu`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Stephen-Lu-Fahai" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">StephenLu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Embedded Software Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Stephen`s Blog!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ISP/">ISP</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E9%A9%B1%E5%8A%A8/">Linux驱动</a><span class="category-list-count">30</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenGL/">OpenGL</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt4Android/">Qt4Android</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/STM32/">STM32</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/armLinux/">armLinux</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/cuda/">cuda</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dicom/">dicom</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gstreamer/">gstreamer</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/openCL/">openCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a><span class="category-list-count">22</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows/">windows</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/">伺服控制</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/">模式设计</a><span class="category-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ISP/" rel="tag">ISP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" rel="tag">Linux驱动[实践]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" rel="tag">Linux驱动[理论]</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt4Android/" rel="tag">Qt4Android</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/STM32/" rel="tag">STM32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/armLinux/" rel="tag">armLinux</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cuda/" rel="tag">cuda</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dicom/" rel="tag">dicom</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gstreamer/" rel="tag">gstreamer</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openCL/" rel="tag">openCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">ubuntu系统</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/" rel="tag">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" rel="tag">伺服控制</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" rel="tag">模式设计</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/C/" style="font-size: 13.44px;">C++</a> <a href="/tags/ISP/" style="font-size: 13.22px;">ISP</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E5%AE%9E%E8%B7%B5/" style="font-size: 13.78px;">Linux驱动[实践]</a> <a href="/tags/Linux%E9%A9%B1%E5%8A%A8-%E7%90%86%E8%AE%BA/" style="font-size: 13.78px;">Linux驱动[理论]</a> <a href="/tags/OpenGL/" style="font-size: 13.67px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 13.56px;">Qt</a> <a href="/tags/Qt4Android/" style="font-size: 13.11px;">Qt4Android</a> <a href="/tags/STM32/" style="font-size: 13px;">STM32</a> <a href="/tags/armLinux/" style="font-size: 13.67px;">armLinux</a> <a href="/tags/cuda/" style="font-size: 13.11px;">cuda</a> <a href="/tags/dicom/" style="font-size: 13.33px;">dicom</a> <a href="/tags/gstreamer/" style="font-size: 13.33px;">gstreamer</a> <a href="/tags/openCL/" style="font-size: 13px;">openCL</a> <a href="/tags/ubuntu%E7%B3%BB%E7%BB%9F/" style="font-size: 13.89px;">ubuntu系统</a> <a href="/tags/windows/" style="font-size: 13.11px;">windows</a> <a href="/tags/%E4%BC%BA%E6%9C%8D%E6%8E%A7%E5%88%B6/" style="font-size: 13.33px;">伺服控制</a> <a href="/tags/%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 14px;">模式设计</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/12/">十二月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/11/">十一月 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">十月 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/09/">九月 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">八月 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/07/">七月 2025</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/05/">五月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/03/">三月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">二月 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">十二月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/11/">十一月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">十月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">九月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">八月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">六月 2024</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">五月 2024</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/04/">四月 2024</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/windows/">windows</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/12/25/windows/windows10-minGW%E7%BC%96%E8%AF%91vtk/" class="title">windows10 minGW编译vtk</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-12-25T08:26:54.000Z" itemprop="datePublished">2025-12-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/windows/">windows</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/12/12/windows/windows10-%E8%BD%AC%E5%8C%96%E5%8F%8A%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC%E5%B9%B6%E5%AE%89%E8%A3%85WSL%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="title">windows10 转化及升级版本并安装WSL子系统</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-12-12T05:15:00.000Z" itemprop="datePublished">2025-12-12</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/OpenGL/">OpenGL</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/12/03/OpenGl/win10%E7%BC%96%E8%AF%91minGW%E7%89%88%E6%9C%AC%E7%9A%84assimp/" class="title">win10编译minGW版本的assimp</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-12-03T08:06:13.000Z" itemprop="datePublished">2025-12-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Qt/">Qt</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/11/25/Qt/Qt%E5%A4%84%E7%90%86xml%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98/" class="title">Qt处理xml中文乱码的问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-11-25T09:14:15.000Z" itemprop="datePublished">2025-11-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ubuntu%E7%B3%BB%E7%BB%9F/">ubuntu系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2025/10/13/ubuntu/ssh%E8%BD%AC%E5%8F%91%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" class="title">ssh转发使用总结</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-10-13T08:59:33.000Z" itemprop="datePublished">2025-10-13</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-windows/windows10-minGW编译vtk" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      windows10 minGW编译vtk
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2025/12/25/windows/windows10-minGW%E7%BC%96%E8%AF%91vtk/" class="article-date">
+	  <time datetime="2025-12-25T08:26:54.000Z" itemprop="datePublished">2025-12-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/windows/">windows</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/windows/" rel="tag">windows</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2025/12/25/windows/windows10-minGW%E7%BC%96%E8%AF%91vtk/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 249(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、版本"><a href="#一、版本" class="headerlink" title="一、版本"></a>一、版本</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">winGW版本: Qt5.12.12自带的 MinGW-W64 gcc7.3</span><br><span class="line">vtk版本: VTK-8.2.0.tar.gz</span><br><span class="line">cmake版本: 3.22.2</span><br><span class="line"></span><br><span class="line">注意: 由于minGW是gcc7.3,如果使用最新的vtk9.5以上版本会报错：gcc版本过低，请使用gcc8.0以上版本。经过测试，VTK-8.2.0满足需求</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、配置"><a href="#二、配置" class="headerlink" title="二、配置"></a>二、配置</h1><p>在cmake-gui中选择vtk源码路径和编译路径，随后选择minGW Makefile并指定响应的gcc路径。<br><img src="data:image/png;base64,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"></p>
+<p>在配置界面中选择对应的几个选项：</p>
+<h2 id="1、安装路径"><a href="#1、安装路径" class="headerlink" title="1、安装路径"></a>1、安装路径</h2><p>根据需求在CMAKE_INSTALL_PREFIX的一个安装目录即可。</p>
+<h2 id="2、编译选项"><a href="#2、编译选项" class="headerlink" title="2、编译选项"></a>2、编译选项</h2><p>在选项CMAKE_CXX_FLAGS 中填入 -Ofast -flto<br>否则在make过程中会出现报错：  Cmake qt ,vtkDataArray.cxx.obj: File too big</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMAKE_CXX_FLAGS  -Ofast -flto</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3、QT路径"><a href="#3、QT路径" class="headerlink" title="3、QT路径"></a>3、QT路径</h2><p>如果项目中需要QT支持，可以勾选 </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Module_vtkGUISupportQt</span><br><span class="line">Module_vtkGUISupportQtOpenGL</span><br></pre></td></tr></table></figure>
+<p>并且需要在选项Qt5_DIR 中选择QT安装目录下的mingw的cmake库目录。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:/install/Qt5.12.12/5.12.12/mingw73_64/lib/cmake/Qt5</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="三、编译"><a href="#三、编译" class="headerlink" title="三、编译"></a>三、编译</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mingw32-make.exe make -j16 &amp;&amp; mingw32-make.exe make install</span><br></pre></td></tr></table></figure>
+
+<p>[img2]:</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2025/12/25/windows/windows10-minGW%E7%BC%96%E8%AF%91vtk/" title="windows10 minGW编译vtk" target="_blank" rel="external">http://example.com/2025/12/25/windows/windows10-minGW编译vtk/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Stephen-Lu-Fahai" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Stephen-Lu-Fahai" target="_blank"><span class="text-dark">StephenLu</span><small class="ml-1x">Embedded Software Developer</small></a></h3>
+        <div>Just4饭</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2025/12/12/windows/windows10-%E8%BD%AC%E5%8C%96%E5%8F%8A%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC%E5%B9%B6%E5%AE%89%E8%A3%85WSL%E5%AD%90%E7%B3%BB%E7%BB%9F/" title="windows10 转化及升级版本并安装WSL子系统"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: '说点什么...',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '15' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
