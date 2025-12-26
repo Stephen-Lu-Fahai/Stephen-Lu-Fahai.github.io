@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-12-25T08:47:44.656Z</updated>
+  <updated>2025-12-26T05:55:23.235Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>windows10 minGW编译simpleITK</title>
+    <link href="http://example.com/2025/12/26/windows/windows10-minGW%E7%BC%96%E8%AF%91simpleITK/"/>
+    <id>http://example.com/2025/12/26/windows/windows10-minGW%E7%BC%96%E8%AF%91simpleITK/</id>
+    <published>2025-12-26T05:35:16.000Z</published>
+    <updated>2025-12-26T05:55:23.235Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、版本"><a href="#一、版本" class="headerlink" title="一、版本"></a>一、版本</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">winGW版本: Qt5.12.12自带的 MinGW-W64 gcc7.3</span><br><span class="line">itk版本: InsightToolkit-5.4.5.zip</span><br><span class="line">simplesITK版本: SimpleITK-2.5.3.tar.gz</span><br><span class="line">cmake版本: 3.22.2</span><br></pre></td></tr></table></figure><h1 id="二、依赖"><a href="#二、依赖" class="headerlink" title="二、依赖"></a>二、依赖</h1><h2 id="1、Lua"><a href="#1、Lua" class="headerlink" title="1、Lua"></a>1、Lua</h2><p>要求版本: 5.3 到 5.5之间，选择：lua-5.4.8.tar.gz<br>编译</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mingw32-make.exe mingw </span><br><span class="line">mingw32-make.exe mingw install <span class="built_in">local</span></span><br></pre></td></tr></table></figure><p>当前目录会生成一个install的安装目录，把src下编译出来的dll库文件拷贝到install&#x2F;bin 目录下，然后把bin目录加到系统环境变量。<br>验证：能在命令行正确执行lua.exe 命令就行。</p><h2 id="2、swig"><a href="#2、swig" class="headerlink" title="2、swig"></a>2、swig</h2><p>minGW无法编译，直接下载可执行文件，选择4.4.1版本，解压并将目录添加到环境PATH。</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://sourceforge.net/projects/swig/files/swigwin/</span><br></pre></td></tr></table></figure><h2 id="3、itk"><a href="#3、itk" class="headerlink" title="3、itk"></a>3、itk</h2><p>选择版本 InsightToolkit-5.4.5.zip<br>直接使用cmake-gui配置相关路径，正常编译安装即可。</p><h3 id="问题1：-ITK-build-directory-path-length-is-too-long"><a href="#问题1：-ITK-build-directory-path-length-is-too-long" class="headerlink" title="问题1： ITK build directory path length is too long"></a>问题1： ITK build directory path length is too long</h3><p>直接修改一下build的路径长度，缩短文件名称，重新编译即可。</p><h3 id="问题2：-undefined-ERROR-SYMLINK-NOT-SUPPORTED"><a href="#问题2：-undefined-ERROR-SYMLINK-NOT-SUPPORTED" class="headerlink" title="问题2： undefined ERROR_SYMLINK_NOT_SUPPORTED"></a>问题2： undefined ERROR_SYMLINK_NOT_SUPPORTED</h3><p>google了一下，应该和minGW的版本有关，但这只是一个返回的错误状态，不影响真正的代码。<br>按照编译器的提示，修改下面文件即可：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">InsightToolkit\Modules\ThirdParty\KWSys\src\KWSys\SystemTools.cxx</span><br><span class="line"></span><br><span class="line">replace ERROR_SYMLINK_NOT_SUPPORTED with ERROR_BIDI_NOT_SUPPORTED</span><br></pre></td></tr></table></figure><h3 id="问题3："><a href="#问题3：" class="headerlink" title="问题3："></a>问题3：</h3><p>编译过程中会出现几次模块编译报错，无需理会，重新执行make可以忽略。</p><h1 id="三、配置及编译"><a href="#三、配置及编译" class="headerlink" title="三、配置及编译"></a>三、配置及编译</h1><h3 id="取消配置"><a href="#取消配置" class="headerlink" title="取消配置"></a>取消配置</h3><p>在cmake_gui配置中取消勾选一下选项，否则编译失败：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BUILD_TESTING</span><br><span class="line">WRAP_PYTHON</span><br><span class="line">WRAP_LUA</span><br><span class="line">WRAP_DEFAULT</span><br><span class="line">SimpleITK_PYTHON_*</span><br></pre></td></tr></table></figure><h3 id="选择配置"><a href="#选择配置" class="headerlink" title="选择配置"></a>选择配置</h3><p>勾选生成dll库选项</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BUILD_SHARED_LIBS</span><br></pre></td></tr></table></figure><h3 id="填写itk库路径"><a href="#填写itk库路径" class="headerlink" title="填写itk库路径"></a>填写itk库路径</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ITK_DIR    C:/install/itk-5.4.5/lib/cmake/ITK-5.4</span><br></pre></td></tr></table></figure><h3 id="增加编译参数"><a href="#增加编译参数" class="headerlink" title="增加编译参数"></a>增加编译参数</h3><p>否则会出现报错：sitkImageExplicit.cxx.obj: File too big</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMAKE_CXX_FLAGS   -Ofast -flto</span><br></pre></td></tr></table></figure><h3 id="选择install的目录"><a href="#选择install的目录" class="headerlink" title="选择install的目录"></a>选择install的目录</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMAKE_INSTALL_PREFIX    C:/install/simpleITK</span><br></pre></td></tr></table></figure><h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mingw32-make.exe make -j16 &amp;&amp; mingw32-make.exe make install</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、版本&quot;&gt;&lt;a href=&quot;#一、版本&quot; class=&quot;headerlink&quot; title=&quot;一、版本&quot;&gt;&lt;/a&gt;一、版本&lt;/h1&gt;&lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;</summary>
+      
+    
+    
+    
+    <category term="windows" scheme="http://example.com/categories/windows/"/>
+    
+    
+    <category term="windows" scheme="http://example.com/tags/windows/"/>
+    
+  </entry>
   
   <entry>
     <title>windows10 minGW编译vtk</title>
@@ -471,30 +495,6 @@
     
     
     <category term="Qt" scheme="http://example.com/tags/Qt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C++07--模板</title>
-    <link href="http://example.com/2025/05/19/C++/C-07-%E6%A8%A1%E6%9D%BF/"/>
-    <id>http://example.com/2025/05/19/C++/C-07-%E6%A8%A1%E6%9D%BF/</id>
-    <published>2025-05-19T03:00:07.000Z</published>
-    <updated>2025-05-19T03:21:19.385Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="一、函数模板"><a href="#一、函数模板" class="headerlink" title="一、函数模板"></a>一、函数模板</h1><p>对比函数重载，函数模板只需要通过一次函数定义就可以实现不同参数列表和参数类型的函数重载功能。<br>主要说明 “函数模板具体化” 的例子: 如果要将某一个或某几个要处理的数据类型进行单独处理，需要额外定义对应数据类型的模板函数，形式是</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template &lt;&gt; <span class="type">void</span> <span class="title function_">fun</span><span class="params">(type &amp;t)</span>; </span><br></pre></td></tr></table></figure><p>函数模板具体化和普通函数可同时存在，调用顺序为： 普通函数 &gt; 函数模板具体化 &gt; 模板函数，这就类似于在类之外实现“多态”</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;typeinfo&gt;</span></span></span><br><span class="line"> </span><br><span class="line">using namespace <span class="built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    Node *next;</span><br><span class="line">    Node(<span class="type">int</span> x) : val(x), next(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 模板函数</span></span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line"><span class="type">void</span> <span class="title function_">tfunc</span><span class="params">(T &amp;t)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;tT:&quot;</span> &lt;&lt; t &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 函数模板具体化（用于处理Node类型）</span></span><br><span class="line">template &lt;&gt;</span><br><span class="line"><span class="type">void</span> <span class="title function_">tfunc</span><span class="params">(Node &amp;node)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;tNode val:&quot;</span> &lt;&lt; node.val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 普通函数</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">tfunc</span><span class="params">(<span class="type">int</span> &amp;a)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;tfunc():&quot;</span> &lt;&lt; a &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">double</span> a = <span class="number">2.1</span>;</span><br><span class="line">    tfunc(a);</span><br><span class="line">    <span class="type">int</span> b = <span class="number">1</span>;</span><br><span class="line">    tfunc(b);</span><br><span class="line">    Node <span class="title function_">node</span><span class="params">(<span class="number">2</span>)</span>;</span><br><span class="line">    tfunc(node);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 输出:</span></span><br><span class="line"><span class="comment">// tT:2.1     </span></span><br><span class="line"><span class="comment">// tfunc():1  </span></span><br><span class="line"><span class="comment">// tNode val:2</span></span><br></pre></td></tr></table></figure><h1 id="二、类模板"><a href="#二、类模板" class="headerlink" title="二、类模板"></a>二、类模板</h1><p>ref: <a href="https://www.cnblogs.com/horacle/p/13701314.html">https://www.cnblogs.com/horacle/p/13701314.html</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;一、函数模板&quot;&gt;&lt;a href=&quot;#一、函数模板&quot; class=&quot;headerlink&quot; title=&quot;一、函数模板&quot;&gt;&lt;/a&gt;一、函数模板&lt;/h1&gt;&lt;p&gt;对比函数重载，函数模板只需要通过一次函数定义就可以实现不同参数列表和参数类型的函数重载功能。&lt;br&gt;主要说明</summary>
-      
-    
-    
-    
-    <category term="C++" scheme="http://example.com/categories/C/"/>
-    
-    
-    <category term="C++" scheme="http://example.com/tags/C/"/>
     
   </entry>
   
