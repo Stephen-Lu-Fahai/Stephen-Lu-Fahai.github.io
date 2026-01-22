@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-12-31T01:43:07.823Z</updated>
+  <updated>2026-01-22T05:45:47.201Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>openGL一些环境变量的总结</title>
+    <link href="http://example.com/2026/01/22/OpenGl/openGL%E4%B8%80%E4%BA%9B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E6%80%BB%E7%BB%93/"/>
+    <id>http://example.com/2026/01/22/OpenGl/openGL%E4%B8%80%E4%BA%9B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E6%80%BB%E7%BB%93/</id>
+    <published>2026-01-22T02:32:34.000Z</published>
+    <updated>2026-01-22T05:45:47.201Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="平台"><a href="#平台" class="headerlink" title="平台"></a>平台</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">OS:         Linux</span><br><span class="line">图形服务:    X11</span><br><span class="line">显卡：       Nvidia-RTX4070</span><br></pre></td></tr></table></figure><h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><h2 id="环境变量1：-GL-MaxFramesAllowed"><a href="#环境变量1：-GL-MaxFramesAllowed" class="headerlink" title="环境变量1：__GL_MaxFramesAllowed"></a>环境变量1：__GL_MaxFramesAllowed</h2><p>这个环境变量没有在Nvidia官方文档中查找到，但是经过网上的资料和延迟测试，使用下面的环境变量声明的确能改善渲染延迟。<br>网上有一种说法是，显卡的渲染队列会默认处理2~3帧的frames，下面的声明强制显卡只处理一帧图像。</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> __GL_MaxFramesAllowed=1</span><br></pre></td></tr></table></figure><h2 id="环境变量2：-GL-YIELD"><a href="#环境变量2：-GL-YIELD" class="headerlink" title="环境变量2：__GL_YIELD"></a>环境变量2：__GL_YIELD</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://download.nvidia.com/XFree86/Linux-x86_64/590.48.01/README/openglenvvariables.html</span><br></pre></td></tr></table></figure><p>这个环境变量在Nvdia驱动的Readme中有介绍，可选值有两个：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__GL_YIELDBehavior</span><br><span class="line">&lt;<span class="built_in">unset</span>&gt;By default, OpenGL will call sched_yield() to yield.</span><br><span class="line"><span class="string">&quot;NOTHING&quot;</span>OpenGL will never yield.</span><br><span class="line"><span class="string">&quot;USLEEP&quot;</span>OpenGL will call usleep(0) to yield.</span><br></pre></td></tr></table></figure><p>当openGL需要等待外部状态切换时，有两种方式，如果选择NOTHING，那么openGL不会停止，一直占用CPU资源等待状态切换完成，这个在一些CPU资源比较紧张的机器上会造成一些调度的问题，CPU占用过高。相反如果选择USLEEP，则openGL会主动退出资源，休眠等待被唤醒。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;平台&quot;&gt;&lt;a href=&quot;#平台&quot; class=&quot;headerlink&quot; title=&quot;平台&quot;&gt;&lt;/a&gt;平台&lt;/h1&gt;&lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span cl</summary>
+      
+    
+    
+    
+    <category term="OpenGL" scheme="http://example.com/categories/OpenGL/"/>
+    
+    
+    <category term="OpenGL" scheme="http://example.com/tags/OpenGL/"/>
+    
+  </entry>
   
   <entry>
     <title>vtk与QtOpenGL的使用</title>
@@ -458,30 +482,6 @@
     <updated>2025-06-20T03:08:27.424Z</updated>
     
     <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_INSTALL_PREFIX=/usr/local/dcmtk -DBUILD_SHARED_LIBS=ON .. </span><br><span class="line">make -j16</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;l</summary>
-      
-    
-    
-    
-    <category term="dicom" scheme="http://example.com/categories/dicom/"/>
-    
-    
-    <category term="dicom" scheme="http://example.com/tags/dicom/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>生成dicom文件时需要的tag</title>
-    <link href="http://example.com/2025/06/17/dicom/%E7%94%9F%E6%88%90dicom%E6%96%87%E4%BB%B6%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84tag/"/>
-    <id>http://example.com/2025/06/17/dicom/%E7%94%9F%E6%88%90dicom%E6%96%87%E4%BB%B6%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84tag/</id>
-    <published>2025-06-17T06:32:10.000Z</published>
-    <updated>2025-06-20T03:08:43.873Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">可空 0x0008, 0x0020 DCM_StudyDate</span><br><span class="line">可空 0x0008, 0x0030 DCM_StudyTime</span><br><span class="line">可空 0x0008, 0x0050 DCM_AccessionNumber</span><br><span class="line">可空 0x0008, 0x0070 DCM_Manufacturer</span><br><span class="line">可空 0x0008, 0x0090 DCM_ReferringPhysiciansName</span><br><span class="line">可空 0x0020, 0x0010 DCM_StudyID</span><br><span class="line">可空 0x0008, 0x0023 DCM_ContentDate</span><br><span class="line">可空 0x0008, 0x0033 DCM_ContentTime</span><br><span class="line">可空 0x0008, 0x002a DCM_AcquisitionDatetime</span><br><span class="line">可空 0x0040, 0xa043 DCM_ConceptNameCodeSequence</span><br><span class="line"></span><br><span class="line">非空 0x0008, 0x0005 DCM_SpecificCharacterSet</span><br><span class="line">非空 0x0008, 0x0016 DCM_SOPClassUID</span><br><span class="line">非空 0x0008, 0x0060 DCM_Modality</span><br><span class="line">非空 0x0008, 0x0064 DCM_ConversionType</span><br><span class="line">非空 0x0042, 0x0012 DCM_MIMETypeOfEncapsulatedDocument</span><br><span class="line">非空 0x0020, 0x0011 DCM_SeriesNumber</span><br><span class="line">非空 0x0042, 0x0010 DCM_DocumentTitle</span><br><span class="line">非空 0x0010, 0x0010 DCM_PatientsName</span><br><span class="line">非空 0x0010, 0x0020 DCM_PatientID</span><br><span class="line">非空 0x0010, 0x0030 DCM_PatientsBirthDate</span><br><span class="line">非空 0x0010, 0x0040 DCM_PatientsSex</span><br><span class="line">非空 0x0028, 0x0301 DCM_BurnedInAnnotation</span><br><span class="line">非空 0x0020, 0x0013 DCM_InstanceNumber</span><br><span class="line">非空 0x0020, 0x000d DCM_StudyInstanceUID</span><br><span class="line">非空 0x0020, 0x000e DCM_SeriesInstanceUID</span><br><span class="line">非空 0x0008, 0x0018 DCM_SOPInstanceUID</span><br><span class="line">非空 0x0008, 0x0012 DCM_InstanceCreationDate</span><br><span class="line">非空 0x0008, 0x0013 DCM_InstanceCreationTime</span><br><span class="line"></span><br><span class="line">非空 0x0002, 0x0001 DCM_FileMetaInformationVersion</span><br><span class="line">非空 0x0002, 0x0002 DCM_MediaStorageSOPClassUID</span><br><span class="line">非空 0x0002, 0x0003 DCM_MediaStorageSOPInstanceUID</span><br><span class="line">非空 0x0002, 0x0010 DCM_TransferSyntaxUID</span><br><span class="line">非空 0x0002, 0x0012 DCM_ImplementationClassUID</span><br><span class="line">非空 0x0002, 0x0013 DCM_ImplementationVersionName</span><br><span class="line">非空 0x0028, 0x0004 DCM_PhotometricInterpretation</span><br><span class="line">非空 0x0028, 0x0002 DCM_SamplesPerPixel</span><br><span class="line">非空 0x0028, 0x0100 DCM_BitsAllocated</span><br><span class="line">非空 0x0028, 0x0101 DCM_BitsStored</span><br><span class="line">非空 0x0028, 0x0102 DCM_HighBit</span><br><span class="line">非空 0x0028, 0x0103 DCM_PixelRepresentation</span><br><span class="line">非空 0x0028, 0x0006 DCM_PlanarConfiguration</span><br><span class="line">非空 0x0028, 0x0010 DCM_Rows</span><br><span class="line">非空 0x0028, 0x0011 DCM_Columns</span><br><span class="line">非空 DCM_PixelData</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
     
     
       
