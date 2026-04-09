@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2026-01-22T05:45:47.201Z</updated>
+  <updated>2026-04-09T08:42:09.755Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>gstreamer新版本的使用遇到的差异记录</title>
+    <link href="http://example.com/2026/04/09/gstreamer/gstreamer%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84%E4%BD%BF%E7%94%A8%E9%81%87%E5%88%B0%E7%9A%84%E5%B7%AE%E5%BC%82%E8%AE%B0%E5%BD%95/"/>
+    <id>http://example.com/2026/04/09/gstreamer/gstreamer%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84%E4%BD%BF%E7%94%A8%E9%81%87%E5%88%B0%E7%9A%84%E5%B7%AE%E5%BC%82%E8%AE%B0%E5%BD%95/</id>
+    <published>2026-04-09T08:34:45.000Z</published>
+    <updated>2026-04-09T08:42:09.755Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="版本变更"><a href="#版本变更" class="headerlink" title="版本变更"></a>版本变更</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">老版本： 1.20</span><br><span class="line">新版本： 1.28</span><br></pre></td></tr></table></figure><h1 id="差异1：-appsrc-变量"><a href="#差异1：-appsrc-变量" class="headerlink" title="差异1： appsrc 变量"></a>差异1： appsrc 变量</h1><p>在老版本的gstreamer中使用appsrc录制视频可以写成下面，并且运行正常</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">appsrc format=time  do-timestamp=<span class="literal">true</span> is-live=<span class="literal">true</span> ! ..... </span><br></pre></td></tr></table></figure><p>但是相同的pipeline在新版本会直接出现如下报错：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">minimum latency bigger than maximum latency</span><br></pre></td></tr></table></figure><p>只需要把is-live&#x3D;true去除即可在新版本中正常运行，原因待进一步查询。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;版本变更&quot;&gt;&lt;a href=&quot;#版本变更&quot; class=&quot;headerlink&quot; title=&quot;版本变更&quot;&gt;&lt;/a&gt;版本变更&lt;/h1&gt;&lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;</summary>
+      
+    
+    
+    
+    <category term="gstreamer" scheme="http://example.com/categories/gstreamer/"/>
+    
+    
+    <category term="gstreamer" scheme="http://example.com/tags/gstreamer/"/>
+    
+  </entry>
   
   <entry>
     <title>openGL一些环境变量的总结</title>
@@ -463,30 +487,6 @@
       
       
     <summary type="html">&lt;h1 id=&quot;h264编码方式的mp4&quot;&gt;&lt;a href=&quot;#h264编码方式的mp4&quot; class=&quot;headerlink&quot; title=&quot;h264编码方式的mp4&quot;&gt;&lt;/a&gt;h264编码方式的mp4&lt;/h1&gt;&lt;p&gt;h264只支持 high profile的mp4，因此需要注</summary>
-      
-    
-    
-    
-    <category term="dicom" scheme="http://example.com/categories/dicom/"/>
-    
-    
-    <category term="dicom" scheme="http://example.com/tags/dicom/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>cmake编译dicom</title>
-    <link href="http://example.com/2025/06/17/dicom/cmake%E7%BC%96%E8%AF%91dicom/"/>
-    <id>http://example.com/2025/06/17/dicom/cmake%E7%BC%96%E8%AF%91dicom/</id>
-    <published>2025-06-17T07:22:41.000Z</published>
-    <updated>2025-06-20T03:08:27.424Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_INSTALL_PREFIX=/usr/local/dcmtk -DBUILD_SHARED_LIBS=ON .. </span><br><span class="line">make -j16</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;l</summary>
       
     
     
