@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2026-06-23T07:23:43.677Z</updated>
+  <updated>2026-09-02T06:46:30.913Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>vulkan坐标初始化注意的问题</title>
+    <link href="http://example.com/2026/09/02/vulkan/vulkan%E5%9D%90%E6%A0%87%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B3%A8%E6%84%8F%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://example.com/2026/09/02/vulkan/vulkan%E5%9D%90%E6%A0%87%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B3%A8%E6%84%8F%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <published>2026-09-02T06:36:03.000Z</published>
+    <updated>2026-09-02T06:46:30.913Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、现象"><a href="#一、现象" class="headerlink" title="一、现象"></a>一、现象</h1><p>在openGL里面，默认渲染都是二维平面纹理，当有需要的时候才会enable深度信息。<br>但是在vulkan里面，如果不注意配置pipeline,则容易导致不显示而为的纹理坐标。</p><h1 id="二、出问题的代码"><a href="#二、出问题的代码" class="headerlink" title="二、出问题的代码"></a>二、出问题的代码</h1><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">VkPipelineRasterizationStateCreateInfo rasterizer&#123;&#125;;</span><br><span class="line">rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;</span><br><span class="line">rasterizer.depthClampEnable = VK_FALSE;</span><br><span class="line">rasterizer.rasterizerDiscardEnable = VK_FALSE;</span><br><span class="line">rasterizer.polygonMode = VK_POLYGON_MODE_FILL;</span><br><span class="line">rasterizer.lineWidth = <span class="number">1.0f</span>;</span><br><span class="line">rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;</span><br><span class="line">rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;</span><br><span class="line">rasterizer.depthBiasEnable = VK_FALSE;</span><br></pre></td></tr></table></figure>这是直接copy官方教程的配置，上面的配置开启背面剔除，VK_CULL_MODE_BACK_BIT，这就默认开启了三维空间的渲染。但是项目中只渲染二维视频画面，不需要使用MVP矩阵。 这就导致了在顶点着色器中，如果顶点坐标不乘上MVP矩阵则无法显示纹理。因此只需要把VK_CULL_MODE_BACK_BIT改为VK_CULL_MODE_NONE，就可以正常显示了。<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasterizer.cullMode = VK_CULL_MODE_NONE;</span><br></pre></td></tr></table></figure></code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、现象&quot;&gt;&lt;a href=&quot;#一、现象&quot; class=&quot;headerlink&quot; title=&quot;一、现象&quot;&gt;&lt;/a&gt;一、现象&lt;/h1&gt;&lt;p&gt;在openGL里面，默认渲染都是二维平面纹理，当有需要的时候才会enable深度信息。&lt;br&gt;但是在vulkan里面，如果不</summary>
+      
+    
+    
+    
+    <category term="vulkan" scheme="http://example.com/categories/vulkan/"/>
+    
+    
+    <category term="vulkan" scheme="http://example.com/tags/vulkan/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vulkan某些变量指针未初始化造成崩溃</title>
+    <link href="http://example.com/2026/09/02/vulkan/vulkan%E6%9F%90%E4%BA%9B%E5%8F%98%E9%87%8F%E6%8C%87%E9%92%88%E6%9C%AA%E5%88%9D%E5%A7%8B%E5%8C%96%E9%80%A0%E6%88%90%E5%B4%A9%E6%BA%83/"/>
+    <id>http://example.com/2026/09/02/vulkan/vulkan%E6%9F%90%E4%BA%9B%E5%8F%98%E9%87%8F%E6%8C%87%E9%92%88%E6%9C%AA%E5%88%9D%E5%A7%8B%E5%8C%96%E9%80%A0%E6%88%90%E5%B4%A9%E6%BA%83/</id>
+    <published>2026-09-02T01:25:03.000Z</published>
+    <updated>2026-09-02T06:00:22.058Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、现象"><a href="#一、现象" class="headerlink" title="一、现象"></a>一、现象</h1><p>使用的是vulkan1.3版本的API，跑debug的时候没啥问题，但是经过release编译之后，程序运行一两秒就崩溃。</p><h1 id="二、出问题的代码"><a href="#二、出问题的代码" class="headerlink" title="二、出问题的代码"></a>二、出问题的代码</h1><pre><code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">VkImageMemoryBarrier2 barrier;</span><br><span class="line">barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2;</span><br><span class="line">barrier.srcStageMask = srcStageMask;</span><br><span class="line">barrier.dstStageMask = dstStageMask;</span><br><span class="line">barrier.srcAccessMask = srcAccMask;</span><br><span class="line">barrier.dstAccessMask = dstAccMask;</span><br><span class="line">barrier.oldLayout = oldLayout;</span><br><span class="line">barrier.newLayout = newLayout;</span><br><span class="line">barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;</span><br><span class="line">barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;</span><br><span class="line">barrier.image = swapChainImages[imageIndex];</span><br><span class="line">barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;</span><br><span class="line">barrier.subresourceRange.baseMipLevel = <span class="number">0</span>;</span><br><span class="line">barrier.subresourceRange.levelCount = <span class="number">1</span>;</span><br><span class="line">barrier.subresourceRange.baseArrayLayer = <span class="number">0</span>;</span><br><span class="line">barrier.subresourceRange.layerCount = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>这是在每一帧渲染循环中都会调用，问了AI之后提示barrier的pNext未初始化。因此直接初始化为NULL解决问题。<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">barrier.pNext = nullptr;</span><br></pre></td></tr></table></figure></code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、现象&quot;&gt;&lt;a href=&quot;#一、现象&quot; class=&quot;headerlink&quot; title=&quot;一、现象&quot;&gt;&lt;/a&gt;一、现象&lt;/h1&gt;&lt;p&gt;使用的是vulkan1.3版本的API，跑debug的时候没啥问题，但是经过release编译之后，程序运行一两秒就崩溃。&lt;</summary>
+      
+    
+    
+    
+    <category term="vulkan" scheme="http://example.com/categories/vulkan/"/>
+    
+    
+    <category term="vulkan" scheme="http://example.com/tags/vulkan/"/>
+    
+  </entry>
   
   <entry>
     <title>openGL使用FBO渲染三维模型,勿忘RBO</title>
@@ -447,54 +495,6 @@
     
     
     <category term="OpenGL" scheme="http://example.com/tags/OpenGL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>openGL回读字节类型不同导致的性能问题</title>
-    <link href="http://example.com/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/"/>
-    <id>http://example.com/2025/07/04/OpenGl/openGL%E5%9B%9E%E8%AF%BB%E5%AD%97%E8%8A%82%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/</id>
-    <published>2025-07-04T01:49:48.000Z</published>
-    <updated>2025-07-17T09:19:13.244Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h1><p>前提：Xorg.conf中将X窗口配置成depth&#x3D;10。<br>然后使用cuda-OGL互操作方式，将OGL渲染结果回读到PBO。<br>最开始设置的字节是GL_UNSIGNED_INT_2_10_10_10_REV，性能没问题。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">glBindBuffer(GL_PIXEL_PACK_BUFFER, mPboId);</span><br><span class="line">glReadPixels(<span class="number">0</span>, <span class="number">0</span>, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, <span class="number">0</span>);</span><br></pre></td></tr></table></figure><p>后面由于更改需求，需要动态缩放openGL渲染结果，并且为了和其他部分代码统一，考虑使用nppiResize.<br>为了减少改动，直接将回读方式改为GL_UNSIGNED_BYTE, 事实上也得到正确的渲染结果。<br>但是测试后发现这样回导致openGL渲染线程的cpu占用率剧增，甚至导致严重掉帧。初步怀疑openGL内部做了某些字节类型的转换，但还未进一步排查。</p><p>经过测试发现，GL_UNSIGNED_INT_2_10_10_10_REV格式的渲染结果和gstreamer中的RGB10A2_LE格式一致。<br>也就是只需要将gstreamer中的appsrc caps设置为”video&#x2F;x-raw(memory:CUDAMemory),format&#x3D;RGB10A2_LE”，<br>就可以直接录制通过GL_UNSIGNED_INT_2_10_10_10_REV抓取到的渲染结果。</p><p>但是好巧不巧，只有nvh265enc支持RGB10A2_LE，nvh264enc不支持，项目上需要支持h264。</p><p>基于上述原因，考虑到nppiResize 和 nvh264enc都不支持RGB10A2，为了代码的统一，只能考虑使用cuda将RGB10A2_LE<br>转为RGBA, 接着nppiResize后再录制。</p><h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>之前一直没搞懂GL_UNSIGNED_INT_2_10_10_10_REV后缀REV代表什么意思，直到它和gstreamer中的RGB10A2_LE格式一致，才有了思路。<br>小端格式是RGB10A2LE，实际内存分布为：32bit地址中，低10为为R,高2为Alpha   (A)2_(B)10_(G)10_(R)10</p><p>根据这个思路，不难写出GL_UNSIGNED_INT_2_10_10_10_REV方式抓取的OGL渲染结果转换成RGBA8的cuda代码：<br>需要注意的是，10Bit 转换成8 Bit 不是直接将Bit &amp; 255，取低8位，这样会导致颜色变浅。<br>正确做法应该是先右移2位，再与， (10Bit &gt;&gt; 2) &amp; 255， 因此下面是省略了一步，正确理解应该是<br>RGB三个通道依次先右移 0位、10位、20位，得到R10、G10、B10, 接着三个通道再各自右移2位，得到RGBA8.<br>结合起来就是依次右移 2位、12位、22位。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">cuVerticalFlip_RGB10A2_To_RGBA8</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> *pSrc, <span class="type">unsigned</span> <span class="type">char</span> *pDst, <span class="type">int</span> iWidth, <span class="type">int</span> iHeight, <span class="type">int</span> iSrcStride, <span class="type">int</span> iDstStride)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> dx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> dy = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="keyword">if</span> (dx &gt;= iWidth || dy &gt;= iHeight) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> idxSrc = dy * iSrcStride + dx;</span><br><span class="line">    <span class="type">int</span> idxDst = (iHeight - dy - <span class="number">1</span>) * iDstStride + dx * <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    uint v = pSrc[idxSrc];</span><br><span class="line">    pDst[idxDst]     = ((v &gt;&gt; <span class="number">2</span>)) &amp; <span class="number">255</span>;</span><br><span class="line">    pDst[idxDst + <span class="number">1</span>] = ((v &gt;&gt; <span class="number">12</span>)) &amp; <span class="number">255</span>;</span><br><span class="line">    pDst[idxDst + <span class="number">2</span>] = ((v &gt;&gt; <span class="number">22</span>)) &amp; <span class="number">255</span>;</span><br><span class="line">    pDst[idxDst + <span class="number">3</span>] = <span class="number">255</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">verticalFlip_RGB10A2_To_RGBA8</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> *pSrc, <span class="type">unsigned</span> <span class="type">char</span> *pDst, <span class="type">int</span> iWidth, <span class="type">int</span> iHeight, <span class="type">int</span> iSrcStride, <span class="type">int</span> iDstStride)</span></span><br><span class="line">&#123;</span><br><span class="line">    dim3 <span class="title function_">numThreads</span><span class="params">(NUM_THREAD_X, NUM_THREAD_Y, <span class="number">1</span>)</span>;</span><br><span class="line">    dim3 <span class="title function_">numBlocks</span><span class="params">(DivUp(iWidth, numThreads.x), DivUp(iHeight, numThreads.y))</span>;</span><br><span class="line">    cuVerticalFlip_RGB10A2_To_RGBA8&lt;&lt;&lt;numBlocks, numThreads&gt;&gt;&gt;(pSrc, pDst, iWidth, iHeight, iSrcStride, iDstStride);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><h1 id="后续补充"><a href="#后续补充" class="headerlink" title="后续补充"></a>后续补充</h1><p>经过测试发现，xorg不同的深度配置需要以不同的字节类型去读取OGL渲染结果。<br>10bit： GL_UNSIGNED_INT_2_10_10_10_REV<br>8bit: GL_UNSIGNED_BYTE 或者 GL_UNSIGNED_INT_8_8_8_8_REV， 他俩等价，并且读出都是正常的RGBA</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;问题来源&quot;&gt;&lt;a href=&quot;#问题来源&quot; class=&quot;headerlink&quot; title=&quot;问题来源&quot;&gt;&lt;/a&gt;问题来源&lt;/h1&gt;&lt;p&gt;前提：Xorg.conf中将X窗口配置成depth&amp;#x3D;10。&lt;br&gt;然后使用cuda-OGL互操作方式，将OGL渲染</summary>
-      
-    
-    
-    
-    <category term="OpenGL" scheme="http://example.com/categories/OpenGL/"/>
-    
-    
-    <category term="OpenGL" scheme="http://example.com/tags/OpenGL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux批量处理动态链接库脚本</title>
-    <link href="http://example.com/2025/06/23/ubuntu/Linux%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E8%84%9A%E6%9C%AC/"/>
-    <id>http://example.com/2025/06/23/ubuntu/Linux%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E8%84%9A%E6%9C%AC/</id>
-    <published>2025-06-23T07:40:34.000Z</published>
-    <updated>2025-06-23T07:46:46.178Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>加入一个新的功能需要依赖编译出的第三方库，对于在外已售的设备不方便直接升级母盘。因此想着直接将动态链接库放到 编辑及安装脚本中。根据实际情况调整路径即可。</p><p>对于 libdcmdata.so.19.3.6.9<br>其major链接文件名为 libdcmdata.so.19，主要是在程序运行的时候链接<br>其plain链接文件名为 libdcmdata.so，主要是编译程序的时候使用。</p><h1 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$#</span> -ne 1 ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;usage: <span class="variable">$0</span> [major|plain]&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">OTS_PATH=.</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$OTS_PATH</span>/dcmtkDeps/lib</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> lib*.so.*.*.*.*; <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$file</span> =~ ^(lib.*\.so)\.([0-9]+)\..* ]]; <span class="keyword">then</span></span><br><span class="line">        libname=<span class="string">&quot;<span class="variable">$&#123;BASH_REMATCH[1]&#125;</span>&quot;</span></span><br><span class="line">        major=<span class="string">&quot;<span class="variable">$&#123;BASH_REMATCH[2]&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">if</span> [[ <span class="variable">$1</span> == <span class="string">&quot;major&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">            linkname=<span class="string">&quot;<span class="variable">$&#123;OTS_PATH&#125;</span>/<span class="variable">$&#123;libname&#125;</span>.<span class="variable">$&#123;major&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">elif</span> [[ <span class="variable">$1</span> == <span class="string">&quot;plain&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">            linkname=<span class="string">&quot;<span class="variable">$&#123;libname&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;error: unknown param&quot;</span></span><br><span class="line">            <span class="built_in">exit</span> 2</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">        <span class="built_in">ln</span> -sf <span class="string">&quot;<span class="variable">$file</span>&quot;</span> <span class="string">&quot;<span class="variable">$linkname</span>&quot;</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;ln -sf <span class="variable">$file</span> <span class="variable">$linkname</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;加入一个新的功能需要依赖编译出的第三方库，对于在外已售的设备不方便直接升级母盘。因此想着直接将动态链接库放到 编辑及安装脚本中。根据实际情况</summary>
-      
-    
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   
