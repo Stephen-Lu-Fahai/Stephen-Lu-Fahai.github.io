@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2026-10-12T03:17:45.092Z</updated>
+  <updated>2026-10-26T08:42:07.304Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>gstreamer录制视频防止文件损坏</title>
+    <link href="http://example.com/2026/10/26/gstreamer/gstreamer%E5%BD%95%E5%88%B6%E8%A7%86%E9%A2%91%E9%98%B2%E6%AD%A2%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F/"/>
+    <id>http://example.com/2026/10/26/gstreamer/gstreamer%E5%BD%95%E5%88%B6%E8%A7%86%E9%A2%91%E9%98%B2%E6%AD%A2%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F/</id>
+    <published>2026-10-26T08:15:04.000Z</published>
+    <updated>2026-10-26T08:42:07.304Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h1><p>MP4文件录制完之后，一定要写入EOS之后，视频文件才会完整保存，正常播放。<br>在上一篇的文件损坏总结中，提到了偶发情况下来不及写入EOS导致文件无法播放。<br>但是最近才听说有个fragment MP4的概念，也就是片段化地存储视频，如果来不及写入<br>EOS,不至于损坏整个文件，已经缓存过的视频帧就能正常播放。<br>这种方式主要是为了应对突然掉电或突然拔出正在录制的U盘。</p><h1 id="正确的用法"><a href="#正确的用法" class="headerlink" title="正确的用法"></a>正确的用法</h1><h2 id="mp4mux"><a href="#mp4mux" class="headerlink" title="mp4mux"></a>mp4mux</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gst-launch-1.0 videotestsrc ! nvh265enc ! h265parse ! mp4mux fragment-mode=1 fragment-duration=2000 ! filesink location=frag.mp4</span><br></pre></td></tr></table></figure><p>一定要注意的是，fragment-mode有两个选项：<br>  (0): dash-or-mss (默认)<br>  (1): first-moov-then-finalise</p><p>经初步测试，如果fragment-mode使用默认值0的话，配合fragment-duration值为2秒，录制出来的画面会卡顿。<br>需要说明的是，fragment-duration&#x3D;2000，并不是最多只丢失2秒钟的画面，而是2秒钟会处理一次fragment。</p><h2 id="matroskamux-MKV"><a href="#matroskamux-MKV" class="headerlink" title="matroskamux (MKV)"></a>matroskamux (MKV)</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gst-launch-1.0 videotestsrc ! nvh265enc ! h265parse ! matroskamux max-cluster-duration=2000000000 min-cluster-duration=1000000000 ! filesink location=frag.mkv</span><br></pre></td></tr></table></figure><p>片段的最大最小值分别设置成2秒和1秒，AI推荐的，暂时还没测试。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;背景：&quot;&gt;&lt;a href=&quot;#背景：&quot; class=&quot;headerlink&quot; title=&quot;背景：&quot;&gt;&lt;/a&gt;背景：&lt;/h1&gt;&lt;p&gt;MP4文件录制完之后，一定要写入EOS之后，视频文件才会完整保存，正常播放。&lt;br&gt;在上一篇的文件损坏总结中，提到了偶发情况下来不及</summary>
+      
+    
+    
+    
+    <category term="gstreamer" scheme="http://example.com/categories/gstreamer/"/>
+    
+    
+    <category term="gstreamer" scheme="http://example.com/tags/gstreamer/"/>
+    
+  </entry>
   
   <entry>
     <title>gstreamer录制视频偶发文件损坏总结</title>
@@ -471,30 +495,6 @@
     
     
     <category term="OpenGL" scheme="http://example.com/tags/OpenGL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux自动挂载U盘</title>
-    <link href="http://example.com/2025/07/25/ubuntu/Linux%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BDU%E7%9B%98/"/>
-    <id>http://example.com/2025/07/25/ubuntu/Linux%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BDU%E7%9B%98/</id>
-    <published>2025-07-25T03:18:07.000Z</published>
-    <updated>2025-07-25T03:25:49.445Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>使用udiskie 可以自动将U盘挂载到&#x2F;media&#x2F;${USER}目录下，使用方法也很简单，就是在用户的.xinitrc启动脚本下开启后台即可：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">udiskie &amp; </span><br></pre></td></tr></table></figure><h1 id="瑕疵"><a href="#瑕疵" class="headerlink" title="瑕疵"></a>瑕疵</h1><p>无法指定挂载目录，暂时找不到修改U盘挂载点的方法。<br>尤其是将系统做成只读文件系统，在这种情况下&#x2F;media也是只读，无法挂载。<br>解决方法是单独划分一个小分区，让&#x2F;media单独挂载到这个小分区上。 这样根文件系统是只读的情况下，不影响U盘的挂载。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;方法&quot;&gt;&lt;a href=&quot;#方法&quot; class=&quot;headerlink&quot; title=&quot;方法&quot;&gt;&lt;/a&gt;方法&lt;/h1&gt;&lt;p&gt;使用udiskie 可以自动将U盘挂载到&amp;#x2F;media&amp;#x2F;${USER}目录下，使用方法也很简单，就是在用户的.xinitr</summary>
-      
-    
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/categories/ubuntu%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="ubuntu系统" scheme="http://example.com/tags/ubuntu%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   
